@@ -1,0 +1,28 @@
+[
+    {
+        "author" : "Josh O'Steen",
+        "headline" : "The Floozies Light Up The Blue Note",
+        "watchVideo" : "https://mediasvcpklc882bwm8qq.blob.core.windows.net/asset-574177c1-c5bc-4673-9fbd-21508bca3c52/portrait_1.mp4?sv=2012-02-12&sr=c&si=b1989574-efe0-4376-a8f5-b9e89a8c1a86&sig=rxSQ4f2%2BE1SXwnOVZ0JRX4eZEnS2C%2BdizZg6812P1a0%3D&st=2016-03-20T23%3A48%3A15Z&se=2116-02-25T23%3A48%3A15Z",
+        "category" : "Entertainment",
+        "pubDate" : 1456776998
+    },
+    {
+        "author" : "Nina Lakhani",
+        "headline" : "Fellow Honduran activist Nelson García murdered days after Berta Cáceres",
+        "category" : "World",
+        "pubDate" : 1458160471
+    },
+    {
+        "author" : "Caitlin Campbell",
+        "headline" : "Columbia voters approve ban to trash system",
+        "category" : "Local",
+        "pubDate" : 1458154831
+    },
+    {
+         "author" : "Alan Burdziak",
+         "headline" : "Estate gift to help with cattle research at MU",
+         "category" : "Local",
+         "pubDate" : 1457762431
+    }
+
+ ]

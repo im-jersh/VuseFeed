@@ -4,6 +4,26 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>VuseFeed Watch (Complication).xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>5</integer>
+		</dict>
+		<key>VuseFeed Watch (Glance).xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>4</integer>
+		</dict>
+		<key>VuseFeed Watch (Notification).xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
+		</dict>
+		<key>VuseFeed Watch.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
 		<key>VuseFeed.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -23,6 +43,11 @@
 			<true/>
 		</dict>
 		<key>0339D2CD1CA42A960072886E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>03583EC11CA42D7200C5EAFE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
