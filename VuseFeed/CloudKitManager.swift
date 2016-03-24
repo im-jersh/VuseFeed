@@ -38,13 +38,13 @@ class CloudKitManager {
         let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
         
         // Create the query
-        let query = CKQuery(recordType: "StoryIteration2", predicate: predicate)
+        let query = CKQuery(recordType: "Story", predicate: predicate)
         query.sortDescriptors = [sortDescriptor]
         
         // Create the query operation
         let operation = CKQueryOperation(query: query)
-        operation.desiredKeys = ["author", "category", "headline", "mainVideo", "pubDate", "summary"]
-        operation.resultsLimit = 50
+        operation.desiredKeys = ["author", "category", "headline", "mainVideo", "publicationDate", "summary", "videoThumbnailString", "watchVideo", "videoThumbnail"]
+        //operation.resultsLimit = 50
         
         var newStories = [WatchableStory]()
         

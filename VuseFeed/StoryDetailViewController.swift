@@ -26,6 +26,8 @@ class StoryDetailViewController: UIViewController {
     @IBOutlet var miniPlayerPlay: UIBarButtonItem!
     @IBOutlet var miniPlayerPause: UIBarButtonItem!
     
+    @IBOutlet var thumbnailImageView: UIImageView!
+    @IBOutlet weak var videoControlContainerBlurView: UIVisualEffectView!
     
     var popupPlayButton : UIButton?
     
@@ -71,6 +73,10 @@ class StoryDetailViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         
     }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return .LightContent
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -96,8 +102,21 @@ class StoryDetailViewController: UIViewController {
     }
     
     private func configureVideoPlayer() {
-        self.avPlayer = AVPlayer(URL: self.story.mainVideo)
-        self.videoPlayerView.avPlayer = self.avPlayer
+        // If this story has a video, setup the player
+        if let videoURL = self.story.mainVideo {
+            self.avPlayer = AVPlayer(URL: videoURL)
+            self.videoPlayerView.avPlayer = self.avPlayer
+        } else if let imageURL = self.story.thumbnailImageURL, data = NSData(contentsOfURL: imageURL), image = UIImage(data: data) {
+            self.videoPlayerView.image = image
+            self.videoControlContainerBlurView.hidden = true
+        }
+    }
+    
+    private func setImage(image: UIImage, asBackgroundFor view: UIView) {
+        self.thumbnailImageView.image = image
+        self.thumbnailImageView.frame = view.bounds
+        view.addSubview(self.thumbnailImageView)
+        self.videoControlContainerBlurView.hidden = true
     }
 
     

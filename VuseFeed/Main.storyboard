@@ -69,8 +69,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="imR-Yk-DVA">
-                                <rect key="frame" x="0.0" y="64" width="600" height="492"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="imR-Yk-DVA">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pbh-rv-pj3" userLabel="contentView">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
@@ -110,7 +110,7 @@
                                                     </label>
                                                 </subviews>
                                             </stackView>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="toI-bS-Yo8" customClass="AVPlayerView" customModule="VuseFeed" customModuleProvider="target">
+                                            <view contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="toI-bS-Yo8" customClass="AVPlayerView" customModule="VuseFeed" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="600" height="338"/>
                                                 <subviews>
                                                     <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xdF-gM-Q0F">
@@ -186,8 +186,8 @@
                             <constraint firstItem="imR-Yk-DVA" firstAttribute="leading" secondItem="J5k-gt-H6h" secondAttribute="leading" id="D9E-jH-wx5"/>
                             <constraint firstItem="imR-Yk-DVA" firstAttribute="bottom" secondItem="IJC-0E-8ad" secondAttribute="top" id="QbA-EG-qsG"/>
                             <constraint firstAttribute="trailing" secondItem="imR-Yk-DVA" secondAttribute="trailing" id="STQ-dA-ezA"/>
-                            <constraint firstItem="imR-Yk-DVA" firstAttribute="top" secondItem="y42-6s-Y8U" secondAttribute="bottom" id="UVH-ED-W1h"/>
                             <constraint firstItem="pbh-rv-pj3" firstAttribute="width" secondItem="J5k-gt-H6h" secondAttribute="width" id="W7k-Gm-X4J"/>
+                            <constraint firstItem="imR-Yk-DVA" firstAttribute="top" secondItem="y42-6s-Y8U" secondAttribute="bottom" constant="-20" id="wBz-GK-IL2"/>
                         </constraints>
                     </view>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -204,6 +204,8 @@
                         <outlet property="playButton" destination="xTs-Hx-hQS" id="egZ-pH-o7b"/>
                         <outlet property="scrollView" destination="imR-Yk-DVA" id="5US-RC-bAB"/>
                         <outlet property="summaryLabel" destination="vAS-gK-FBz" id="Mww-CI-RWR"/>
+                        <outlet property="thumbnailImageView" destination="80X-qe-Kxd" id="7wj-nc-u5X"/>
+                        <outlet property="videoControlContainerBlurView" destination="xdF-gM-Q0F" id="KLw-V4-CgL"/>
                         <outlet property="videoPlayerView" destination="toI-bS-Yo8" id="XSi-by-S1P"/>
                     </connections>
                 </viewController>
@@ -218,6 +220,10 @@
                         <action selector="playButtonTapped:" destination="eJS-O3-YcE" id="70b-8X-1aY"/>
                     </connections>
                 </barButtonItem>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="1458154831" id="80X-qe-Kxd">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
             </objects>
             <point key="canvasLocation" x="2099" y="489"/>
         </scene>
@@ -246,6 +252,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="1458154831" width="333" height="232"/>
         <image name="playerPause" width="100" height="100"/>
         <image name="playerPlay" width="100" height="100"/>
     </resources>

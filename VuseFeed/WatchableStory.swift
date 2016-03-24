@@ -9,7 +9,7 @@
 import UIKit
 import CloudKit
 
-class WatchableStory: NSObject {
+class WatchableStory {
 
     private(set) var recordID : CKRecordID!
     private(set) var author : String!
@@ -20,12 +20,23 @@ class WatchableStory: NSObject {
     private(set) var summary : String!
     private(set) var article : NSURL?
     private(set) var articleText : String!
-    private(set) var mainVideo : NSURL!
-    private(set) var watchVideo : NSURL!
+    private(set) var mainVideo : NSURL?
+    private(set) var watchVideo : NSURL?
+    
+    private(set) var thumbnailImageString : String?
+    private(set) var thumbnailImageURL : NSURL? {
+        get {
+            return NSURL(string: thumbnailImageString!)
+        }
+        set {
+            
+        }
+    }
 
     init(fromRecord record: CKRecord) {
+        
         self.recordID = record.recordID
-        guard let author = record["author"] as? String, headline = record["headline"] as? String, category = record["category"] as? String, pubDate = record["pubDate"] as? Double, summary = record["summary"] as? String, mainVideo = record["mainVideo"] as? String else {
+        guard let author = record["author"] as? String, headline = record["headline"] as? String, category = record["category"] as? String, pubDate = record["publicationDate"] as? Double, summary = record["summary"] as? String else {
             return
         }
         
@@ -36,21 +47,29 @@ class WatchableStory: NSObject {
         self.pubDate = NSDate(timeIntervalSince1970: pubDate)
         self.printPubDate = NSDateFormatter.localizedStringFromDate(self.pubDate, dateStyle: .FullStyle, timeStyle: .ShortStyle)
         
-        guard let mainVideoURL = NSURL(string: mainVideo) else {
-            return
+        if let mainVideo = record["mainVideo"] as? String, mainVideoURL = NSURL(string: mainVideo) {
+            self.mainVideo = mainVideoURL
         }
         
-        self.mainVideo = mainVideoURL
+        // There must either be a url or an asset for the story's thumbnail, but not both
+        if let videoThumbnailString = record["videoThumbnailString"] as? String {
+            self.thumbnailImageString = videoThumbnailString
+        } else if let thumbnailAsset = record["videoThumbnail"] as? CKAsset {
+            self.thumbnailImageString = thumbnailAsset.fileURL.absoluteString
+        }
 
     }
     
     func updateStory(withRecord record: CKRecord) -> Void {
-        guard let article = record["article"] as? CKAsset, wVideo = record["watchVideo"] as? CKAsset else {
+        guard let article = record["article"] as? CKAsset else {
             return
         }
         
         self.article = article.fileURL
-        self.watchVideo = wVideo.fileURL
+        
+        if let wVideo = record["watchVideo"] as? CKAsset {
+            self.watchVideo = wVideo.fileURL
+        }
         
         // Extract text from file
         do {

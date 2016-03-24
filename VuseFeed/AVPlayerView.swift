@@ -10,7 +10,7 @@ import UIKit
 import AVKit
 import AVFoundation
 
-class AVPlayerView: UIView {
+class AVPlayerView: UIImageView {
 
     var avPlayer : AVPlayer? {
         didSet {

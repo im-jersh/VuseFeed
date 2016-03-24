@@ -41,6 +41,7 @@
 		03583F0B1CA42F6400C5EAFE /* VFHeaderRowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03583F061CA42F6400C5EAFE /* VFHeaderRowController.swift */; };
 		03583F0C1CA42F6400C5EAFE /* VFStoriesTableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03583F071CA42F6400C5EAFE /* VFStoriesTableController.swift */; };
 		03583F0D1CA42F6400C5EAFE /* VFStoryRowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03583F081CA42F6400C5EAFE /* VFStoryRowController.swift */; };
+		03583F0E1CA44B2B00C5EAFE /* Story.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03583EF61CA42E1400C5EAFE /* Story.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -459,6 +460,7 @@
 		0339D2A41CA42A940072886E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = VF;
 				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = "Joshua O'Steen";
@@ -613,6 +615,7 @@
 				03583EDE1CA42D7300C5EAFE /* ComplicationController.swift in Sources */,
 				03583ED61CA42D7300C5EAFE /* InterfaceController.swift in Sources */,
 				03583EDC1CA42D7300C5EAFE /* GlanceController.swift in Sources */,
+				03583F0E1CA44B2B00C5EAFE /* Story.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
