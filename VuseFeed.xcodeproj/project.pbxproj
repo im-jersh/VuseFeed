@@ -927,6 +927,7 @@
 				03583EE71CA42D7300C5EAFE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		03583EE91CA42D7300C5EAFE /* Build configuration list for PBXNativeTarget "VuseFeed Watch" */ = {
 			isa = XCConfigurationList;
@@ -935,6 +936,7 @@
 				03583EEB1CA42D7300C5EAFE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
