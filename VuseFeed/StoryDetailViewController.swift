@@ -95,7 +95,7 @@ class StoryDetailViewController: UIViewController {
         
         // Create the popupItem bar button items
         self.popupItem.leftBarButtonItems = [self.miniPlayerPlay]
-        self.popupItem.rightBarButtonItems = [UIBarButtonItem(image: UIImage(named: "miniPlayerAction"), style: .Plain, target: self, action: #selector(StoryDetailViewController.actionButtonTapped))]
+        self.popupItem.rightBarButtonItems = [UIBarButtonItem(image: UIImage(named: "miniPlayerAction"), style: .Plain, target: self, action: "actionButtonTapped:")]
         
         self.view.setNeedsLayout()
     

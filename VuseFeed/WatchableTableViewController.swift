@@ -12,6 +12,10 @@ import LNPopupController
 
 class WatchableTableViewController: UITableViewController {
     
+    @IBOutlet weak var categoriesButton: UIBarButtonItem!
+    @IBOutlet weak var bookmarksButton: UIBarButtonItem!
+    @IBOutlet weak var settingsButton: UIBarButtonItem!
+    
     let reuseIdentifier = "WatchableStoryCell"
     var stories : [WatchableStory]? {
         didSet {
@@ -125,7 +129,21 @@ class WatchableTableViewController: UITableViewController {
             
         }
         
+        //let viewController = segue.destinationViewController as! CategoriesViewController
+        
     }
 
+    @IBAction func categoriesTapped(sender: AnyObject) {
+        print("categories tapped")
+    }
+    @IBAction func bookmarksTapped(sender: AnyObject) {
+        print("bookmarks tapped")
+    }
+    @IBAction func settingsTapped(sender: AnyObject) {
+        print("settings tapped")
+    }
 
+    @IBAction func unwindToNewsfeed(segue: UIStoryboardSegue){
+        
+    }
 }
