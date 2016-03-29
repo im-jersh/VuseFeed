@@ -468,6 +468,11 @@
 					0339D2AB1CA42A950072886E = {
 						CreatedOnToolsVersion = 7.3;
 						DevelopmentTeam = P9T3VX888M;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					0339D2C21CA42A960072886E = {
 						CreatedOnToolsVersion = 7.3;
@@ -483,6 +488,7 @@
 					};
 					03583ECD1CA42D7300C5EAFE = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = P9T3VX888M;
 					};
 				};
 			};
@@ -824,6 +830,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "VuseFeed Watch Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.osteen.VuseFeed.watchkitapp.watchkitextension;
@@ -839,6 +846,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "VuseFeed Watch Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.osteen.VuseFeed.watchkitapp.watchkitextension;

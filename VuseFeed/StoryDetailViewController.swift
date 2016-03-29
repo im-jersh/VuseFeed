@@ -75,7 +75,7 @@ class StoryDetailViewController: UIViewController {
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return .LightContent
+        return .Default
     }
 
     override func didReceiveMemoryWarning() {
