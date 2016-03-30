@@ -22,6 +22,8 @@ class StoryDetailViewController: UIViewController {
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var videoPlayerView: AVPlayerView!
     @IBOutlet weak var playButton: UIButton!
+    @IBOutlet weak var shareButton: UIButton!
+    @IBOutlet weak var bookmarkButton: UIButton!
     
     @IBOutlet var miniPlayerPlay: UIBarButtonItem!
     @IBOutlet var miniPlayerPause: UIBarButtonItem!
@@ -36,11 +38,12 @@ class StoryDetailViewController: UIViewController {
     var avPlayer : AVPlayer?
     var isPlaying : Bool = false {
         willSet {
-            if newValue {
+            if newValue { // play
                 self.playButton.selected = !self.playButton.selected
                 self.popupItem.leftBarButtonItems = [self.miniPlayerPause]
                 self.avPlayer?.play()
-            } else {
+                self.hideControlsAfterVideoPlays()
+            } else { // pause
                 self.playButton.selected = !self.playButton.selected
                 self.popupItem.leftBarButtonItems = [self.miniPlayerPlay]
                 self.avPlayer?.pause()
@@ -118,7 +121,24 @@ class StoryDetailViewController: UIViewController {
         view.addSubview(self.thumbnailImageView)
         self.videoControlContainerBlurView.hidden = true
     }
+    
+    private func hideControlsAfterVideoPlays() {
+        
+        // Create a timer that hides the controls once fired
+        let timer = NSTimer.init(timeInterval: 2.0, target: self, selector: #selector(StoryDetailViewController.hideControlsAfterTimer(_:)), userInfo: nil, repeats: false)
+        
+        // Add it to the run loop
+        NSRunLoop.mainRunLoop().addTimer(timer, forMode: NSDefaultRunLoopMode)
+    }
 
+    @objc private func hideControlsAfterTimer(timer : NSTimer) {
+        
+        // Invalidate the timer
+        timer.invalidate()
+        
+        // Hide the controls
+        self.videoControlContainerBlurView.hidden = true
+    }
     
     @IBAction func playButtonTapped(sender: AnyObject) {
         
@@ -132,4 +152,51 @@ class StoryDetailViewController: UIViewController {
         print("ACTION BUTTON TAPPED")
     }
 
+    @IBAction func mediaViewWasTapped(sender: AnyObject) {
+        
+        // The gesture should only effect a video player, not an image
+        if let _ = self.story.mainVideo {
+            self.videoControlContainerBlurView.hidden = !self.videoControlContainerBlurView.hidden
+        }
+    }
+    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
