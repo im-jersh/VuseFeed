@@ -10,6 +10,7 @@ import UIKit
 import CloudKit
 import LNPopupController
 
+
 class WatchableTableViewController: UITableViewController {
     
     @IBOutlet weak var categoriesButton: UIBarButtonItem!
@@ -22,17 +23,26 @@ class WatchableTableViewController: UITableViewController {
             self.tableView.reloadData()
         }
     }
+    var storySections : [Category]?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Fetch the stories from CloudKit and reload the table view when the results are returned
         CloudKitManager.sharedManager().fetchAllTestStories() { (fetchedStories: [WatchableStory]!) in
-            self.stories = fetchedStories
+            
+            // Get the various DISTINCT category types for the section headers sorted alphabetically
+            let categorySet = Set<Category>(fetchedStories.map{ $0.category })
+            self.storySections = Array<Category>(categorySet).sort{ $0.rawValue < $1.rawValue }
+            
+            // Sort the fetched stories by category and then by publication date
+            self.stories = fetchedStories.sort{
+                return ($0.category.rawValue == $1.category.rawValue) ? ($0.epochDate > $1.epochDate) : ($0.category.rawValue < $1.category.rawValue)
+            }
+            
         }
         
         self.tableView.estimatedRowHeight = 120.0
-        //self.
         
     }
 
@@ -44,31 +54,54 @@ class WatchableTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1
+        return self.storySections?.count ?? 1
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return self.stories?.count ?? 0
+        
+        // Filter the stories by the category represented by the section
+        guard let category = self.storySections?[section] else {
+            return 0
+        }
+        
+        return self.stories?.filter{ $0.category.rawValue == category.rawValue }.count ?? 0
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
+        // Create the cell
         let cell = tableView.dequeueReusableCellWithIdentifier(self.reuseIdentifier, forIndexPath: indexPath)
-
-        let story = self.stories?[indexPath.row]
         
-        cell.textLabel?.text = story?.headline
-        cell.detailTextLabel?.text = story?.author
+        // Get the stories corresponding to the section that this indexPath is in
+        guard let category = self.storySections?[indexPath.section] else {
+            return cell
+        }
         
+        let filteredStories = self.stories?.filter{ $0.category.rawValue == category.rawValue }
 
+        // Extract the story from the filtered set
+        if let story = filteredStories?[indexPath.row] {
+            cell.textLabel?.text = story.headline
+            cell.detailTextLabel?.text = story.author
+        }
+        
         return cell
     }
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
+        // Get the stories corresponding to the section that this indexPath is in
+        guard let category = self.storySections?[indexPath.section] else {
+            return
+        }
+        
+        // Filter the stories
+        guard let filteredStories = self.stories?.filter({ $0.category.rawValue == category.rawValue }) else {
+            return
+        }
+        
         if let popupController = self.storyboard?.instantiateViewControllerWithIdentifier("storyDetailController") as? StoryDetailViewController {
-            popupController.story = self.stories![indexPath.row]
+            popupController.story = filteredStories[indexPath.row]
             popupController.popupItem.title = popupController.story.headline
             popupController.popupItem.subtitle = popupController.story.summary
             
@@ -78,41 +111,10 @@ class WatchableTableViewController: UITableViewController {
         self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
         
     }
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+    
+    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return self.storySections?[section].rawValue ?? "Category"
     }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
 
     
     // MARK: - Navigation
