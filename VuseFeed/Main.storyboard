@@ -46,14 +46,14 @@
                         </connections>
                     </tableView>
                     <toolbarItems>
-                        <barButtonItem title="Categories" id="vrN-LE-SzE">
+                        <barButtonItem systemItem="organize" id="vrN-LE-SzE">
                             <connections>
                                 <action selector="categoriesTapped:" destination="WRl-3Q-9PP" id="QKa-f0-l83"/>
                                 <segue destination="XAJ-d5-810" kind="presentation" identifier="selectCategory" modalTransitionStyle="coverVertical" id="nBE-Nv-OK7"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="nhy-bN-tc5"/>
-                        <barButtonItem title="Bookmarks" id="Sob-sd-bci">
+                        <barButtonItem systemItem="bookmarks" id="Sob-sd-bci">
                             <connections>
                                 <action selector="bookmarksTapped:" destination="WRl-3Q-9PP" id="ZJZ-cM-YRv"/>
                             </connections>
@@ -154,7 +154,7 @@
                         <viewControllerLayoutGuide type="bottom" id="IJC-0E-8ad"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="J5k-gt-H6h">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="800"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LZs-qJ-J54" customClass="AVPlayerView" customModule="VuseFeed" customModuleProvider="target">
@@ -202,13 +202,13 @@
                                 </connections>
                             </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OtK-rA-bY5">
-                                <rect key="frame" x="0.0" y="358" width="600" height="442"/>
+                                <rect key="frame" x="0.0" y="358" width="600" height="242"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="llb-is-bGa">
-                                        <rect key="frame" x="0.0" y="0.0" width="600" height="180"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="llb-is-bGa">
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="137"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="gGG-pR-0j0">
-                                                <rect key="frame" x="15" y="10" width="570" height="159"/>
+                                                <rect key="frame" x="15" y="10" width="570" height="117"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Headline" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dxf-Pc-SsM">
                                                         <rect key="frame" x="0.0" y="0.0" width="570" height="26"/>
@@ -233,27 +233,14 @@
                                                             </label>
                                                         </subviews>
                                                     </stackView>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="Rlv-db-pVA">
-                                                        <rect key="frame" x="0.0" y="67" width="570" height="30"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5kc-G9-Ukx">
-                                                                <rect key="frame" x="0.0" y="0.0" width="40" height="30"/>
-                                                                <state key="normal" title="Share"/>
-                                                            </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jig-jd-CJM">
-                                                                <rect key="frame" x="500" y="0.0" width="70" height="30"/>
-                                                                <state key="normal" title="Bookmark"/>
-                                                            </button>
-                                                        </subviews>
-                                                    </stackView>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Summary" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LOU-Wm-hTK">
-                                                        <rect key="frame" x="0.0" y="109" width="570" height="17"/>
+                                                        <rect key="frame" x="0.0" y="67" width="570" height="17"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Article Body" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UAq-ue-Pnt">
-                                                        <rect key="frame" x="0.0" y="138" width="570" height="21"/>
+                                                        <rect key="frame" x="0.0" y="96" width="570" height="21"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                         <nil key="highlightedColor"/>
@@ -279,26 +266,34 @@
                                     <outlet property="delegate" destination="eJS-O3-YcE" id="Qqu-gL-xYc"/>
                                 </connections>
                             </scrollView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="J9i-BX-3Qp">
+                                <rect key="frame" x="0.0" y="556" width="600" height="44"/>
+                                <items>
+                                    <barButtonItem systemItem="action" id="xLl-7T-P9F"/>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="Xnu-P8-GxM"/>
+                                    <barButtonItem title="Item" image="bookmark" id="PNe-uI-RJK"/>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="OtK-rA-bY5" firstAttribute="leading" secondItem="J5k-gt-H6h" secondAttribute="leading" id="4cb-rK-GW1"/>
                             <constraint firstAttribute="trailing" secondItem="OtK-rA-bY5" secondAttribute="trailing" id="7Db-c6-AGu"/>
+                            <constraint firstItem="J9i-BX-3Qp" firstAttribute="leading" secondItem="J5k-gt-H6h" secondAttribute="leading" id="Ccb-el-B5V"/>
                             <constraint firstItem="IJC-0E-8ad" firstAttribute="top" secondItem="OtK-rA-bY5" secondAttribute="bottom" id="KRd-Ta-7qP"/>
                             <constraint firstItem="OtK-rA-bY5" firstAttribute="top" secondItem="LZs-qJ-J54" secondAttribute="bottom" id="V7c-UB-md0"/>
                             <constraint firstAttribute="trailing" secondItem="LZs-qJ-J54" secondAttribute="trailing" id="ZCJ-jX-Yf9"/>
                             <constraint firstItem="llb-is-bGa" firstAttribute="width" secondItem="J5k-gt-H6h" secondAttribute="width" id="bO5-JJ-cRd"/>
                             <constraint firstItem="LZs-qJ-J54" firstAttribute="leading" secondItem="J5k-gt-H6h" secondAttribute="leading" id="hhK-tb-X7t"/>
                             <constraint firstItem="LZs-qJ-J54" firstAttribute="top" secondItem="y42-6s-Y8U" secondAttribute="bottom" id="hmJ-01-kLy"/>
+                            <constraint firstAttribute="trailing" secondItem="J9i-BX-3Qp" secondAttribute="trailing" id="pkf-uC-DZ7"/>
+                            <constraint firstItem="IJC-0E-8ad" firstAttribute="top" secondItem="J9i-BX-3Qp" secondAttribute="bottom" id="pxt-I9-oo0"/>
                         </constraints>
                     </view>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="600" height="800"/>
                     <connections>
                         <outlet property="articleLabel" destination="UAq-ue-Pnt" id="SkO-ev-9Qx"/>
                         <outlet property="authorDateStackView" destination="ZRp-ge-AQu" id="UhP-dq-Evd"/>
                         <outlet property="authorLabel" destination="1fW-Sb-sxS" id="IM1-z3-krL"/>
-                        <outlet property="bookmarkButton" destination="Jig-jd-CJM" id="xpr-8E-cOx"/>
                         <outlet property="contentView" destination="llb-is-bGa" id="83R-tu-uDt"/>
                         <outlet property="dateLabel" destination="ISm-5T-uiO" id="USU-Nl-v5Y"/>
                         <outlet property="headlineLabel" destination="Dxf-Pc-SsM" id="ucb-To-QTq"/>
@@ -306,7 +301,6 @@
                         <outlet property="miniPlayerPlay" destination="vdj-ag-Sls" id="5H4-s6-e9H"/>
                         <outlet property="playButton" destination="bJM-Vz-3zB" id="zoi-k8-AiO"/>
                         <outlet property="scrollView" destination="OtK-rA-bY5" id="Zrg-Fu-Fwo"/>
-                        <outlet property="shareButton" destination="5kc-G9-Ukx" id="hap-AA-dGc"/>
                         <outlet property="summaryLabel" destination="LOU-Wm-hTK" id="Di8-8z-SXW"/>
                         <outlet property="thumbnailImageView" destination="80X-qe-Kxd" id="7wj-nc-u5X"/>
                         <outlet property="videoControlContainerBlurView" destination="kKW-0U-rKB" id="XJl-IW-gIf"/>
@@ -334,7 +328,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="2181" y="389"/>
+            <point key="canvasLocation" x="2181" y="489"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="OxG-Ii-U3B">
@@ -380,6 +374,7 @@
     </scenes>
     <resources>
         <image name="1458154831" width="333" height="232"/>
+        <image name="bookmark" width="22" height="22"/>
         <image name="playerPause" width="100" height="100"/>
         <image name="playerPlay" width="100" height="100"/>
     </resources>
