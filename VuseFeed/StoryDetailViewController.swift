@@ -69,7 +69,7 @@ class StoryDetailViewController: UIViewController {
         
         self.configure()
         self.configureVideoPlayer()
-        self.scrollView.contentSize.height = 1000
+        self.scrollView.scrollsToTop = true
         
     }
     
@@ -98,7 +98,7 @@ class StoryDetailViewController: UIViewController {
         
         // Create the popupItem bar button items
         self.popupItem.leftBarButtonItems = [self.miniPlayerPlay]
-        self.popupItem.rightBarButtonItems = [UIBarButtonItem(image: UIImage(named: "miniPlayerAction"), style: .Plain, target: self, action: "actionButtonTapped:")]
+        self.popupItem.rightBarButtonItems = [UIBarButtonItem(image: UIImage(named: "miniPlayerAction"), style: .Plain, target: self, action: #selector(StoryDetailViewController.actionButtonTapped))]
         
         self.view.setNeedsLayout()
     
@@ -158,6 +158,14 @@ class StoryDetailViewController: UIViewController {
         if let _ = self.story.mainVideo {
             self.videoControlContainerBlurView.hidden = !self.videoControlContainerBlurView.hidden
         }
+    }
+    
+}
+
+extension StoryDetailViewController : UIScrollViewDelegate {
+    
+    func scrollViewShouldScrollToTop(scrollView: UIScrollView) -> Bool {
+        return true
     }
     
 }

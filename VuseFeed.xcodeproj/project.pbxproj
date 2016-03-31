@@ -332,8 +332,8 @@
 		03583EEF1CA42DAE00C5EAFE /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				671844111CAB436B00C53DE2 /* CategoryTableViewCell.swift */,
 				03583F001CA42E5400C5EAFE /* Main.storyboard */,
+				671844111CAB436B00C53DE2 /* CategoryTableViewCell.swift */,
 				03583EF11CA42DE800C5EAFE /* AVPlayerView.swift */,
 			);
 			name = Views;
