@@ -12,17 +12,14 @@ class CategoriesViewController: UIViewController {
 
     @IBOutlet weak var categoriesTable: UITableView!
     
-    var categories : [(category: String,isChecked: Bool)] = [("World", false), ("Sports",false), ("US News",false), ("Tech",false), ("Finance",false), ("Health",false), ("a",false), ("b",false), ("c",false), ("d",false), ("e",false),("World", false), ("Sports",false), ("US News",false), ("Tech",false), ("Finance",false), ("Health",false), ("a",false), ("b",false), ("c",false), ("d",false), ("e",false)]
+    var categories = Array(VuseFeedEngine.sharedEngine.allCategories).sort({ $0.rawValue < $1.rawValue })
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
 
@@ -42,17 +39,16 @@ class CategoriesViewController: UIViewController {
 extension CategoriesViewController : UITableViewDelegate, UITableViewDataSource {
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = self.categoriesTable.dequeueReusableCellWithIdentifier("categoryCell", forIndexPath: indexPath) 
-    
-        cell.textLabel?.text = categories[indexPath.row].category
         
+        // Create the cell and get it's corresponding category
+        let cell = self.categoriesTable.dequeueReusableCellWithIdentifier("categoryCell", forIndexPath: indexPath)
+        let category = self.categories[indexPath.row]
         
-        if  categories[indexPath.row].isChecked == false {
-            cell.accessoryType = .None
-        } else {
-            cell.accessoryType = .Checkmark
-        }
-        
+        cell.textLabel?.text = category.rawValue
+        cell.textLabel?.textColor = UIColor.colorForCategory(category)
+
+        // If the category is in the newsFeedCategories set, checkmark it; otherwise, don't
+        cell.accessoryType = VuseFeedEngine.sharedEngine.newsFeedCategories.contains(category) ? .Checkmark : .None
         
         return cell
     }
@@ -62,25 +58,54 @@ extension CategoriesViewController : UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categories.count
+        return self.categories.count
     }
 
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Categories"
+        return "Select the categories that you wish to see in your news feed."
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        // If the category is not checkmarked, checkmark it and add it to the newsFeedCategories
+        // Otherwise, uncheck it and remove it from the set
         if let cell = tableView.cellForRowAtIndexPath(indexPath) {
-            if cell.accessoryType == .Checkmark {
-                cell.accessoryType = .None
-                categories[indexPath.row].isChecked = false
-            } else {
+            let category = self.categories[indexPath.row]
+            
+            if cell.accessoryType == .None {
+                VuseFeedEngine.sharedEngine.newsFeedCategories.insert(category)
                 cell.accessoryType = .Checkmark
-                categories[indexPath.row].isChecked = true
+            } else if cell.accessoryType == .Checkmark {
+                VuseFeedEngine.sharedEngine.newsFeedCategories.remove(category)
+                cell.accessoryType = .None
             }
+            
         }
         
         self.categoriesTable.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

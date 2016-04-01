@@ -42,9 +42,10 @@
 		03583F0E1CA44B2B00C5EAFE /* Story.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03583EF61CA42E1400C5EAFE /* Story.swift */; };
 		035CD7991CAE0B0300527B3F /* VFStoryListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035CD7981CAE0B0300527B3F /* VFStoryListCell.swift */; };
 		035CD7A11CAEB89F00527B3F /* Cartfile in Resources */ = {isa = PBXBuildFile; fileRef = 035CD7A01CAEB89F00527B3F /* Cartfile */; };
-		035CD7A31CAEC78200527B3F /* WebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 035CD7A21CAEC78200527B3F /* WebImage.framework */; };
 		035CD7A51CAEC8AE00527B3F /* LNPopupController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 035CD7A41CAEC8AE00527B3F /* LNPopupController.framework */; };
 		035CD7A71CAEC97100527B3F /* Chameleon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 035CD7A61CAEC97100527B3F /* Chameleon.framework */; };
+		035CD7B01CAED67400527B3F /* WebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 035CD7A21CAEC78200527B3F /* WebImage.framework */; };
+		035CD7B61CAEE68D00527B3F /* VuseFeedEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035CD7B51CAEE68D00527B3F /* VuseFeedEngine.swift */; };
 		03789CBD1CADAF9A00F631BB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03789CBC1CADAF9A00F631BB /* QuartzCore.framework */; };
 		03789CBF1CADAFA000F631BB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03789CBE1CADAFA000F631BB /* CoreGraphics.framework */; };
 		671844101CAB378400C53DE2 /* CategoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6718440F1CAB378400C53DE2 /* CategoriesViewController.swift */; };
@@ -155,9 +156,11 @@
 		035CD7A21CAEC78200527B3F /* WebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebImage.framework; path = Carthage/Build/iOS/WebImage.framework; sourceTree = "<group>"; };
 		035CD7A41CAEC8AE00527B3F /* LNPopupController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LNPopupController.framework; path = Carthage/Build/iOS/LNPopupController.framework; sourceTree = "<group>"; };
 		035CD7A61CAEC97100527B3F /* Chameleon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Chameleon.framework; path = Carthage/Build/iOS/Chameleon.framework; sourceTree = "<group>"; };
+		035CD7B11CAED92900527B3F /* VuseFeed-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VuseFeed-Bridging-Header.h"; sourceTree = "<group>"; };
+		035CD7B41CAEDAA400527B3F /* UIImageView+WebCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UIImageView+WebCache.h"; path = "Carthage/Build/iOS/WebImage.framework/Headers/UIImageView+WebCache.h"; sourceTree = SOURCE_ROOT; };
+		035CD7B51CAEE68D00527B3F /* VuseFeedEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VuseFeedEngine.swift; sourceTree = "<group>"; };
 		03789CBC1CADAF9A00F631BB /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		03789CBE1CADAFA000F631BB /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		03789CC01CADB0ED00F631BB /* VuseFeed-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "VuseFeed-Bridging-Header.h"; path = "../VuseFeed-Bridging-Header.h"; sourceTree = "<group>"; };
 		6718440F1CAB378400C53DE2 /* CategoriesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoriesViewController.swift; sourceTree = "<group>"; };
 		671844111CAB436B00C53DE2 /* CategoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -167,9 +170,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				035CD7B01CAED67400527B3F /* WebImage.framework in Frameworks */,
 				035CD7A71CAEC97100527B3F /* Chameleon.framework in Frameworks */,
 				035CD7A51CAEC8AE00527B3F /* LNPopupController.framework in Frameworks */,
-				035CD7A31CAEC78200527B3F /* WebImage.framework in Frameworks */,
 				03789CBF1CADAFA000F631BB /* CoreGraphics.framework in Frameworks */,
 				03789CBD1CADAF9A00F631BB /* QuartzCore.framework in Frameworks */,
 				0339D2F11CA42B440072886E /* CloudKit.framework in Frameworks */,
@@ -317,11 +320,11 @@
 			isa = PBXGroup;
 			children = (
 				035CD7A01CAEB89F00527B3F /* Cartfile */,
-				03789CC01CADB0ED00F631BB /* VuseFeed-Bridging-Header.h */,
 				0339D2B91CA42A960072886E /* Assets.xcassets */,
 				0339D2BB1CA42A960072886E /* LaunchScreen.storyboard */,
 				0339D2F81CA42CDC0072886E /* VuseFeed.entitlements */,
 				0339D2BE1CA42A960072886E /* Info.plist */,
+				035CD7B11CAED92900527B3F /* VuseFeed-Bridging-Header.h */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -351,7 +354,9 @@
 		03583EF31CA42DF600C5EAFE /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				035CD7B51CAEE68D00527B3F /* VuseFeedEngine.swift */,
 				03583EF41CA42E0200C5EAFE /* CloudKitManager.swift */,
+				035CD7B41CAEDAA400527B3F /* UIImageView+WebCache.h */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -589,6 +594,7 @@
 				671844101CAB378400C53DE2 /* CategoriesViewController.swift in Sources */,
 				03583EF51CA42E0200C5EAFE /* CloudKitManager.swift in Sources */,
 				671844121CAB436B00C53DE2 /* CategoryTableViewCell.swift in Sources */,
+				035CD7B61CAEE68D00527B3F /* VuseFeedEngine.swift in Sources */,
 				035CD7991CAE0B0300527B3F /* VFStoryListCell.swift in Sources */,
 				03583EFF1CA42E3200C5EAFE /* WatchableTableViewController.swift in Sources */,
 				0339D2B01CA42A960072886E /* AppDelegate.swift in Sources */,
@@ -756,18 +762,21 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = VuseFeed/VuseFeed.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = VuseFeed/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.osteen.VuseFeed;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "VuseFeed-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "VuseFeed/VuseFeed-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -775,18 +784,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = VuseFeed/VuseFeed.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = VuseFeed/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.osteen.VuseFeed;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "VuseFeed-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "VuseFeed/VuseFeed-Bridging-Header.h";
 			};
 			name = Release;
 		};

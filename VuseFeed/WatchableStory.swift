@@ -8,6 +8,7 @@
 
 import UIKit
 import CloudKit
+import Chameleon
 
 enum Category : String {
     case World = "World"
@@ -29,30 +30,30 @@ extension UIColor {
     
     static func colorForCategory(category: Category) -> UIColor {
         switch category {
-        case .World :
-            return UIColor.flatPowderBlueColorDark()
-        case .US :
-            return UIColor.flatRedColor()
-        case .Local :
-            return UIColor.flatGreenColorDark()
-        case .Politics :
-            return UIColor.flatOrangeColor()
-        case .SciTech :
-            return UIColor.flatMintColor()
-        case .Entertainment :
-            return UIColor.flatYellowColor()
-        case .Sports :
-            return UIColor.flatSkyBlueColorDark()
         case .Business :
-            return UIColor.flatTealColor()
+            return UIColor.flatPowderBlueColorDark()
+        case .Education :
+            return UIColor.flatSkyBlueColorDark()
+        case .Entertainment :
+            return UIColor.flatMagentaColor()
         case .Health :
             return UIColor.flatPinkColor()
-        case .Travel :
-            return UIColor.flatMagentaColor()
         case .Lifestyle :
+            return UIColor.flatRedColor()
+        case .Local :
+            return UIColor.flatOrangeColor()
+        case .Politics :
+            return UIColor.flatYellowColor()
+        case .SciTech :
             return UIColor.flatLimeColor()
-        case .Education :
-            return UIColor.flatCoffeeColor()
+        case .Sports :
+            return UIColor.flatGreenColorDark()
+        case .Travel :
+            return UIColor.flatMintColor()
+        case .US :
+            return UIColor.flatTealColor()
+        case .World :
+            return UIColor.flatCoffeeColorDark()
         default:
             return UIColor.flatBlackColor()
         }

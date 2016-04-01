@@ -84,13 +84,16 @@ class WatchableTableViewController: UITableViewController {
 
         // Extract the story from the filtered set
         if let story = filteredStories?[indexPath.row] {
+            
             cell.headlineLabel.text = story.headline
             cell.authorLabel.text = story.author
-            cell.pubDateLabel.text = story.printPubDate
+            cell.pubDateLabel.text = NSDateFormatter.localizedStringFromDate(story.pubDate, dateStyle: .MediumStyle, timeStyle: .ShortStyle)
             
-            if let imageURL = story.thumbnailImageURL, data = NSData(contentsOfURL: imageURL), image = UIImage(data: data) {
-                cell.thumbnailImage.image = image
+            if let imageURL = story.thumbnailImageURL {
+                cell.thumbnailImage.sd_setImageWithURL(imageURL, placeholderImage: UIImage(named: "placeholder"))
             }
+            
+            return cell
         }
         
         return cell
