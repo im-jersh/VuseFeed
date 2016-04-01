@@ -33,6 +33,9 @@ class CloudKitManager {
     // Fetch all story records
     func fetchAllTestStories(withCompletion completion: ([WatchableStory]!) -> Void) {
         
+        // Set the network activity indicator
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        
         // Create the predicate and sort descriptor
         let predicate = NSPredicate(value: true)
         let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
@@ -50,10 +53,14 @@ class CloudKitManager {
         
         // Set the per record completion block
         operation.recordFetchedBlock = { (record) in
+            //print(record)
             newStories.append(WatchableStory(fromRecord: record))
         }
         
         operation.queryCompletionBlock = { (cursor, error) in
+            // Unset the activity indicator
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            
             if error == nil {
                 dispatch_async(dispatch_get_main_queue()) {
                     print("FETCH COMPLETE AT : \(NSDate())")
@@ -68,10 +75,13 @@ class CloudKitManager {
     
     func updateCompleteStory(story: WatchableStory, completion: (WatchableStory) -> Void) {
         
-        print("UPDATE BEGAN AT : \(NSDate())")
+        // Set the network activity indicator
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         
         // Download the complete record with the convenience API
         self.publicDatabase.fetchRecordWithID(story.recordID) { (record, error) in
+            // Unset the activity indicator
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
          
             if error == nil {
                 if let record = record {

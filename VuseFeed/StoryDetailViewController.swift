@@ -9,6 +9,7 @@
 import UIKit
 import AVKit
 import AVFoundation
+import LNPopupController
 
 class StoryDetailViewController: UIViewController {
 

@@ -42,8 +42,12 @@ class WatchableTableViewController: UITableViewController {
             
         }
         
+        // Dynamic cell height based on content
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 200.0
+        
+        // Make the popupcontroller bar title bold
+        LNPopupBar.appearanceWhenContainedInInstancesOfClasses([UINavigationController.self]).titleTextAttributes = [ NSFontAttributeName : UIFont.boldSystemFontOfSize(12.0)]
         
     }
 
