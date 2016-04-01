@@ -27,7 +27,7 @@ enum Category : String {
 
 extension UIColor {
     
-    func colorForCategory(category: Category) -> UIColor {
+    static func colorForCategory(category: Category) -> UIColor {
         switch category {
         case .World :
             return UIColor.flatPowderBlueColorDark()

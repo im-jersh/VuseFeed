@@ -59,6 +59,7 @@
 		0358B14D1CADB79800992B15 /* UIViewController+Chameleon.m in Sources */ = {isa = PBXBuildFile; fileRef = 0358B1391CADB79800992B15 /* UIViewController+Chameleon.m */; };
 		0358B14E1CADB79800992B15 /* ChameleonShorthand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0358B13B1CADB79800992B15 /* ChameleonShorthand.swift */; };
 		0358B14F1CADB79800992B15 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 0358B13C1CADB79800992B15 /* README.md */; };
+		035CD7991CAE0B0300527B3F /* VFStoryListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035CD7981CAE0B0300527B3F /* VFStoryListCell.swift */; };
 		03789CBD1CADAF9A00F631BB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03789CBC1CADAF9A00F631BB /* QuartzCore.framework */; };
 		03789CBF1CADAFA000F631BB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03789CBE1CADAFA000F631BB /* CoreGraphics.framework */; };
 		03C8F17E1CAB200C0098958D /* LNPopupController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03C8F17D1CAB1FFE0098958D /* LNPopupController.framework */; };
@@ -248,6 +249,7 @@
 		0358B1391CADB79800992B15 /* UIViewController+Chameleon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Chameleon.m"; sourceTree = "<group>"; };
 		0358B13B1CADB79800992B15 /* ChameleonShorthand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChameleonShorthand.swift; sourceTree = "<group>"; };
 		0358B13C1CADB79800992B15 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		035CD7981CAE0B0300527B3F /* VFStoryListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VFStoryListCell.swift; sourceTree = "<group>"; };
 		03789CBC1CADAF9A00F631BB /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		03789CBE1CADAFA000F631BB /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		03789CC01CADB0ED00F631BB /* VuseFeed-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "VuseFeed-Bridging-Header.h"; path = "../VuseFeed-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -420,6 +422,7 @@
 			isa = PBXGroup;
 			children = (
 				03583F001CA42E5400C5EAFE /* Main.storyboard */,
+				035CD7981CAE0B0300527B3F /* VFStoryListCell.swift */,
 				671844111CAB436B00C53DE2 /* CategoryTableViewCell.swift */,
 				03583EF11CA42DE800C5EAFE /* AVPlayerView.swift */,
 			);
@@ -807,6 +810,7 @@
 				0358B1451CADB79800992B15 /* UIAppearance+Swift.m in Sources */,
 				671844121CAB436B00C53DE2 /* CategoryTableViewCell.swift in Sources */,
 				0358B1401CADB79800992B15 /* CHANGELOG.md in Sources */,
+				035CD7991CAE0B0300527B3F /* VFStoryListCell.swift in Sources */,
 				0358B1471CADB79800992B15 /* UIColor+Chameleon.m in Sources */,
 				0358B14E1CADB79800992B15 /* ChameleonShorthand.swift in Sources */,
 				0358B14F1CADB79800992B15 /* README.md in Sources */,

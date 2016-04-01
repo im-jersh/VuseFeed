@@ -42,7 +42,8 @@ class WatchableTableViewController: UITableViewController {
             
         }
         
-        self.tableView.estimatedRowHeight = 120.0
+        self.tableView.rowHeight = UITableViewAutomaticDimension
+        self.tableView.estimatedRowHeight = 200.0
         
     }
 
@@ -51,7 +52,7 @@ class WatchableTableViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    // MARK: - Table view data source
+// MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return self.storySections?.count ?? 1
@@ -70,7 +71,9 @@ class WatchableTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         // Create the cell
-        let cell = tableView.dequeueReusableCellWithIdentifier(self.reuseIdentifier, forIndexPath: indexPath)
+        guard let cell = tableView.dequeueReusableCellWithIdentifier(self.reuseIdentifier) as? VFStoryListCell else {
+            return tableView.dequeueReusableCellWithIdentifier(self.reuseIdentifier, forIndexPath: indexPath)
+        }
         
         // Get the stories corresponding to the section that this indexPath is in
         guard let category = self.storySections?[indexPath.section] else {
@@ -81,8 +84,13 @@ class WatchableTableViewController: UITableViewController {
 
         // Extract the story from the filtered set
         if let story = filteredStories?[indexPath.row] {
-            cell.textLabel?.text = story.headline
-            cell.detailTextLabel?.text = story.author
+            cell.headlineLabel.text = story.headline
+            cell.authorLabel.text = story.author
+            cell.pubDateLabel.text = story.printPubDate
+            
+            if let imageURL = story.thumbnailImageURL, data = NSData(contentsOfURL: imageURL), image = UIImage(data: data) {
+                cell.thumbnailImage.image = image
+            }
         }
         
         return cell
@@ -115,9 +123,30 @@ class WatchableTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return self.storySections?[section].rawValue ?? "Category"
     }
+    
+    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        // Create the view
+        let header = UIView(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: 24.0))
+        
+        guard let category = self.storySections?[section] else {
+            return header
+        }
+        
+        header.backgroundColor = UIColor.colorForCategory(category)
+        
+        // Create the Label
+        let label = UILabel(frame: CGRect(x: 15.0, y: 1.0, width: self.view.frame.width - 15.0, height: 24.0))
+        label.text = self.storySections?[section].rawValue ?? "Category"
+        
+        // Add the label to the view
+        header.addSubview(label)
+        
+        return header
+    }
 
     
-    // MARK: - Navigation
+// MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -138,9 +167,11 @@ class WatchableTableViewController: UITableViewController {
     @IBAction func categoriesTapped(sender: AnyObject) {
         print("categories tapped")
     }
+    
     @IBAction func bookmarksTapped(sender: AnyObject) {
         print("bookmarks tapped")
     }
+    
     @IBAction func settingsTapped(sender: AnyObject) {
         print("settings tapped")
     }
