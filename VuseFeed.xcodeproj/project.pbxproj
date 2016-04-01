@@ -60,6 +60,7 @@
 		0358B14E1CADB79800992B15 /* ChameleonShorthand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0358B13B1CADB79800992B15 /* ChameleonShorthand.swift */; };
 		0358B14F1CADB79800992B15 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 0358B13C1CADB79800992B15 /* README.md */; };
 		035CD7991CAE0B0300527B3F /* VFStoryListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035CD7981CAE0B0300527B3F /* VFStoryListCell.swift */; };
+		035CD7A11CAEB89F00527B3F /* Cartfile in Resources */ = {isa = PBXBuildFile; fileRef = 035CD7A01CAEB89F00527B3F /* Cartfile */; };
 		03789CBD1CADAF9A00F631BB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03789CBC1CADAF9A00F631BB /* QuartzCore.framework */; };
 		03789CBF1CADAFA000F631BB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03789CBE1CADAFA000F631BB /* CoreGraphics.framework */; };
 		03C8F17E1CAB200C0098958D /* LNPopupController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03C8F17D1CAB1FFE0098958D /* LNPopupController.framework */; };
@@ -250,6 +251,7 @@
 		0358B13B1CADB79800992B15 /* ChameleonShorthand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChameleonShorthand.swift; sourceTree = "<group>"; };
 		0358B13C1CADB79800992B15 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		035CD7981CAE0B0300527B3F /* VFStoryListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VFStoryListCell.swift; sourceTree = "<group>"; };
+		035CD7A01CAEB89F00527B3F /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		03789CBC1CADAF9A00F631BB /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		03789CBE1CADAFA000F631BB /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		03789CC01CADB0ED00F631BB /* VuseFeed-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "VuseFeed-Bridging-Header.h"; path = "../VuseFeed-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -409,6 +411,7 @@
 		03583EEE1CA42D9700C5EAFE /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				035CD7A01CAEB89F00527B3F /* Cartfile */,
 				03789CC01CADB0ED00F631BB /* VuseFeed-Bridging-Header.h */,
 				0339D2B91CA42A960072886E /* Assets.xcassets */,
 				0339D2BB1CA42A960072886E /* LaunchScreen.storyboard */,
@@ -658,6 +661,9 @@
 						CreatedOnToolsVersion = 7.3;
 						DevelopmentTeam = P9T3VX888M;
 						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 0;
+							};
 							com.apple.Push = {
 								enabled = 1;
 							};
@@ -749,6 +755,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				035CD7A11CAEB89F00527B3F /* Cartfile in Resources */,
 				0358B13F1CADB79800992B15 /* ChameleonFramework.podspec in Resources */,
 				0358B13D1CADB79800992B15 /* .gitignore in Resources */,
 				0339D2BD1CA42A960072886E /* LaunchScreen.storyboard in Resources */,
