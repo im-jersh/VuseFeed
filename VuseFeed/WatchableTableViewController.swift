@@ -29,7 +29,7 @@ class WatchableTableViewController: UITableViewController {
         super.viewDidLoad()
 
         // Fetch the stories from CloudKit and reload the table view when the results are returned
-        CloudKitManager.sharedManager().fetchAllTestStories() { (fetchedStories: [WatchableStory]!) in
+        CloudKitManager.sharedManager().fetchStories() { (fetchedStories: [WatchableStory]!) in
             
             // Get the various DISTINCT category types for the section headers sorted alphabetically
             let categorySet = Set<Category>(fetchedStories.map{ $0.category })

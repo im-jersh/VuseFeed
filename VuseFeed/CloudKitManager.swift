@@ -73,6 +73,54 @@ class CloudKitManager {
         self.publicDatabase.addOperation(operation)
     }
     
+    func fetchStories(withCompletion completion: ([WatchableStory]!) -> Void) {
+    
+        // Set the network activity indicator
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        
+        // Create the predicate and sort descriptor
+        let predicate = NSPredicate(format: "%K >= %lf", "publicationDate",self.calculateDateInPast().timeIntervalSince1970)
+        let sortDescriptor = NSSortDescriptor(key: "publicationDate", ascending: false)
+        
+        // Create the query
+        let query = CKQuery(recordType: "Story", predicate: predicate)
+        query.sortDescriptors = [sortDescriptor]
+        
+        // Create the query operation
+        let operation = CKQueryOperation(query: query)
+        operation.desiredKeys = ["author", "category", "headline", "mainVideo", "publicationDate", "summary", "videoThumbnailString", "watchVideo", "videoThumbnail"] // all fields except the watch video asset
+        
+        var newStories = [WatchableStory]()
+        
+        // Per record completion block
+        operation.recordFetchedBlock = { (record) in
+            newStories.append(WatchableStory(fromRecord: record))
+        }
+        
+        // Query completion block
+        operation.queryCompletionBlock = { (curser, error) in
+         
+            // Unset the activity indicator
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            
+            if error == nil {
+                // Save the latest fetch date
+                self.setLastFetchTime()
+                
+                // Dispatch the results to the UI for display
+                dispatch_async(dispatch_get_main_queue()) {
+                    print("FETCH COMPLETE AT : \(NSDate())")
+                    completion(newStories)
+                }
+            }
+            
+        }
+        
+        // Start the query
+        print("FETCH BEGAN AT : \(NSDate())")
+        self.publicDatabase.addOperation(operation)
+    }
+    
     func updateCompleteStory(story: WatchableStory, completion: (WatchableStory) -> Void) {
         
         // Set the network activity indicator
@@ -103,27 +151,25 @@ class CloudKitManager {
         NSUserDefaults.standardUserDefaults().setObject(NSDate(), forKey: "lastFetchTime")
     }
     
-//    private func getLastFetchTime() -> NSDate {
-//        
-//        // Get the last fetch date from user defaults
-//        guard let lastFetchTime = NSUserDefaults.standardUserDefaults().objectForKey("lastFetchTime") as? NSDate else {
-//            return self.calculateDateInPast(daysAgo: self.daysAgo)
-//        }
-//        
-//        return lastFetchTime
-//        
-//    }
+    private func getLastFetchTime() -> NSDate {
+        
+        // Get the last fetch date from user defaults
+        guard let lastFetchTime = NSUserDefaults.standardUserDefaults().objectForKey("lastFetchTime") as? NSDate else {
+            return self.calculateDateInPast()
+        }
+        
+        return lastFetchTime
+    }
     
-//    private func calculateDateInPast(daysAgo days: Int = 1) -> NSDate {
-//        
-//        // Date of daysAgo from now (negative number indicates time in the past)
-//        let pastDate = NSDate().dateByAddingTimeInterval(Double(daysAgo * -86400)) // number of days multiplied by number of seconds in a day
-//        
-//        // Decompose the date into its components
-//        let calendar = NSCalendar.currentCalendar()
-//        var components = calendar.components(<#T##unitFlags: NSCalendarUnit##NSCalendarUnit#>, fromDate: <#T##NSDate#>)
-//        
-//    }
+    private func calculateDateInPast(hoursAgo hours: Int = 36) -> NSDate {
+        
+        // Calculate the number of seconds in the past
+        let seconds = Double(60 * 60 * hours)
+        
+        // Date of hoursAgo from now (negative number indicates time in the past)
+        return NSDate().dateByAddingTimeInterval(-(seconds))
+    }
+    
 }
 
 

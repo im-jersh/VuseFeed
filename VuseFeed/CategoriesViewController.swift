@@ -44,6 +44,7 @@ extension CategoriesViewController : UITableViewDelegate, UITableViewDataSource 
         let cell = self.categoriesTable.dequeueReusableCellWithIdentifier("categoryCell", forIndexPath: indexPath)
         let category = self.categories[indexPath.row]
         
+        cell.textLabel?.font = UIFont(descriptor: (cell.textLabel?.font.fontDescriptor().fontDescriptorWithSymbolicTraits(.TraitBold))!, size: (cell.textLabel?.font.pointSize)!)
         cell.textLabel?.text = category.rawValue
         cell.textLabel?.textColor = UIColor.colorForCategory(category)
 
@@ -65,6 +66,10 @@ extension CategoriesViewController : UITableViewDelegate, UITableViewDataSource 
         return "Select the categories that you wish to see in your news feed."
     }
     
+    func tableView(tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        return "Deselecting a category will disable any notifications for that category"
+    }
+    
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         // If the category is not checkmarked, checkmark it and add it to the newsFeedCategories
@@ -73,10 +78,10 @@ extension CategoriesViewController : UITableViewDelegate, UITableViewDataSource 
             let category = self.categories[indexPath.row]
             
             if cell.accessoryType == .None {
-                VuseFeedEngine.sharedEngine.newsFeedCategories.insert(category)
+                VuseFeedEngine.sharedEngine.addCategory(category)
                 cell.accessoryType = .Checkmark
             } else if cell.accessoryType == .Checkmark {
-                VuseFeedEngine.sharedEngine.newsFeedCategories.remove(category)
+                VuseFeedEngine.sharedEngine.removeCategory(category)
                 cell.accessoryType = .None
             }
             

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreData
 
 class VuseFeedEngine {
     
@@ -23,8 +24,73 @@ class VuseFeedEngine {
     }()
     
     // The selected Categories to show in the news feed
-    lazy var newsFeedCategories : Set<Category> = {
-       return self.allCategories
+    private(set) lazy var newsFeedCategories : Set<Category> = {
+        // Fetch the entities
+        let fetchRequest = NSFetchRequest(entityName: "Category")
+        do {
+            let fetchedEntities = try self.moc.executeFetchRequest(fetchRequest) as! [NSManagedObject]
+            
+            // Map the entities to Categories
+            let categories = fetchedEntities.flatMap{ Category(rawValue: $0.valueForKey("category") as! String) }
+            return Set(categories) // return a Set
+        } catch {
+            // TODO: Handle exception
+        }
+        
+        return Set<Category>() // return empty Set
     }()
+    
+    lazy var moc : NSManagedObjectContext = {
+        let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        return delegate.managedObjectContext
+    }()
+    
+    func addCategory(category: Category) {
+        // Add to the category set
+        self.newsFeedCategories.insert(category)
+        
+        // Check to see if entity already exists
+        let fetchRequest = NSFetchRequest(entityName: "Category")
+        fetchRequest.predicate = NSPredicate(format: "%K == %@", "category", category.rawValue)
+        let error : NSErrorPointer = nil
+        if self.moc.countForFetchRequest(fetchRequest, error: error) == 1 { return } // Entity already exists; return
+        
+        // Save new record
+        let newEntity = NSEntityDescription.insertNewObjectForEntityForName("Category", inManagedObjectContext: self.moc)
+        newEntity.setValue(category.rawValue, forKey: "category")
+        
+        do {
+            try self.moc.save()
+        } catch {
+            // TODO: Handle exception
+        }
+        
+    }
+    
+    func removeCategory(category: Category) {
+        // Remove from the category set
+        self.newsFeedCategories.remove(category)
+        
+        // Delete entity from CoreData
+        let fetchRequest = NSFetchRequest(entityName: "Category")
+        fetchRequest.predicate = NSPredicate(format: "%K == %@", "category", category.rawValue)
+        
+        do {
+            let fetchedEntities = try self.moc.executeFetchRequest(fetchRequest) as! [NSManagedObject]
+            if let entityToDelete = fetchedEntities.first {
+                self.moc.deleteObject(entityToDelete)
+            }
+        } catch {
+            // TODO: Handle exception
+        }
+        
+        do {
+            try self.moc.save()
+        } catch {
+            // TODO: Handle exception
+        }
+        
+        // TODO: Unsubscribe CloudKit Notifications for this category
+    }
     
 }

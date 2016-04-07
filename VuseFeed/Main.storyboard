@@ -24,13 +24,13 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleAspectFill" axis="vertical" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="qEp-cV-pJE">
-                                            <rect key="frame" x="252" y="15" width="333" height="210"/>
+                                            <rect key="frame" x="210" y="15" width="375" height="210"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="oJs-3p-qlG">
-                                                    <rect key="frame" x="0.0" y="0.0" width="333" height="164"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="164"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Headline" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZTE-l2-hQC">
-                                                            <rect key="frame" x="0.0" y="0.0" width="333" height="23"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="375" height="23"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                             <nil key="highlightedColor"/>
@@ -38,13 +38,13 @@
                                                     </subviews>
                                                 </stackView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Author" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lyt-BN-b5d">
-                                                    <rect key="frame" x="0.0" y="171" width="333" height="17"/>
+                                                    <rect key="frame" x="0.0" y="171" width="375" height="17"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Publication Date" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AOL-Jn-mVs">
-                                                    <rect key="frame" x="0.0" y="195" width="333" height="15"/>
+                                                    <rect key="frame" x="0.0" y="195" width="375" height="15"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
@@ -52,7 +52,7 @@
                                             </subviews>
                                         </stackView>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6nO-tG-Wsg">
-                                            <rect key="frame" x="15" y="15" width="222" height="139"/>
+                                            <rect key="frame" x="15" y="15" width="180" height="113"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="6nO-tG-Wsg" secondAttribute="height" multiplier="16:10" id="gAt-YA-l5h"/>
                                             </constraints>
@@ -66,7 +66,7 @@
                                         <constraint firstItem="6nO-tG-Wsg" firstAttribute="top" secondItem="xOj-Gl-Lw2" secondAttribute="top" constant="15" id="Gxf-R5-hdz"/>
                                         <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="6nO-tG-Wsg" secondAttribute="bottom" constant="15" id="edp-xN-vaG"/>
                                         <constraint firstItem="qEp-cV-pJE" firstAttribute="top" secondItem="xOj-Gl-Lw2" secondAttribute="top" constant="15" id="i9a-7I-xme"/>
-                                        <constraint firstItem="6nO-tG-Wsg" firstAttribute="width" secondItem="xOj-Gl-Lw2" secondAttribute="width" multiplier="0.37" id="vf2-Wm-pfg"/>
+                                        <constraint firstItem="6nO-tG-Wsg" firstAttribute="width" secondItem="xOj-Gl-Lw2" secondAttribute="width" multiplier="0.3" id="vf2-Wm-pfg"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
@@ -96,7 +96,7 @@
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
-                    <navigationItem key="navigationItem" id="zLp-gi-wGx">
+                    <navigationItem key="navigationItem" title="News Feed" id="zLp-gi-wGx">
                         <barButtonItem key="rightBarButtonItem" title="Settings" id="ZSB-J1-Il3">
                             <connections>
                                 <action selector="settingsTapped:" destination="WRl-3Q-9PP" id="f9x-5V-Udz"/>
@@ -129,18 +129,18 @@
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" accessoryType="checkmark" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="categoryCell" textLabel="HKm-hg-cay" style="IBUITableViewCellStyleDefault" id="J0e-sC-za8" customClass="CategoryTableViewCell" customModule="VuseFeed" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" accessoryType="checkmark" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="categoryCell" textLabel="TSx-Oc-D9l" style="IBUITableViewCellStyleDefault" id="J0e-sC-za8" customClass="CategoryTableViewCell" customModule="VuseFeed" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="114" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="J0e-sC-za8" id="oxG-Tv-FTb">
                                             <rect key="frame" x="0.0" y="0.0" width="561" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="HKm-hg-cay">
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="TSx-Oc-D9l">
                                                     <rect key="frame" x="15" y="0.0" width="546" height="43"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -161,12 +161,7 @@
                             <constraint firstItem="5D9-U9-lu6" firstAttribute="top" secondItem="DEf-Qw-7hk" secondAttribute="bottom" id="bQj-HF-tS9"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="ipH-d8-UBG">
-                        <barButtonItem key="leftBarButtonItem" title="Item" systemItem="cancel" id="4oA-4z-MgY">
-                            <connections>
-                                <segue destination="IDU-gP-fZO" kind="unwind" unwindAction="unwindToNewsfeed:" id="T5Z-OD-FLu"/>
-                            </connections>
-                        </barButtonItem>
+                    <navigationItem key="navigationItem" title="Select Categories" id="ipH-d8-UBG">
                         <barButtonItem key="rightBarButtonItem" title="Item" systemItem="done" id="WcP-QP-XRj">
                             <connections>
                                 <segue destination="IDU-gP-fZO" kind="unwind" unwindAction="unwindToNewsfeed:" id="J8z-1P-b3Z"/>
