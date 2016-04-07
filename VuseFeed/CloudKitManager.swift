@@ -8,6 +8,7 @@
 
 import Foundation
 import CloudKit
+import CoreData
 
 class CloudKitManager {
     
@@ -73,13 +74,19 @@ class CloudKitManager {
         self.publicDatabase.addOperation(operation)
     }
     
-    func fetchStories(withCompletion completion: ([WatchableStory]!) -> Void) {
+    func fetchStories(withCompletion completion: ([WatchableStory]!) -> Void) throws {
     
         // Set the network activity indicator
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         
         // Create the predicate and sort descriptor
-        let predicate = NSPredicate(format: "%K >= %lf", "publicationDate",self.calculateDateInPast().timeIntervalSince1970)
+        var predicate : NSPredicate
+        do {
+            predicate = try self.constructCategoriesFetchPredicate()
+        } catch let error as NSError {
+            throw error
+        }
+        
         let sortDescriptor = NSSortDescriptor(key: "publicationDate", ascending: false)
         
         // Create the query
@@ -168,6 +175,28 @@ class CloudKitManager {
         
         // Date of hoursAgo from now (negative number indicates time in the past)
         return NSDate().dateByAddingTimeInterval(-(seconds))
+    }
+    
+    private func constructCategoriesFetchPredicate() throws -> NSPredicate {
+        
+        // Fetch the categories from CoreData
+        var fetchedEntities = [NSManagedObject]()
+        do {
+            // We guarantee in the category selection controller that there will be at least on entity returned
+            fetchedEntities = try VuseFeedEngine.fetchAllCategories()
+            
+            // Form the two predicates
+            let datePredicate = NSPredicate(format: "%K >= %lf", "publicationDate",self.calculateDateInPast().timeIntervalSince1970)
+            
+            let categories = fetchedEntities.flatMap{ $0.valueForKey("category") }
+            let categoryPredicate = NSPredicate(format: "%K IN %@", "category", categories)
+            
+            // Return a compound `AND` predicate
+            return NSCompoundPredicate(andPredicateWithSubpredicates: [datePredicate, categoryPredicate])
+        } catch let error as NSError {
+            throw error
+        }
+        
     }
     
 }

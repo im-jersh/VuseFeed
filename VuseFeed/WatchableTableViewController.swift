@@ -9,6 +9,7 @@
 import UIKit
 import CloudKit
 import LNPopupController
+import CoreData
 
 
 class WatchableTableViewController: UITableViewController {
@@ -24,23 +25,16 @@ class WatchableTableViewController: UITableViewController {
         }
     }
     var storySections : [Category]?
+    
+    lazy var moc : NSManagedObjectContext = {
+        let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        return delegate.managedObjectContext
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Fetch the stories from CloudKit and reload the table view when the results are returned
-        CloudKitManager.sharedManager().fetchStories() { (fetchedStories: [WatchableStory]!) in
-            
-            // Get the various DISTINCT category types for the section headers sorted alphabetically
-            let categorySet = Set<Category>(fetchedStories.map{ $0.category })
-            self.storySections = Array<Category>(categorySet).sort{ $0.rawValue < $1.rawValue }
-            
-            // Sort the fetched stories by category and then by publication date
-            self.stories = fetchedStories.sort{
-                return ($0.category.rawValue == $1.category.rawValue) ? ($0.epochDate > $1.epochDate) : ($0.category.rawValue < $1.category.rawValue)
-            }
-            
-        }
+        self.fetchStories()
         
         // Dynamic cell height based on content
         self.tableView.rowHeight = UITableViewAutomaticDimension
@@ -137,7 +131,7 @@ class WatchableTableViewController: UITableViewController {
         let header = UIView(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: 24.0))
         
         guard let category = self.storySections?[section] else {
-            return header
+            return nil
         }
         
         header.backgroundColor = UIColor.colorForCategory(category)
@@ -151,7 +145,8 @@ class WatchableTableViewController: UITableViewController {
         
         return header
     }
-
+    
+    
     
 // MARK: - Navigation
 
@@ -167,7 +162,32 @@ class WatchableTableViewController: UITableViewController {
             
         }
         
-        //let viewController = segue.destinationViewController as! CategoriesViewController
+    }
+
+}
+
+
+extension WatchableTableViewController {
+    
+    func fetchStories() {
+        
+        // Fetch the stories from CloudKit and reload the table view when the results are returned
+        do {
+            try CloudKitManager.sharedManager().fetchStories() { (fetchedStories: [WatchableStory]!) in
+                
+                // Get the various DISTINCT category types for the section headers sorted alphabetically
+                let categorySet = Set<Category>(fetchedStories.map{ $0.category })
+                self.storySections = Array<Category>(categorySet).sort{ $0.rawValue < $1.rawValue }
+                
+                // Sort the fetched stories by category and then by publication date
+                self.stories = fetchedStories.sort{
+                    return ($0.category.rawValue == $1.category.rawValue) ? ($0.epochDate > $1.epochDate) : ($0.category.rawValue < $1.category.rawValue)
+                }
+                
+            }
+        } catch let _ as NSError {
+            // TODO: Handle exception
+        }
         
     }
 
@@ -182,8 +202,55 @@ class WatchableTableViewController: UITableViewController {
     @IBAction func settingsTapped(sender: AnyObject) {
         print("settings tapped")
     }
-
+    
     @IBAction func unwindToNewsfeed(segue: UIStoryboardSegue){
         
+        // Check the segue identifier
+        if segue.identifier == "unwindToNewsfeed" {
+            
+            // Check if there are any changes to the managed object context
+            if self.moc.hasChanges {
+                // Save the changed
+                do {
+                    try self.moc.save()
+                } catch {
+                    // TODO: Handle exceptions
+                }
+                
+                // Empty the table view
+                self.stories?.removeAll()
+                self.storySections?.removeAll()
+                self.tableView.reloadData()
+                self.fetchStories()
+            }
+            
+        }
+        
     }
+    
+    
+    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

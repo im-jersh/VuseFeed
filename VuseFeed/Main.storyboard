@@ -164,7 +164,7 @@
                     <navigationItem key="navigationItem" title="Select Categories" id="ipH-d8-UBG">
                         <barButtonItem key="rightBarButtonItem" title="Item" systemItem="done" id="WcP-QP-XRj">
                             <connections>
-                                <segue destination="IDU-gP-fZO" kind="unwind" unwindAction="unwindToNewsfeed:" id="J8z-1P-b3Z"/>
+                                <segue destination="IDU-gP-fZO" kind="unwind" identifier="unwindToNewsfeed" unwindAction="unwindToNewsfeed:" id="J8z-1P-b3Z"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>

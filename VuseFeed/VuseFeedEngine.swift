@@ -59,12 +59,6 @@ class VuseFeedEngine {
         let newEntity = NSEntityDescription.insertNewObjectForEntityForName("Category", inManagedObjectContext: self.moc)
         newEntity.setValue(category.rawValue, forKey: "category")
         
-        do {
-            try self.moc.save()
-        } catch {
-            // TODO: Handle exception
-        }
-        
     }
     
     func removeCategory(category: Category) {
@@ -84,13 +78,52 @@ class VuseFeedEngine {
             // TODO: Handle exception
         }
         
-        do {
-            try self.moc.save()
-        } catch {
-            // TODO: Handle exception
-        }
-        
         // TODO: Unsubscribe CloudKit Notifications for this category
     }
     
+    class func fetchAllCategories() throws -> [NSManagedObject] {
+        
+        let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let moc = delegate.managedObjectContext
+        
+        let fetchRequest = NSFetchRequest(entityName: "Category")
+        do {
+            // We guarantee in the category selection controller that there will be at least on entity returned
+            let fetchedEntities = try moc.executeFetchRequest(fetchRequest) as! [NSManagedObject]
+            return fetchedEntities
+        } catch let error as NSError {
+            throw error
+        }
+        
+    }
+    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
