@@ -12,6 +12,7 @@ class CategoriesViewController: UIViewController {
 
     @IBOutlet weak var categoriesTable: UITableView!
     
+    // Array of all categories sorted alphabetically
     var categories = Array(VuseFeedEngine.sharedEngine.allCategories).sort({ $0.rawValue < $1.rawValue })
     
     override func viewDidLoad() {
@@ -93,6 +94,26 @@ extension CategoriesViewController : UITableViewDelegate, UITableViewDataSource 
 }
 
 
+extension CategoriesViewController {
+    
+    @IBAction func selectAllCategoriesWasTapped(sender: AnyObject) {
+        
+        // Get all the cells
+        let cells = self.categoriesTable.visibleCells
+        
+        // Iterate through each cell and checkmark it if it isn't checkmarked already
+        for cell in cells {
+            if cell.accessoryType == .None {
+                if let indexPath = self.categoriesTable.indexPathForCell(cell){
+                    cell.accessoryType = .Checkmark
+                    VuseFeedEngine.sharedEngine.addCategory(self.categories[indexPath.row])
+                }
+            }
+        }
+        
+    }
+    
+}
 
 
 
