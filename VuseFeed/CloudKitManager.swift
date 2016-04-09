@@ -34,8 +34,6 @@ class CloudKitManager {
     // Check if there are records; upload all stories if not.
     func seedCloudKit() {
         
-        print("SEEDING CLOUDKIT.....")
-        
         // Set the network activity indicator
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         
@@ -61,6 +59,8 @@ class CloudKitManager {
             guard !storiesPresent else {
                 return
             }
+            
+            print("SEEDING CLOUDKIT.....")
             
             // TODO: Delete all records first
             

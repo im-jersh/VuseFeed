@@ -56,6 +56,11 @@
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="6nO-tG-Wsg" secondAttribute="height" multiplier="16:10" id="gAt-YA-l5h"/>
                                             </constraints>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                    <integer key="value" value="5"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
                                         </imageView>
                                     </subviews>
                                     <constraints>
