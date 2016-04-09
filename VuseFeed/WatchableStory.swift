@@ -63,7 +63,7 @@ extension UIColor {
 
 class WatchableStory {
 
-    private(set) var recordID : CKRecordID!
+    private(set) var cloudKitRecord : CKRecord
     private(set) var author : String!
     private(set) var category : Category!
     private(set) var headline : String!
@@ -88,7 +88,7 @@ class WatchableStory {
 
     init(fromRecord record: CKRecord) {
         
-        self.recordID = record.recordID
+        self.cloudKitRecord = record
         guard let author = record["author"] as? String, headline = record["headline"] as? String, categoryString = record["category"] as? String, pubDate = record["publicationDate"] as? Double, summary = record["summary"] as? String, category = Category(rawValue: categoryString) else {
             return
         }

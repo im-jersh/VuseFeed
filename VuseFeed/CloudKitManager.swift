@@ -24,11 +24,13 @@ class CloudKitManager {
     private var publicDatabase : CKDatabase {
         return self.defaultContainer.publicCloudDatabase
     }
+    private var privateDatabase : CKDatabase {
+        return self.defaultContainer.privateCloudDatabase
+    }
     
     class func sharedManager() -> CloudKitManager {
         return self.sharedInstance
     }
-    
     
     
     // Check if there are records; upload all stories if not.
@@ -223,7 +225,7 @@ class CloudKitManager {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         
         // Download the complete record with the convenience API
-        self.publicDatabase.fetchRecordWithID(story.recordID) { (record, error) in
+        self.publicDatabase.fetchRecordWithID(story.cloudKitRecord.recordID) { (record, error) in
             // Unset the activity indicator
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
          
@@ -243,8 +245,32 @@ class CloudKitManager {
     }
     
     // Save the record to the user's private database
-    func saveStoryToPrivateDatabase(story: WatchableStory) {
+    func saveStoryToPrivateDatabase(story: WatchableStory, withCompletionHandler completion: (success : Bool) -> Void) {
         
+        let record = story.cloudKitRecord
+        
+        self.privateDatabase.saveRecord(record) { (record, error) in
+            if error != nil {
+                completion(success: false)
+            } else {
+                completion(success: true)
+            }
+        }
+        
+    }
+    
+    // Deletes the record from the user's private database
+    func deleteStoryFromPrivateDatabase(story: WatchableStory, withCompletionHandler completion: (success : Bool) -> Void) {
+        
+        let record = story.cloudKitRecord
+        
+        self.privateDatabase.deleteRecordWithID(record.recordID) { (recordID, error) in
+            if error != nil {
+                completion(success: false)
+            } else {
+                completion(success: true)
+            }
+        }
     }
     
     func saveStoryToPublicDatabase(story: WatchableStory) {
