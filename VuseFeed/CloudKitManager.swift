@@ -31,47 +31,135 @@ class CloudKitManager {
     
     
     
-    // Fetch all story records
-    func fetchAllTestStories(withCompletion completion: ([WatchableStory]!) -> Void) {
+    // Check if there are records; upload all stories if not.
+    func seedCloudKit() {
+        
+        print("SEEDING CLOUDKIT.....")
         
         // Set the network activity indicator
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         
-        // Create the predicate and sort descriptor
-        let predicate = NSPredicate(value: true)
-        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
-        
-        // Create the query
+        // Check if there are any records
+        let predicate = NSPredicate(format: "%K >= %lf", "publicationDate", self.calculateDateInPast())
         let query = CKQuery(recordType: "Story", predicate: predicate)
-        query.sortDescriptors = [sortDescriptor]
+        query.sortDescriptors = [NSSortDescriptor(key: "publicationDate", ascending: false)]
         
-        // Create the query operation
         let operation = CKQueryOperation(query: query)
-        operation.desiredKeys = ["author", "category", "headline", "mainVideo", "publicationDate", "summary", "videoThumbnailString", "watchVideo", "videoThumbnail"]
-        //operation.resultsLimit = 50
+        operation.desiredKeys = ["publicationDate"]
+        operation.resultsLimit = 1
         
-        var newStories = [WatchableStory]()
-        
-        // Set the per record completion block
+        var storiesPresent = false
         operation.recordFetchedBlock = { (record) in
-            //print(record)
-            newStories.append(WatchableStory(fromRecord: record))
+            // There was at least 1 story
+            storiesPresent = true
         }
         
         operation.queryCompletionBlock = { (cursor, error) in
-            // Unset the activity indicator
+            
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
             
-            if error == nil {
-                dispatch_async(dispatch_get_main_queue()) {
-                    print("FETCH COMPLETE AT : \(NSDate())")
-                    completion(newStories)
+            guard !storiesPresent else {
+                return
+            }
+            
+            // TODO: Delete all records first
+            
+            // Parse the stories.json file into CKRecords
+            let storyRecords = self.parseStoriesFromFile()
+            
+            // Save the records
+            self.saveRecords(storyRecords)
+        }
+
+        self.publicDatabase.addOperation(operation)
+    }
+    
+    // Loads the story data from JSON file and creates CKRecords from that data
+    private func parseStoriesFromFile(filename: String = "stories") -> [CKRecord] {
+        
+        // Get path of JSON file
+        let path = NSBundle.mainBundle().pathForResource(filename, ofType: "json")!
+        
+        // Extract the file data into memory
+        let data = NSData(contentsOfFile: path)!
+        
+        // Create JSON object
+        let json = try! NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as? [[String: AnyObject]]
+        
+        //print(json)
+        
+        // Iterate through the json and create story objects
+        var storyRecords = [CKRecord]()
+        for (index, jsonStory) in json!.shuffle().enumerate() {
+            
+            // extract the json data for each story
+            guard let author = jsonStory["AUTHOR"] as? String, category = jsonStory["CATEGORY"] as? String, summary = jsonStory["SUMMARY"] as? String, headline = jsonStory["HEADLINE"] as? String, imageLink = jsonStory["IMAGE_LINK"] as? String, article = jsonStory["ARTICLE"] as? NSString else {
+                continue
+            }
+            
+            // Create a file in the tmp directory for the article asset
+            let tempFileURL = NSURL.fileURLWithPath(NSTemporaryDirectory(), isDirectory: true).URLByAppendingPathComponent("\(headline).txt")
+            do {
+                try article.writeToURL(tempFileURL, atomically: true, encoding: NSUTF8StringEncoding)
+            } catch let error as NSError {
+                print(error.localizedDescription)
+                continue
+            }
+            
+            // Create the asset
+            let articleAsset = CKAsset(fileURL: tempFileURL)
+            
+            // Create a story record
+            let storyRecord = CKRecord(recordType: "Story")
+            storyRecord.setValue(articleAsset, forKey: "article")
+            storyRecord.setValue(author, forKey: "author")
+            storyRecord.setValue(category, forKey: "category")
+            storyRecord.setValue(summary, forKey: "summary")
+            storyRecord.setValue(headline, forKey: "headline")
+            storyRecord.setValue(imageLink, forKey: "videoThumbnailString")
+            
+            // Save the date
+            let nowDouble = NSDate().timeIntervalSince1970
+            let multiplier = Double(index * 5000)
+            let dateDouble = Double(nowDouble - multiplier)
+            storyRecord.setValue(dateDouble, forKey: "publicationDate")
+            
+            // Append the record for saving
+            storyRecords.append(storyRecord)
+        }
+        
+        print("\(storyRecords.count) CKRECORDS TO SAVE")
+        
+        return storyRecords
+    }
+    
+    // Saves a batch of records to a CloudKit datase
+    func saveRecords(records: [CKRecord], toDatabase database: CKDatabase = CKContainer.defaultContainer().publicCloudDatabase) {
+        
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        
+        // Create the save operation
+        let saveOperation = CKModifyRecordsOperation(recordsToSave: records, recordIDsToDelete: nil)
+        saveOperation.modifyRecordsCompletionBlock = { (savedRecords, deletedRecords, error) in
+            print("\(savedRecords?.count ?? 0) CKRECORDS WERE SAVED")
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            
+            // Update the UI
+            dispatch_async(dispatch_get_main_queue()) {
+                // Get the delegate and the root nagivation controller
+                let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
+                let rootNavigationController = delegate.window?.rootViewController as? UINavigationController
+                
+                // Get the newsfeed and fetch the newly uploaded records.
+                if let newsFeed = rootNavigationController?.viewControllers.first as? WatchableTableViewController {
+                    newsFeed.fetchStories()
                 }
             }
         }
         
-        print("FETCH BEGAN AT : \(NSDate())")
-        self.publicDatabase.addOperation(operation)
+        // Run the operation
+        self.publicDatabase.addOperation(saveOperation)
+        
     }
     
     // Fetch all stories by category that were published within the last 36hrs
@@ -121,7 +209,6 @@ class CloudKitManager {
                     completion(newStories)
                 }
             }
-            
         }
         
         // Start the query
@@ -157,6 +244,12 @@ class CloudKitManager {
     
     // Save the record to the user's private database
     func saveStoryToPrivateDatabase(story: WatchableStory) {
+        
+    }
+    
+    func saveStoryToPublicDatabase(story: WatchableStory) {
+        
+        
         
     }
     
@@ -210,6 +303,43 @@ extension CloudKitManager {
     }
     
 }
+
+extension CollectionType {
+    /// Return a copy of `self` with its elements shuffled
+    func shuffle() -> [Generator.Element] {
+        var list = Array(self)
+        list.shuffleInPlace()
+        return list
+    }
+}
+
+extension MutableCollectionType where Index == Int {
+    /// Shuffle the elements of `self` in-place.
+    mutating func shuffleInPlace() {
+        // empty and single-element collections don't shuffle
+        if count < 2 { return }
+        
+        for i in 0..<count - 1 {
+            let j = Int(arc4random_uniform(UInt32(count - i))) + i
+            guard i != j else { continue }
+            swap(&self[i], &self[j])
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
