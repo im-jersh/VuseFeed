@@ -23,6 +23,17 @@ class CategoriesViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
+    override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
+        
+        if identifier == "unwindToNewsfeed" && VuseFeedEngine.sharedEngine.newsFeedCategories.isEmpty {
+            // There must be at least one category selected, otherwise the news feed would be empty; notify the user and cancel the segue
+            self.showAlertController(withMessage: "You must select at least 1 category otherwise your news feed will be all boring and we can't have you getting bored!")
+            
+            return false
+        }
+        
+        return true
+    }
 
     /*
     // MARK: - Navigation
@@ -111,6 +122,16 @@ extension CategoriesViewController {
             }
         }
         
+    }
+    
+    func showAlertController(withMessage message: String) {
+        
+        let alert = UIAlertController(title: "Uh Oh", message: message, preferredStyle: .Alert)
+        let action = UIAlertAction(title: "Got It", style: .Default, handler: nil)
+        
+        alert.addAction(action)
+        
+        self.presentViewController(alert, animated: true, completion: nil)
     }
     
 }

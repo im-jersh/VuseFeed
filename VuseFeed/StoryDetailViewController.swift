@@ -150,9 +150,15 @@ class StoryDetailViewController: UIViewController {
     }
     
     func actionButtonTapped() {
-        print("ACTION BUTTON TAPPED")
+        // TODO: Add ability to bookmark or share from an action sheet
     }
-
+    
+    @IBAction func bookmarkButtonWasTapped(sender: AnyObject) {
+        
+        // Save the story to the user's private database
+        
+    }
+    
     @IBAction func mediaViewWasTapped(sender: AnyObject) {
         
         // The gesture should only effect a video player, not an image

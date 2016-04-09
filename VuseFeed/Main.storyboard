@@ -312,7 +312,11 @@
                                 <items>
                                     <barButtonItem systemItem="action" id="xLl-7T-P9F"/>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="Xnu-P8-GxM"/>
-                                    <barButtonItem title="Item" image="bookmark" id="PNe-uI-RJK"/>
+                                    <barButtonItem title="Item" image="bookmark" id="PNe-uI-RJK">
+                                        <connections>
+                                            <action selector="bookmarkButtonWasTapped:" destination="eJS-O3-YcE" id="K9k-t1-LeN"/>
+                                        </connections>
+                                    </barButtonItem>
                                 </items>
                             </toolbar>
                         </subviews>

@@ -74,6 +74,7 @@ class CloudKitManager {
         self.publicDatabase.addOperation(operation)
     }
     
+    // Fetch all stories by category that were published within the last 36hrs
     func fetchStories(withCompletion completion: ([WatchableStory]!) -> Void) throws {
     
         // Set the network activity indicator
@@ -128,6 +129,7 @@ class CloudKitManager {
         self.publicDatabase.addOperation(operation)
     }
     
+    // Update the story with it's assets
     func updateCompleteStory(story: WatchableStory, completion: (WatchableStory) -> Void) {
         
         // Set the network activity indicator
@@ -153,7 +155,15 @@ class CloudKitManager {
         }
     }
     
-    // Helper function
+    // Save the record to the user's private database
+    func saveStoryToPrivateDatabase(story: WatchableStory) {
+        
+    }
+    
+}
+
+extension CloudKitManager {
+    
     private func setLastFetchTime() {
         NSUserDefaults.standardUserDefaults().setObject(NSDate(), forKey: "lastFetchTime")
     }
@@ -200,8 +210,6 @@ class CloudKitManager {
     }
     
 }
-
-
 
 
 
