@@ -245,16 +245,43 @@ class CloudKitManager {
     }
     
     // Save the record to the user's private database
-    func saveStoryToPrivateDatabase(story: WatchableStory, withCompletionHandler completion: (success : Bool) -> Void) {
+    func saveStoryToPrivateDatabase(story: WatchableStory, withCompletionHandler completion: (success : Bool, message: String?) -> Void) {
         
-        let record = story.cloudKitRecord
-        
-        self.privateDatabase.saveRecord(record) { (record, error) in
-            if error != nil {
-                completion(success: false)
-            } else {
-                completion(success: true)
+        // Let's first make sure we have a complete record first
+        if story.article == nil {
+            self.updateCompleteStory(story) { [unowned self] (updatedStory) in
+                self.saveStoryToPrivateDatabase(updatedStory, withCompletionHandler: completion)
             }
+        }
+        
+        // Once we have a complete record, we need to create a copy of it in order to save a record with a unique recordID
+        guard let recordCopy = story.createDuplicateCloudKitRecord() else {
+            completion(success: false, message: "We weren't able to save your bookmarked story.")
+            return
+        }
+        
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        print("SAVING BOOKMARK...")
+        
+        self.privateDatabase.saveRecord(recordCopy) { (record, error) in
+            
+            dispatch_async(dispatch_get_main_queue(), { 
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                if error != nil {
+                    print(error?.localizedDescription)
+                    
+                    // If the error code was 14, then the bookmark has already been saved to the user's private database before
+                    if error!.code == 14 {
+                        completion(success: false, message: "It looks like you've already bookmarked this story.")
+                    } else {
+                        completion(success: false, message: "We weren't able to save your bookmarked story.")
+                    }
+                    
+                } else {
+                    print("BOOKMARK SAVED!")
+                    completion(success: true, message: nil)
+                }
+            })
         }
         
     }
@@ -262,14 +289,18 @@ class CloudKitManager {
     // Deletes the record from the user's private database
     func deleteStoryFromPrivateDatabase(story: WatchableStory, withCompletionHandler completion: (success : Bool) -> Void) {
         
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         let record = story.cloudKitRecord
         
         self.privateDatabase.deleteRecordWithID(record.recordID) { (recordID, error) in
-            if error != nil {
-                completion(success: false)
-            } else {
-                completion(success: true)
-            }
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                if error != nil {
+                    completion(success: false)
+                } else {
+                    completion(success: true)
+                }
+            })
         }
     }
     
