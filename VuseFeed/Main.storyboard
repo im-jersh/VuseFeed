@@ -58,7 +58,7 @@
                                             </constraints>
                                             <userDefinedRuntimeAttributes>
                                                 <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                    <integer key="value" value="5"/>
+                                                    <integer key="value" value="6"/>
                                                 </userDefinedRuntimeAttribute>
                                             </userDefinedRuntimeAttributes>
                                         </imageView>
@@ -426,6 +426,53 @@
             </objects>
             <point key="canvasLocation" x="975" y="1312"/>
         </scene>
+        <!--Bookmark Table View Controller-->
+        <scene sceneID="SgP-Us-WpF">
+            <objects>
+                <tableViewController id="TMu-dh-3OR" customClass="BookmarkTableViewController" customModule="VuseFeed" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="qIE-Qr-cm6">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="lpS-da-xEb">
+                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lpS-da-xEb" id="sMt-14-dPT">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="TMu-dh-3OR" id="fKc-Ba-66d"/>
+                            <outlet property="delegate" destination="TMu-dh-3OR" id="896-KW-KlW"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="qGY-ds-ywg"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XIF-P8-mmD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1818" y="2032"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="EQ4-uk-sQH">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="CJP-oq-cTn" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ypn-aX-EeN">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="TMu-dh-3OR" kind="relationship" relationship="rootViewController" id="a29-04-lTN"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8fx-py-0Fx" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1818" y="1312"/>
+        </scene>
     </scenes>
     <resources>
         <image name="1458154831" width="333" height="232"/>
@@ -433,4 +480,5 @@
         <image name="playerPause" width="100" height="100"/>
         <image name="playerPlay" width="100" height="100"/>
     </resources>
+    <color key="tintColor" red="0.52106726169586182" green="0.24050712585449219" blue="0.68248951435089111" alpha="1" colorSpace="calibratedRGB"/>
 </document>

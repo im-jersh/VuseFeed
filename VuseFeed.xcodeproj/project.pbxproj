@@ -49,6 +49,7 @@
 		03789CBD1CADAF9A00F631BB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03789CBC1CADAF9A00F631BB /* QuartzCore.framework */; };
 		03789CBF1CADAFA000F631BB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03789CBE1CADAFA000F631BB /* CoreGraphics.framework */; };
 		03E09A641CB96ACE006AEDFE /* stories.json in Resources */ = {isa = PBXBuildFile; fileRef = 03E09A631CB96ACE006AEDFE /* stories.json */; };
+		03E09A681CBAF1C3006AEDFE /* BookmarkTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E09A671CBAF1C3006AEDFE /* BookmarkTableViewController.swift */; };
 		671844101CAB378400C53DE2 /* CategoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6718440F1CAB378400C53DE2 /* CategoriesViewController.swift */; };
 		671844121CAB436B00C53DE2 /* CategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671844111CAB436B00C53DE2 /* CategoryTableViewCell.swift */; };
 /* End PBXBuildFile section */
@@ -163,6 +164,7 @@
 		03789CBC1CADAF9A00F631BB /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		03789CBE1CADAFA000F631BB /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		03E09A631CB96ACE006AEDFE /* stories.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = stories.json; sourceTree = "<group>"; };
+		03E09A671CBAF1C3006AEDFE /* BookmarkTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkTableViewController.swift; sourceTree = "<group>"; };
 		6718440F1CAB378400C53DE2 /* CategoriesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoriesViewController.swift; sourceTree = "<group>"; };
 		671844111CAB436B00C53DE2 /* CategoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -346,6 +348,7 @@
 		03583EF01CA42DB800C5EAFE /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				03E09A671CBAF1C3006AEDFE /* BookmarkTableViewController.swift */,
 				6718440F1CAB378400C53DE2 /* CategoriesViewController.swift */,
 				03583EF81CA42E1A00C5EAFE /* StoryDetailViewController.swift */,
 				03583EFA1CA42E2300C5EAFE /* WatchablePlayerController.swift */,
@@ -594,6 +597,7 @@
 				03583EF21CA42DE800C5EAFE /* AVPlayerView.swift in Sources */,
 				03583EF91CA42E1A00C5EAFE /* StoryDetailViewController.swift in Sources */,
 				0339D2B81CA42A960072886E /* VuseFeed.xcdatamodeld in Sources */,
+				03E09A681CBAF1C3006AEDFE /* BookmarkTableViewController.swift in Sources */,
 				03583EFD1CA42E2A00C5EAFE /* WatchableStory.swift in Sources */,
 				671844101CAB378400C53DE2 /* CategoriesViewController.swift in Sources */,
 				03583EF51CA42E0200C5EAFE /* CloudKitManager.swift in Sources */,

@@ -1,8 +1,8 @@
 //
-//  WatchableTableViewController.swift
-//  Watchable
+//  BookmarkTableViewController.swift
+//  VuseFeed
 //
-//  Created by Joshua O'Steen on 2/22/16.
+//  Created by Joshua O'Steen on 4/10/16.
 //  Copyright © 2016 Joshua O'Steen. All rights reserved.
 //
 
@@ -12,50 +12,25 @@ import LNPopupController
 import CoreData
 
 
-class WatchableTableViewController: UITableViewController {
-    
-    @IBOutlet weak var categoriesButton: UIBarButtonItem!
-    @IBOutlet weak var bookmarksButton: UIBarButtonItem!
-    @IBOutlet weak var settingsButton: UIBarButtonItem!
-    
-    let reuseIdentifier = "WatchableStoryCell"
-    var stories : [WatchableStory]? {
-        didSet {
-            self.tableView.reloadData()
-        }
-    }
-    var storySections : [Category]?
-    
-    lazy var moc : NSManagedObjectContext = {
-        let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        return delegate.managedObjectContext
-    }()
+class BookmarkTableViewController: WatchableTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.fetchStories()
-        
-        // Dynamic cell height based on content
-        self.tableView.rowHeight = UITableViewAutomaticDimension
-        self.tableView.estimatedRowHeight = 200.0
-        
-        // Make the popupcontroller bar title bold
-        LNPopupBar.appearanceWhenContainedInInstancesOfClasses([UINavigationController.self]).titleTextAttributes = [ NSFontAttributeName : UIFont.boldSystemFontOfSize(12.0)]
         
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        
     }
 
 // MARK: - Table view data source
-
+    
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return self.storySections?.count ?? 1
     }
-
+    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         // Filter the stories by the category represented by the section
@@ -65,7 +40,7 @@ class WatchableTableViewController: UITableViewController {
         
         return self.stories?.filter{ $0.category.rawValue == category.rawValue }.count ?? 0
     }
-
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         // Create the cell
@@ -79,7 +54,7 @@ class WatchableTableViewController: UITableViewController {
         }
         
         let filteredStories = self.stories?.filter{ $0.category.rawValue == category.rawValue }
-
+        
         // Extract the story from the filtered set
         if let story = filteredStories?[indexPath.row] {
             
@@ -96,7 +71,7 @@ class WatchableTableViewController: UITableViewController {
         
         return cell
     }
-
+    
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         // Get the stories corresponding to the section that this indexPath is in
@@ -146,122 +121,14 @@ class WatchableTableViewController: UITableViewController {
         return header
     }
     
-    
-    
-// MARK: - Navigation
+    /*
+    // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-        if let identifier = segue.identifier, destVC = segue.destinationViewController as? StoryDetailViewController where identifier == "presentStoryDetail" {
-            
-            if let indexPath = self.tableView.indexPathForSelectedRow, story = self.stories?[indexPath.row] {
-                // Set the destination story to the selected cell's story
-                destVC.story = story
-            }
-            
-        }
-        
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
     }
+    */
 
 }
-
-
-extension WatchableTableViewController {
-    
-    func fetchStories() {
-        
-        // Fetch the stories from CloudKit and reload the table view when the results are returned
-        do {
-            try CloudKitManager.sharedManager().fetchStories() { (fetchedStories: [WatchableStory]!) in
-                
-                // Get the various DISTINCT category types for the section headers sorted alphabetically
-                let categorySet = Set<Category>(fetchedStories.map{ $0.category })
-                self.storySections = Array<Category>(categorySet).sort{ $0.rawValue < $1.rawValue }
-                
-                // Sort the fetched stories by category and then by publication date
-                self.stories = fetchedStories.sort{
-                    return ($0.category.rawValue == $1.category.rawValue) ? ($0.epochDate > $1.epochDate) : ($0.category.rawValue < $1.category.rawValue)
-                }
-                
-            }
-        } catch let _ as NSError {
-            // TODO: Handle exception
-        }
-        
-    }
-
-    @IBAction func categoriesTapped(sender: AnyObject) {
-        print("categories tapped")
-    }
-    
-    @IBAction func bookmarksTapped(sender: AnyObject) {
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    }
-    
-    @IBAction func settingsTapped(sender: AnyObject) {
-        print("settings tapped")
-    }
-    
-    @IBAction func unwindToNewsfeed(segue: UIStoryboardSegue){
-        
-        // Check the segue identifier
-        if segue.identifier == "unwindToNewsfeed" {
-            
-            // Check if there are any changes to the managed object context
-            if self.moc.hasChanges {
-                // Save the changed
-                do {
-                    try self.moc.save()
-                } catch {
-                    // TODO: Handle exceptions
-                }
-                
-                // Empty the table view
-                self.stories?.removeAll()
-                self.storySections?.removeAll()
-                self.tableView.reloadData()
-                self.fetchStories()
-            }
-            
-        }
-        
-    }
-    
-    
-    
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
