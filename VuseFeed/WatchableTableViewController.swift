@@ -205,7 +205,18 @@ extension WatchableTableViewController {
     }
     
     @IBAction func bookmarksTapped(sender: AnyObject) {
-        print("bookmarks tapped")
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     }
     
     @IBAction func settingsTapped(sender: AnyObject) {

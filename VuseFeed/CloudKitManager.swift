@@ -24,11 +24,13 @@ class CloudKitManager {
     private var publicDatabase : CKDatabase {
         return self.defaultContainer.publicCloudDatabase
     }
+    private var privateDatabase : CKDatabase {
+        return self.defaultContainer.privateCloudDatabase
+    }
     
     class func sharedManager() -> CloudKitManager {
         return self.sharedInstance
     }
-    
     
     
     // Check if there are records; upload all stories if not.
@@ -223,7 +225,7 @@ class CloudKitManager {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         
         // Download the complete record with the convenience API
-        self.publicDatabase.fetchRecordWithID(story.recordID) { (record, error) in
+        self.publicDatabase.fetchRecordWithID(story.cloudKitRecord.recordID) { (record, error) in
             // Unset the activity indicator
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
          
@@ -243,8 +245,63 @@ class CloudKitManager {
     }
     
     // Save the record to the user's private database
-    func saveStoryToPrivateDatabase(story: WatchableStory) {
+    func saveStoryToPrivateDatabase(story: WatchableStory, withCompletionHandler completion: (success : Bool, message: String?) -> Void) {
         
+        // Let's first make sure we have a complete record first
+        if story.article == nil {
+            self.updateCompleteStory(story) { [unowned self] (updatedStory) in
+                self.saveStoryToPrivateDatabase(updatedStory, withCompletionHandler: completion)
+            }
+        }
+        
+        // Once we have a complete record, we need to create a copy of it in order to save a record with a unique recordID
+        guard let recordCopy = story.createDuplicateCloudKitRecord() else {
+            completion(success: false, message: "We weren't able to save your bookmarked story.")
+            return
+        }
+        
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        print("SAVING BOOKMARK...")
+        
+        self.privateDatabase.saveRecord(recordCopy) { (record, error) in
+            
+            dispatch_async(dispatch_get_main_queue(), { 
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                if error != nil {
+                    print(error?.localizedDescription)
+                    
+                    // If the error code was 14, then the bookmark has already been saved to the user's private database before
+                    if error!.code == 14 {
+                        completion(success: false, message: "It looks like you've already bookmarked this story.")
+                    } else {
+                        completion(success: false, message: "We weren't able to save your bookmarked story.")
+                    }
+                    
+                } else {
+                    print("BOOKMARK SAVED!")
+                    completion(success: true, message: nil)
+                }
+            })
+        }
+        
+    }
+    
+    // Deletes the record from the user's private database
+    func deleteStoryFromPrivateDatabase(story: WatchableStory, withCompletionHandler completion: (success : Bool) -> Void) {
+        
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        let record = story.cloudKitRecord
+        
+        self.privateDatabase.deleteRecordWithID(record.recordID) { (recordID, error) in
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                if error != nil {
+                    completion(success: false)
+                } else {
+                    completion(success: true)
+                }
+            })
+        }
     }
     
     func saveStoryToPublicDatabase(story: WatchableStory) {

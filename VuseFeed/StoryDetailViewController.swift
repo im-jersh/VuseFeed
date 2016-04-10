@@ -163,7 +163,11 @@ class StoryDetailViewController: UIViewController {
     
     @IBAction func bookmarkButtonWasTapped(sender: AnyObject) {
         
-        // Save the story to the user's private database
+        CloudKitManager.sharedManager().saveStoryToPrivateDatabase(self.story) { (success, message) in
+            if !success {
+                self.presentAlertWithMessage(message!)
+            }
+        }
         
     }
     
@@ -186,6 +190,16 @@ class StoryDetailViewController: UIViewController {
         let shareMenu = UIActivityViewController(activityItems: [story.headline], applicationActivities: nil)
         presentViewController(shareMenu, animated: true, completion: nil)
     }
+
+    func presentAlertWithMessage(message: String) {
+        
+        let alert = UIAlertController(title: "Uh Oh", message: message, preferredStyle: .Alert)
+        let action = UIAlertAction(title: "Got It", style: .Default, handler: nil)
+        alert.addAction(action)
+        
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
 }
 
 extension StoryDetailViewController : UIScrollViewDelegate {
