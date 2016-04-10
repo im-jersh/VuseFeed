@@ -11,6 +11,10 @@ import AVKit
 import AVFoundation
 import LNPopupController
 
+protocol StoryDetailDelegate {
+    func storyDetail(storyDetail: StoryDetailViewController, actionWasTappedForStory story: WatchableStory)
+}
+
 class StoryDetailViewController: UIViewController {
 
     @IBOutlet weak var scrollView: UIScrollView!
@@ -31,6 +35,8 @@ class StoryDetailViewController: UIViewController {
     
     @IBOutlet var thumbnailImageView: UIImageView!
     @IBOutlet weak var videoControlContainerBlurView: UIVisualEffectView!
+    
+    var delegate : StoryDetailDelegate?
     
     var popupPlayButton : UIButton?
     
@@ -150,7 +156,9 @@ class StoryDetailViewController: UIViewController {
     }
     
     func actionButtonTapped() {
-        // TODO: Add ability to bookmark or share from an action sheet
+        
+        self.delegate?.storyDetail(self, actionWasTappedForStory: self.story)
+        
     }
     
     @IBAction func bookmarkButtonWasTapped(sender: AnyObject) {
@@ -167,6 +175,17 @@ class StoryDetailViewController: UIViewController {
         }
     }
     
+    @IBAction func shareButtonWasTapped(sender: AnyObject) {
+        showShareMenu()
+    }
+    
+    //func to create and show the UIActivityController for the share menu
+    func showShareMenu() {
+       
+        //create share sheet
+        let shareMenu = UIActivityViewController(activityItems: [story.headline], applicationActivities: nil)
+        presentViewController(shareMenu, animated: true, completion: nil)
+    }
 }
 
 extension StoryDetailViewController : UIScrollViewDelegate {
