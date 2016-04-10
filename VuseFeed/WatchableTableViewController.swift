@@ -113,6 +113,7 @@ class WatchableTableViewController: UITableViewController {
             popupController.story = filteredStories[indexPath.row]
             popupController.popupItem.title = popupController.story.headline
             popupController.popupItem.subtitle = popupController.story.summary
+            popupController.delegate = self
             
             self.navigationController?.presentPopupBarWithContentViewController(popupController, openPopup: true, animated: true, completion: nil)
         }
@@ -168,6 +169,14 @@ class WatchableTableViewController: UITableViewController {
 
 
 extension WatchableTableViewController {
+    
+    //func to create and show the UIActivityController for the share menu
+    func showShareMenu(forStory story: WatchableStory) {
+        
+        //create share sheet
+        let shareMenu = UIActivityViewController(activityItems: [story.headline], applicationActivities: nil)
+        presentViewController(shareMenu, animated: true, completion: nil)
+    }
     
     func fetchStories() {
         
@@ -238,8 +247,29 @@ extension WatchableTableViewController {
         }
         
     }
+}
+
+extension WatchableTableViewController : StoryDetailDelegate {
     
-    
+    func storyDetail(storyDetail: StoryDetailViewController, actionWasTappedForStory story: WatchableStory) {
+        
+        //create an action sheet when the button is tapped
+        let actionMenu = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        
+        //add the share and bookmark acions to the menu
+        actionMenu.addAction(UIAlertAction(title: "Share", style: .Default, handler: { (action) in
+            self.showShareMenu(forStory: story)
+        }))
+        
+        actionMenu.addAction(UIAlertAction(title: "Bookmark", style: .Default, handler: { (action) in
+            print("\(action.title) saved")
+        }))
+        
+        actionMenu.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+        
+        presentViewController(actionMenu, animated: true, completion: nil)
+
+    }
     
 }
 
