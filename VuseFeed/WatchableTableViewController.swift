@@ -178,6 +178,15 @@ extension WatchableTableViewController {
         presentViewController(shareMenu, animated: true, completion: nil)
     }
     
+    func presentAlertWithMessage(message: String) {
+        
+        let alert = UIAlertController(title: "Uh Oh", message: message, preferredStyle: .Alert)
+        let action = UIAlertAction(title: "Got It", style: .Default, handler: nil)
+        alert.addAction(action)
+        
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
     func fetchStories() {
         
         // Fetch the stories from CloudKit and reload the table view when the results are returned
@@ -205,16 +214,6 @@ extension WatchableTableViewController {
     }
     
     @IBAction func bookmarksTapped(sender: AnyObject) {
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         
         
     }
@@ -262,7 +261,13 @@ extension WatchableTableViewController : StoryDetailDelegate {
         }))
         
         actionMenu.addAction(UIAlertAction(title: "Bookmark", style: .Default, handler: { (action) in
-            print("\(action.title) saved")
+            
+            CloudKitManager.sharedManager().saveStoryToPrivateDatabase(story) { (success, message) in
+                if !success {
+                    self.presentAlertWithMessage(message!)
+                }
+            }
+            
         }))
         
         actionMenu.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
