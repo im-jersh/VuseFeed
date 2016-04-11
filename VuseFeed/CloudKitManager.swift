@@ -21,10 +21,10 @@ class CloudKitManager {
     
     // Default container and public database
     private let defaultContainer = CKContainer.defaultContainer()
-    private var publicDatabase : CKDatabase {
+    var publicDatabase : CKDatabase {
         return self.defaultContainer.publicCloudDatabase
     }
-    private var privateDatabase : CKDatabase {
+    var privateDatabase : CKDatabase {
         return self.defaultContainer.privateCloudDatabase
     }
     
@@ -165,7 +165,7 @@ class CloudKitManager {
     }
     
     // Fetch all stories by category that were published within the last 36hrs
-    func fetchStories(withCompletion completion: ([WatchableStory]!) -> Void) throws {
+    func fetchStories(fromDatabase database: CKDatabase = CKContainer.defaultContainer().publicCloudDatabase, withCompletion completion: ([WatchableStory]!) -> Void) throws {
     
         // Set the network activity indicator
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
@@ -215,17 +215,17 @@ class CloudKitManager {
         
         // Start the query
         print("FETCH BEGAN AT : \(NSDate())")
-        self.publicDatabase.addOperation(operation)
+        database.addOperation(operation)
     }
     
     // Update the story with it's assets
-    func updateCompleteStory(story: WatchableStory, completion: (WatchableStory) -> Void) {
+    func updateCompleteStory(story: WatchableStory, fromDatabase database: CKDatabase = CKContainer.defaultContainer().publicCloudDatabase, completion: (WatchableStory) -> Void) {
         
         // Set the network activity indicator
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         
         // Download the complete record with the convenience API
-        self.publicDatabase.fetchRecordWithID(story.cloudKitRecord.recordID) { (record, error) in
+        database.fetchRecordWithID(story.cloudKitRecord.recordID) { (record, error) in
             // Unset the activity indicator
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
          
@@ -288,7 +288,7 @@ class CloudKitManager {
     
     // Deletes the record from the user's private database
     func deleteStoryFromPrivateDatabase(story: WatchableStory, withCompletionHandler completion: (success : Bool) -> Void) {
-        
+        print("DELETING RECORD...")
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         let record = story.cloudKitRecord
         
@@ -298,6 +298,7 @@ class CloudKitManager {
                 if error != nil {
                     completion(success: false)
                 } else {
+                    print("RECORD DELETED!")
                     completion(success: true)
                 }
             })

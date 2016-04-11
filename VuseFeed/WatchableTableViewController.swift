@@ -18,7 +18,7 @@ class WatchableTableViewController: UITableViewController {
     @IBOutlet weak var bookmarksButton: UIBarButtonItem!
     @IBOutlet weak var settingsButton: UIBarButtonItem!
     
-    let reuseIdentifier = "WatchableStoryCell"
+    var reuseIdentifier = "WatchableStoryCell"
     var stories : [WatchableStory]? {
         didSet {
             self.tableView.reloadData()
@@ -225,7 +225,7 @@ extension WatchableTableViewController {
     @IBAction func unwindToNewsfeed(segue: UIStoryboardSegue){
         
         // Check the segue identifier
-        if segue.identifier == "unwindToNewsfeed" {
+        if segue.identifier == "unwindFromCategories" {
             
             // Check if there are any changes to the managed object context
             if self.moc.hasChanges {
@@ -242,6 +242,10 @@ extension WatchableTableViewController {
                 self.tableView.reloadData()
                 self.fetchStories()
             }
+            
+        }
+        
+        if segue.identifier == "unwindFromBookmarks" {
             
         }
         

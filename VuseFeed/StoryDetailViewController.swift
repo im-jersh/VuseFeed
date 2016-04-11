@@ -80,8 +80,8 @@ class StoryDetailViewController: UIViewController {
         
     }
     
-    override func viewWillAppear(animated: Bool) {
-        
+    override func viewDidAppear(animated: Bool) {
+        self.configure()
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -93,7 +93,7 @@ class StoryDetailViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    private func configure() {
+    func configure() {
         self.headlineLabel.text = self.story.headline
         self.authorLabel.text = self.story.author
         self.summaryLabel.text = self.story.summary
@@ -111,7 +111,7 @@ class StoryDetailViewController: UIViewController {
     
     }
     
-    private func configureVideoPlayer() {
+    func configureVideoPlayer() {
         // If this story has a video, setup the player
         if let videoURL = self.story.mainVideo {
             self.avPlayer = AVPlayer(URL: videoURL)

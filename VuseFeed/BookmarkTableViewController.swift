@@ -16,8 +16,8 @@ class BookmarkTableViewController: WatchableTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         
+        self.reuseIdentifier = "BookmarkStoryCell"
     }
 
     override func didReceiveMemoryWarning() {
@@ -25,51 +25,26 @@ class BookmarkTableViewController: WatchableTableViewController {
         
     }
 
-// MARK: - Table view data source
-    
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return self.storySections?.count ?? 1
-    }
-    
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func fetchStories() {
         
-        // Filter the stories by the category represented by the section
-        guard let category = self.storySections?[section] else {
-            return 0
-        }
-        
-        return self.stories?.filter{ $0.category.rawValue == category.rawValue }.count ?? 0
-    }
-    
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
-        // Create the cell
-        guard let cell = tableView.dequeueReusableCellWithIdentifier(self.reuseIdentifier) as? VFStoryListCell else {
-            return tableView.dequeueReusableCellWithIdentifier(self.reuseIdentifier, forIndexPath: indexPath)
-        }
-        
-        // Get the stories corresponding to the section that this indexPath is in
-        guard let category = self.storySections?[indexPath.section] else {
-            return cell
-        }
-        
-        let filteredStories = self.stories?.filter{ $0.category.rawValue == category.rawValue }
-        
-        // Extract the story from the filtered set
-        if let story = filteredStories?[indexPath.row] {
-            
-            cell.headlineLabel.text = story.headline
-            cell.authorLabel.text = story.author
-            cell.pubDateLabel.text = NSDateFormatter.localizedStringFromDate(story.pubDate, dateStyle: .MediumStyle, timeStyle: .ShortStyle)
-            
-            if let imageURL = story.thumbnailImageURL {
-                cell.thumbnailImage.sd_setImageWithURL(imageURL, placeholderImage: UIImage(named: "placeholder"))
+        // Fetch the stories from CloudKit and reload the table view when the results are returned
+        do {
+            try CloudKitManager.sharedManager().fetchStories(fromDatabase: CloudKitManager.sharedManager().privateDatabase) { (fetchedStories: [WatchableStory]!) in
+                
+                // Get the various DISTINCT category types for the section headers sorted alphabetically
+                let categorySet = Set<Category>(fetchedStories.map{ $0.category })
+                self.storySections = Array<Category>(categorySet).sort{ $0.rawValue < $1.rawValue }
+                
+                // Sort the fetched stories by category and then by publication date
+                self.stories = fetchedStories.sort{
+                    return ($0.category.rawValue == $1.category.rawValue) ? ($0.epochDate > $1.epochDate) : ($0.category.rawValue < $1.category.rawValue)
+                }
+                
             }
-            
-            return cell
+        } catch let _ as NSError {
+            // TODO: Handle exception
         }
         
-        return cell
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -84,10 +59,11 @@ class BookmarkTableViewController: WatchableTableViewController {
             return
         }
         
-        if let popupController = self.storyboard?.instantiateViewControllerWithIdentifier("storyDetailController") as? StoryDetailViewController {
+        if let popupController = self.storyboard?.instantiateViewControllerWithIdentifier("bookmarkViewController") as? BookmarkDetailViewController {
             popupController.story = filteredStories[indexPath.row]
             popupController.popupItem.title = popupController.story.headline
             popupController.popupItem.subtitle = popupController.story.summary
+            popupController.delegate = self
             
             self.navigationController?.presentPopupBarWithContentViewController(popupController, openPopup: true, animated: true, completion: nil)
         }
@@ -96,39 +72,54 @@ class BookmarkTableViewController: WatchableTableViewController {
         
     }
     
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return self.storySections?[section].rawValue ?? "Category"
-    }
-    
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
-        // Create the view
-        let header = UIView(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: 24.0))
-        
-        guard let category = self.storySections?[section] else {
-            return nil
+    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == .Delete {
+            // TODO:
+            if let story = self.stories?.removeAtIndex(indexPath.row) {
+                CloudKitManager.sharedManager().deleteStoryFromPrivateDatabase(story, withCompletionHandler: { (success) in
+                    
+                })
+                //tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            }
+            
+            
+            // Delete story from user's private database
         }
-        
-        header.backgroundColor = UIColor.colorForCategory(category)
-        
-        // Create the Label
-        let label = UILabel(frame: CGRect(x: 15.0, y: 1.0, width: self.view.frame.width - 15.0, height: 24.0))
-        label.text = self.storySections?[section].rawValue ?? "Category"
-        
-        // Add the label to the view
-        header.addSubview(label)
-        
-        return header
     }
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
