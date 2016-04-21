@@ -13,7 +13,9 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
 
     func applicationDidFinishLaunching() {
         
-        //self.setupWatchConnectivity()
+        let engine = VuseFeedEngine.sharedEngine
+        engine.setupWatchConnectivity()
+        engine.fetchStoriesInstantly()
         
     }
 

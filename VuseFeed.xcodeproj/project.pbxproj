@@ -47,10 +47,10 @@
 		035CD7B81CAF05A900527B3F /* Chameleon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 035CD7A61CAEC97100527B3F /* Chameleon.framework */; };
 		035CD7B91CAF05A900527B3F /* LNPopupController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 035CD7A41CAEC8AE00527B3F /* LNPopupController.framework */; };
 		035CD7BA1CAF05A900527B3F /* WebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 035CD7A21CAEC78200527B3F /* WebImage.framework */; };
-		0364706C1CC6D10200245CC6 /* TestConnectivityInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0364706B1CC6D10200245CC6 /* TestConnectivityInterfaceController.swift */; };
 		03789CBD1CADAF9A00F631BB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03789CBC1CADAF9A00F631BB /* QuartzCore.framework */; };
 		03789CBF1CADAFA000F631BB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03789CBE1CADAFA000F631BB /* CoreGraphics.framework */; };
 		037FFA1D1CC85B910089E887 /* videos.json in Resources */ = {isa = PBXBuildFile; fileRef = 037FFA1C1CC85B910089E887 /* videos.json */; };
+		03BA44971CC928230047AE73 /* VuseFeedEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035CD7B51CAEE68D00527B3F /* VuseFeedEngine.swift */; };
 		03BC40EC1CBB480C00637C67 /* BookmarkDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BC40EB1CBB480C00637C67 /* BookmarkDetailViewController.swift */; };
 		03E09A641CB96ACE006AEDFE /* stories.json in Resources */ = {isa = PBXBuildFile; fileRef = 03E09A631CB96ACE006AEDFE /* stories.json */; };
 		03E09A681CBAF1C3006AEDFE /* BookmarkTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E09A671CBAF1C3006AEDFE /* BookmarkTableViewController.swift */; };
@@ -115,7 +115,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		030007AE1CC09E3300047F23 /* Category+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Category+Extensions.swift"; path = "VuseFeed/Category+Extensions.swift"; sourceTree = "<group>"; };
+		030007AE1CC09E3300047F23 /* Category+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Category+Extensions.swift"; sourceTree = "<group>"; };
 		0339D2AC1CA42A950072886E /* VuseFeed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VuseFeed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0339D2AF1CA42A960072886E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0339D2B71CA42A960072886E /* VuseFeed.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = VuseFeed.xcdatamodel; sourceTree = "<group>"; };
@@ -145,7 +145,7 @@
 		03583EE11CA42D7300C5EAFE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		03583EF11CA42DE800C5EAFE /* AVPlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AVPlayerView.swift; sourceTree = "<group>"; };
 		03583EF41CA42E0200C5EAFE /* CloudKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
-		03583EF61CA42E1400C5EAFE /* Story.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Story.swift; path = VuseFeed/Story.swift; sourceTree = "<group>"; };
+		03583EF61CA42E1400C5EAFE /* Story.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Story.swift; sourceTree = "<group>"; };
 		03583EF81CA42E1A00C5EAFE /* StoryDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryDetailViewController.swift; sourceTree = "<group>"; };
 		03583EFA1CA42E2300C5EAFE /* WatchablePlayerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchablePlayerController.swift; sourceTree = "<group>"; };
 		03583EFC1CA42E2A00C5EAFE /* WatchableStory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchableStory.swift; sourceTree = "<group>"; };
@@ -165,7 +165,6 @@
 		035CD7B11CAED92900527B3F /* VuseFeed-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VuseFeed-Bridging-Header.h"; sourceTree = "<group>"; };
 		035CD7B41CAEDAA400527B3F /* UIImageView+WebCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UIImageView+WebCache.h"; path = "Carthage/Build/iOS/WebImage.framework/Headers/UIImageView+WebCache.h"; sourceTree = SOURCE_ROOT; };
 		035CD7B51CAEE68D00527B3F /* VuseFeedEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VuseFeedEngine.swift; sourceTree = "<group>"; };
-		0364706B1CC6D10200245CC6 /* TestConnectivityInterfaceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestConnectivityInterfaceController.swift; sourceTree = "<group>"; };
 		03789CBC1CADAF9A00F631BB /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		03789CBE1CADAFA000F631BB /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		037FFA1C1CC85B910089E887 /* videos.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = videos.json; sourceTree = "<group>"; };
@@ -216,19 +215,9 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		030007B01CC09E3E00047F23 /* Shared */ = {
-			isa = PBXGroup;
-			children = (
-				030007AE1CC09E3300047F23 /* Category+Extensions.swift */,
-				03583EF61CA42E1400C5EAFE /* Story.swift */,
-			);
-			name = Shared;
-			sourceTree = "<group>";
-		};
 		0339D2A31CA42A940072886E = {
 			isa = PBXGroup;
 			children = (
-				030007B01CC09E3E00047F23 /* Shared */,
 				0339D2AE1CA42A960072886E /* VuseFeed */,
 				03583EC31CA42D7200C5EAFE /* VuseFeed Watch */,
 				03583ED21CA42D7300C5EAFE /* VuseFeed Watch Extension */,
@@ -295,7 +284,6 @@
 		03583ED21CA42D7300C5EAFE /* VuseFeed Watch Extension */ = {
 			isa = PBXGroup;
 			children = (
-				0364706B1CC6D10200245CC6 /* TestConnectivityInterfaceController.swift */,
 				03583ED71CA42D7300C5EAFE /* ExtensionDelegate.swift */,
 				03583F071CA42F6400C5EAFE /* VFStoriesTableController.swift */,
 				035ED9521CBDE7FB00B72748 /* 🔩 Row Controllers */,
@@ -319,6 +307,7 @@
 		03583EED1CA42D8800C5EAFE /* Data Models */ = {
 			isa = PBXGroup;
 			children = (
+				03583EF61CA42E1400C5EAFE /* Story.swift */,
 				03583EFC1CA42E2A00C5EAFE /* WatchableStory.swift */,
 				0339D2B61CA42A960072886E /* VuseFeed.xcdatamodeld */,
 			);
@@ -369,6 +358,7 @@
 			children = (
 				035CD7B51CAEE68D00527B3F /* VuseFeedEngine.swift */,
 				03583EF41CA42E0200C5EAFE /* CloudKitManager.swift */,
+				030007AE1CC09E3300047F23 /* Category+Extensions.swift */,
 				035CD7B41CAEDAA400527B3F /* UIImageView+WebCache.h */,
 			);
 			name = "Engines, Managers, & Helpers";
@@ -676,6 +666,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				03BA44971CC928230047AE73 /* VuseFeedEngine.swift in Sources */,
 				03583F0A1CA42F6400C5EAFE /* VFButtonRowController.swift in Sources */,
 				03583EDA1CA42D7300C5EAFE /* NotificationController.swift in Sources */,
 				03583F0D1CA42F6400C5EAFE /* VFStoryRowController.swift in Sources */,
@@ -684,7 +675,6 @@
 				03583F0B1CA42F6400C5EAFE /* VFHeaderRowController.swift in Sources */,
 				03583EDE1CA42D7300C5EAFE /* ComplicationController.swift in Sources */,
 				03583EDC1CA42D7300C5EAFE /* GlanceController.swift in Sources */,
-				0364706C1CC6D10200245CC6 /* TestConnectivityInterfaceController.swift in Sources */,
 				0343647D1CC2D78E0010210D /* VFStoriesTableController.swift in Sources */,
 				03583F0E1CA44B2B00C5EAFE /* Story.swift in Sources */,
 			);

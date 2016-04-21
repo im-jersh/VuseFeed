@@ -15,15 +15,21 @@ class VFStoriesTableController: WKInterfaceController {
     @IBOutlet var table: WKInterfaceTable!
     
     let jsonFileName = "Stories"
-    var stories = [Story]()
+    var stories : [Story]? {
+        didSet {
+            self.loadTable(withStories: self.stories!)
+        }
+    }
     
     
     override func awakeWithContext(context: AnyObject?) {
         
         super.awakeWithContext(context)
         
-        self.setupWatchConnectivity()
-        self.fetchStoriesInstantly()
+        VuseFeedEngine.delegate = self
+        if let watchStories = VuseFeedEngine.watchStories {
+            self.stories = watchStories
+        }
         
     }
     
@@ -45,7 +51,7 @@ class VFStoriesTableController: WKInterfaceController {
         
         // Get the categories
         var categories = [Category]()
-        for story in self.stories {
+        for story in self.stories! {
             if !categories.contains(story.category) {
                 categories.append(story.category)
             }
@@ -57,7 +63,7 @@ class VFStoriesTableController: WKInterfaceController {
             refreshRow.button.setTitle("Refresh")
         }
         
-        // Sort the categories
+        // Sort the categories and add them to the table 
         categories = categories.sort({ $0.rawValue < $1.rawValue })
         for category in categories {
             self.addStoriesToTable(byCategory: category)
@@ -72,7 +78,7 @@ class VFStoriesTableController: WKInterfaceController {
         
         
         // Scroll to hide the refresh button
-        self.table.scrollToRowAtIndex(2)
+        self.table.scrollToRowAtIndex(1)
         
     }
     
@@ -110,34 +116,31 @@ class VFStoriesTableController: WKInterfaceController {
         // Insert the category header row
         let headerIndex = NSIndexSet(index: rows)
         self.table.insertRowsAtIndexes(headerIndex, withRowType: "categoryLabel")
+        if let headerRow = self.table.rowControllerAtIndex(rows) as? VFHeaderRowController {
+            // Change the background and set the category label
+            headerRow.rowGroup.setBackgroundColor(UIColor.colorForCategory(category))
+            headerRow.categoryLabel.setText(category.rawValue.capitalizedString)
+        }
         
         // Insert the story rows
         var storiesForCategory = [Story]()
-        let _ = self.stories.map{ // get only the stories for this category
+        let _ = self.stories!.map{ // Get only the stories for this category
             if $0.category == category {
                 storiesForCategory.append($0)
             }
         }
-        storiesForCategory.sortInPlace{ $0.pubDateEpoch > $1.pubDateEpoch }
+        storiesForCategory.sortInPlace{ $0.pubDateEpoch > $1.pubDateEpoch } // Sort them by publication date
         
         let storyRows = NSIndexSet(indexesInRange: NSRange(location: rows + 1, length: storiesForCategory.count))
         self.table.insertRowsAtIndexes(storyRows, withRowType: "storyRow")
         
         // Configure the rows
-        for i in rows..<self.table.numberOfRows {
+        for i in (rows+1)..<self.table.numberOfRows {
             
             // Get the row
             let row = self.table.rowControllerAtIndex(i)
             
-            // Configure the controller based on its type
-            if let row = row as? VFHeaderRowController {
-                
-                // Change the background and set the category label
-                row.rowGroup.setBackgroundColor(UIColor.colorForCategory(category))
-                row.categoryLabel.setText(category.rawValue.capitalizedString)
-                
-            } else if let row = row as? VFStoryRowController {
-                
+            if let row = row as? VFStoryRowController {
                 // Get the story for this row
                 let story = storiesForCategory[i - rows - 1]
                 
@@ -146,8 +149,7 @@ class VFStoriesTableController: WKInterfaceController {
                 
                 // Set the thumbnail, headline, & author
                 let rowColor = UIColor.colorForCategory(story.category)
-                //row.thumbnailImage.setImage(UIImage(named: String(story.pubDateEpoch)))
-                row.movie.setPosterImage(WKImage(image: UIImage(named: String(story.pubDateEpoch))!))
+                row.movie.setPosterImage(WKImage(image: UIImage(named: "video_placeholder")!))
                 if let _ = story.watchVideoURL {
                     row.movie.setMovieURL(story.watchVideoURL!)
                 }
@@ -155,87 +157,22 @@ class VFStoriesTableController: WKInterfaceController {
                 row.rowGroup.setBackgroundColor(rowColor.colorWithAlphaComponent(0.20))
                 row.headlineLabel.setText(story.headline)
                 row.authorLabel.setText(story.author)
-                
             }
-            
-            
         }
         
     }
 
 }
 
-extension VFStoriesTableController : WCSessionDelegate {
+extension VFStoriesTableController : VuseFeedEngineDelegate {
     
-    private func setupWatchConnectivity() {
-        if WCSession.isSupported() {
-            let session  = WCSession.defaultSession()
-            session.delegate = self
-            session.activateSession()
-        }
+    func engine(engine: VuseFeedEngine, didCompleteFetchWithStories stories: [Story]) {
+        dispatch_async(dispatch_get_main_queue(), {
+            self.stories = stories
+        })
     }
-    
-    func fetchStoriesInstantly() {
-        
-        // Fetch the stories
-        if WCSession.isSupported() {
-            
-            let session = WCSession.defaultSession()
-            if session.reachable {
-                let message = ["fetch_date" : NSDate()]
-                
-                // Send the request
-                session.sendMessage(message, replyHandler: { (reply : [String : AnyObject]) in
-                    
-                    // Check for any errors
-                    if let errorString = reply["error_message"] as? String {
-                        print(errorString)
-                        return
-                    }
-                    
-                    // Extract the story data
-                    guard let storyData = reply["watch_stories"] as? [[String : AnyObject]] else {
-                        print("Could not extract the watch stories from the reply payload")
-                        return
-                    }
-                    
-                    // Convert the data to Stories
-                    self.stories = storyData.flatMap({ Story(withJSON: $0) })
-                    self.loadTable(withStories: self.stories)
-                    
-                    }, errorHandler: { (error : NSError) in
-                        print("ERROR SENDING MESSAGE - CODE: \(error.code) - DESCRIPTION: \(error.localizedDescription)")
-                })
-                
-            } else { self.showReachabilityError() }
-            
-        }
-
-        
-    }
-    
-//    func fetchStoriesAndWait() {
-//        
-//        if WCSession.isSupported() {
-//            let message = ["fetch_date" : NSDate()]
-//            
-//            WCSession.defaultSession().transferUserInfo(message)
-//            
-//        }
-//        
-//    }
-    
-    func session(session: WCSession, didReceiveUserInfo userInfo: [String : AnyObject]) {
-        if let stories = userInfo["watch_stories"] {
-            print(stories)
-        }
-    }
-    
-    
     
 }
-
-
 
 
 

@@ -8,13 +8,29 @@
 
 import Foundation
 import CoreData
+import WatchConnectivity
+import UIKit
 
-class VuseFeedEngine {
+protocol VuseFeedEngineDelegate {
+    func engine(engine: VuseFeedEngine, didCompleteFetchWithStories stories: [Story])
+}
+
+class VuseFeedEngine : NSObject {
     
     // Singleton
     static let sharedEngine = VuseFeedEngine()
-    private init() { }
+    private override init() { }
     
+    static var watchStories : [Story]? {
+        didSet {
+            VuseFeedEngine.delegate?.engine(VuseFeedEngine.sharedEngine, didCompleteFetchWithStories: VuseFeedEngine.watchStories!)
+        }
+    }
+    
+    static var delegate : VuseFeedEngineDelegate?
+    
+    
+#if os(iOS)
     // All the strings for the categories
     let allCategorieStrings = Set(["World","U.S.","Local","Politics","Science & Technology","Entertainment","Sports","Business","Health","Travel","Lifestyle","Education"])
     
@@ -22,6 +38,28 @@ class VuseFeedEngine {
     private(set) lazy var allCategories : Set<Category> = {
        return Set(self.allCategorieStrings.flatMap{ Category(rawValue: $0) })
     }()
+    
+    
+    lazy var moc : NSManagedObjectContext = {
+        let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        return delegate.managedObjectContext
+    }()
+    
+    class func fetchAllCategories() throws -> [NSManagedObject] {
+        
+        let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let moc = delegate.managedObjectContext
+        
+        let fetchRequest = NSFetchRequest(entityName: "Category")
+        do {
+            // We guarantee in the category selection controller that there will be at least on entity returned
+            let fetchedEntities = try moc.executeFetchRequest(fetchRequest) as! [NSManagedObject]
+            return fetchedEntities
+        } catch let error as NSError {
+            throw error
+        }
+        
+    }
     
     // The selected Categories to show in the news feed
     private(set) lazy var newsFeedCategories : Set<Category> = {
@@ -39,12 +77,7 @@ class VuseFeedEngine {
         
         return Set<Category>() // return empty Set
     }()
-    
-    lazy var moc : NSManagedObjectContext = {
-        let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        return delegate.managedObjectContext
-    }()
-    
+
     func addCategory(category: Category) {
         // Add to the category set
         self.newsFeedCategories.insert(category)
@@ -81,49 +114,77 @@ class VuseFeedEngine {
         // TODO: Unsubscribe CloudKit Notifications for this category
     }
     
-    class func fetchAllCategories() throws -> [NSManagedObject] {
-        
-        let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        let moc = delegate.managedObjectContext
-        
-        let fetchRequest = NSFetchRequest(entityName: "Category")
-        do {
-            // We guarantee in the category selection controller that there will be at least on entity returned
-            let fetchedEntities = try moc.executeFetchRequest(fetchRequest) as! [NSManagedObject]
-            return fetchedEntities
-        } catch let error as NSError {
-            throw error
+#endif
+    
+}
+
+extension VuseFeedEngine : WCSessionDelegate {
+    
+    func setupWatchConnectivity() {
+        if WCSession.isSupported() {
+            let session  = WCSession.defaultSession()
+            session.delegate = self
+            session.activateSession()
         }
+    }
+    
+    func fetchStoriesInstantly() {
+        
+        // Fetch the stories
+        if WCSession.isSupported() {
+            
+            let session = WCSession.defaultSession()
+            if session.reachable {
+                let message = ["fetch_date" : NSDate()]
+                
+                // Send the request
+                session.sendMessage(message, replyHandler: { (reply : [String : AnyObject]) in
+                    
+                    // Check for any errors
+                    if let errorString = reply["error_message"] as? String {
+                        print(errorString)
+                        return
+                    }
+                    
+                    // Extract the story data
+                    guard let storyData = reply["watch_stories"] as? [[String : AnyObject]] else {
+                        print("Could not extract the watch stories from the reply payload")
+                        return
+                    }
+                    
+                    // Convert the data to Stories
+                    VuseFeedEngine.watchStories = storyData.flatMap({ Story(withJSON: $0) })
+                    
+                    }, errorHandler: { (error : NSError) in
+                        print("ERROR SENDING MESSAGE - CODE: \(error.code) - DESCRIPTION: \(error.localizedDescription)")
+                })
+                
+            } else {
+                //self.showReachabilityError()
+            }
+            
+        }
+        
         
     }
     
+    //    func fetchStoriesAndWait() {
+    //
+    //        if WCSession.isSupported() {
+    //            let message = ["fetch_date" : NSDate()]
+    //
+    //            WCSession.defaultSession().transferUserInfo(message)
+    //
+    //        }
+    //
+    //    }
+    
+    func session(session: WCSession, didReceiveUserInfo userInfo: [String : AnyObject]) {
+        if let stories = userInfo["watch_stories"] {
+            print(stories)
+        }
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
+    
 }

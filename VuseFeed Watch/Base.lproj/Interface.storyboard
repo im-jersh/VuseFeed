@@ -10,9 +10,9 @@
             <objects>
                 <controller identifier="TableController" id="AgC-eL-Hgc" customClass="VFStoriesTableController" customModule="VuseFeed_Watch_Extension">
                     <items>
-                        <table alignment="left" spacing="5" id="JVr-VB-9Jh">
+                        <table alignment="center" spacing="5" id="JVr-VB-9Jh">
                             <items>
-                                <tableRow identifier="vusefeedButton" id="4jm-qa-VdB" customClass="VFButtonRowController" customModule="Watchable_Watch_Extension">
+                                <tableRow identifier="vusefeedButton" id="4jm-qa-VdB" customClass="VFButtonRowController" customModule="VuseFeed_Watch_Extension">
                                     <group key="rootItem" width="1" alignment="left" id="roy-TY-fWP">
                                         <items>
                                             <button width="1" alignment="left" title="Button" id="Lh9-5y-NyK"/>
@@ -24,7 +24,7 @@
                                         <outlet property="button" destination="Lh9-5y-NyK" id="gYF-Rv-Z6L"/>
                                     </connections>
                                 </tableRow>
-                                <tableRow identifier="categoryLabel" selectable="NO" id="e8h-3E-oe9" customClass="VFHeaderRowController" customModule="Watchable_Watch_Extension">
+                                <tableRow identifier="categoryLabel" selectable="NO" id="e8h-3E-oe9" customClass="VFHeaderRowController" customModule="VuseFeed_Watch_Extension">
                                     <group key="rootItem" width="1" height="0.0" alignment="left" layout="vertical" id="rrK-oi-dan">
                                         <items>
                                             <label alignment="left" verticalAlignment="center" text="Category" textAlignment="left" numberOfLines="0" id="3ot-ri-pir">
@@ -38,14 +38,14 @@
                                         <outlet property="rowGroup" destination="rrK-oi-dan" id="tf8-fW-xVl"/>
                                     </connections>
                                 </tableRow>
-                                <tableRow identifier="storyRow" selectable="NO" id="RGk-Dn-104" customClass="VFStoryRowController" customModule="Watchable_Watch_Extension">
+                                <tableRow identifier="storyRow" id="RGk-Dn-104" customClass="VFStoryRowController" customModule="VuseFeed_Watch_Extension">
                                     <group key="rootItem" width="1" height="0.0" alignment="left" layout="vertical" radius="8" id="urf-oZ-cVb">
                                         <items>
-                                            <movie width="1" alignment="center" videoGravity="resize" id="LBu-0v-pyn"/>
+                                            <movie width="1" height="85" alignment="center" videoGravity="resize" posterImage="video_placeholder" id="LBu-0v-pyn"/>
                                             <label alignment="left" text="Headline" numberOfLines="0" id="mqI-un-1sL">
                                                 <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
                                             </label>
-                                            <label alignment="right" text="Author" textAlignment="right" numberOfLines="0" id="IaH-aG-F89">
+                                            <label alignment="right" text="Author" textAlignment="right" numberOfLines="2" id="IaH-aG-F89">
                                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                 <fontDescription key="font" type="italicSystem" pointSize="13"/>
                                             </label>
@@ -53,10 +53,10 @@
                                         <edgeInsets key="margins" left="0.0" right="0.0" top="0.0" bottom="5"/>
                                     </group>
                                     <connections>
-                                        <outlet property="authorLabel" destination="IaH-aG-F89" id="Zov-6g-HWu"/>
-                                        <outlet property="headlineLabel" destination="mqI-un-1sL" id="jjP-VM-xPO"/>
-                                        <outlet property="movie" destination="LBu-0v-pyn" id="Z4n-az-pMo"/>
-                                        <outlet property="rowGroup" destination="urf-oZ-cVb" id="2qp-Ha-89G"/>
+                                        <outlet property="authorLabel" destination="IaH-aG-F89" id="AK2-hf-0ox"/>
+                                        <outlet property="headlineLabel" destination="mqI-un-1sL" id="nbY-hF-0MO"/>
+                                        <outlet property="movie" destination="LBu-0v-pyn" id="Stz-hj-zAW"/>
+                                        <outlet property="rowGroup" destination="urf-oZ-cVb" id="RAB-fs-w5p"/>
                                     </connections>
                                 </tableRow>
                             </items>
@@ -67,25 +67,7 @@
                     </connections>
                 </controller>
             </objects>
-            <point key="canvasLocation" x="235" y="348.5"/>
-        </scene>
-        <!--Test Connectivity Interface Controller-->
-        <scene sceneID="TMf-ma-4Vp">
-            <objects>
-                <controller id="0zE-jR-teP" customClass="TestConnectivityInterfaceController" customModule="VuseFeed_Watch_Extension">
-                    <items>
-                        <button width="1" alignment="left" title="Button" id="U1x-jI-1fr">
-                            <connections>
-                                <action selector="testButtonWasTapped" destination="0zE-jR-teP" id="ldi-tp-XoK"/>
-                            </connections>
-                        </button>
-                    </items>
-                    <connections>
-                        <outlet property="testButton" destination="U1x-jI-1fr" id="sdo-vA-3Jl"/>
-                    </connections>
-                </controller>
-            </objects>
-            <point key="canvasLocation" x="-82" y="262"/>
+            <point key="canvasLocation" x="235" y="370"/>
         </scene>
         <!--Glance Interface Controller-->
         <scene sceneID="BOz-TT-tkC">
@@ -98,7 +80,7 @@
                     <edgeInsets key="margins" left="0.0" right="0.0" top="0.0" bottom="14"/>
                 </glanceController>
             </objects>
-            <point key="canvasLocation" x="235" y="712"/>
+            <point key="canvasLocation" x="235" y="738"/>
         </scene>
         <!--Static Notification Interface Controller-->
         <scene sceneID="AEw-b0-oYE">
