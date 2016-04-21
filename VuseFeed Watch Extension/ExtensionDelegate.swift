@@ -7,11 +7,14 @@
 //
 
 import WatchKit
+import WatchConnectivity
 
 class ExtensionDelegate: NSObject, WKExtensionDelegate {
 
     func applicationDidFinishLaunching() {
-        // Perform any final initialization of your application.
+        
+        //self.setupWatchConnectivity()
+        
     }
 
     func applicationDidBecomeActive() {
@@ -23,4 +26,19 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
         // Use this method to pause ongoing tasks, disable timers, etc.
     }
 
+    
+    
+}
+
+
+extension ExtensionDelegate : WCSessionDelegate {
+    
+    private func setupWatchConnectivity() {
+        if WCSession.isSupported() {
+            let session  = WCSession.defaultSession()
+            session.delegate = self
+            session.activateSession()
+        }
+    }
+    
 }

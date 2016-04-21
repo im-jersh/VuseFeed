@@ -8,28 +8,7 @@
 
 import WatchKit
 import Foundation
-
-struct CategoryColor {
-    var category : String
-    
-    init(withCategory category: String) {
-        self.category = category
-    }
-    
-    func colorForCategory() -> UIColor {
-        switch self.category {
-        case "Local" :
-            return UIColor(red: 255/255, green: 149/255, blue: 0, alpha: 1) // orange
-        case "World" :
-            return UIColor(red: 32/255, green: 148/255, blue: 250/255, alpha: 1) // blue
-        case "Entertainment" :
-            return UIColor(red: 255/255, green: 230/255, blue: 32/255, alpha: 1) // yellow
-        default :
-            return UIColor(red: 242/255, green: 244/255, blue: 255/255, alpha: 1) // grey
-        }
-    }
-}
-
+import WatchConnectivity
 
 class VFStoriesTableController: WKInterfaceController {
 
@@ -40,38 +19,11 @@ class VFStoriesTableController: WKInterfaceController {
     
     
     override func awakeWithContext(context: AnyObject?) {
+        
         super.awakeWithContext(context)
         
-        // Create stories from the file
-        self.stories = self.loadStoriesFromJSON(self.jsonFileName)
-        
-        // Get the categories
-        var categories = [String]()
-        for story in self.stories {
-            if !categories.contains(story.category) {
-                categories.append(story.category)
-            }
-        }
-        
-        // Add a refresh button
-        self.table.insertRowsAtIndexes(NSIndexSet(index: 0), withRowType: "vusefeedButton")
-        let refreshRow = self.table.rowControllerAtIndex(0) as! VFButtonRowController
-        refreshRow.button.setTitle("Refresh")
-        
-        // Sort the categories
-        categories = categories.sort()
-        for category in categories {
-            self.addStoriesToTable(byCategory: category)
-        }
-        
-        // Add a load more button
-        let numRows = self.table.numberOfRows
-        self.table.insertRowsAtIndexes(NSIndexSet(index: numRows), withRowType: "vusefeedButton")
-        let loadMoreRow = self.table.rowControllerAtIndex(numRows) as! VFButtonRowController
-        loadMoreRow.button.setTitle("Load More")
-        
-        // Scroll to hide the refresh button
-        self.table.scrollToRowAtIndex(2)
+        self.setupWatchConnectivity()
+        self.fetchStoriesInstantly()
         
     }
     
@@ -87,6 +39,47 @@ class VFStoriesTableController: WKInterfaceController {
     override func didDeactivate() {
         // This method is called when watch view controller is no longer visible
         super.didDeactivate()
+    }
+    
+    func loadTable(withStories stories: [Story]) {
+        
+        // Get the categories
+        var categories = [Category]()
+        for story in self.stories {
+            if !categories.contains(story.category) {
+                categories.append(story.category)
+            }
+        }
+        
+        // Add a refresh button
+        self.table.insertRowsAtIndexes(NSIndexSet(index: 0), withRowType: "vusefeedButton")
+        if let refreshRow = self.table.rowControllerAtIndex(0) as? VFButtonRowController {
+            refreshRow.button.setTitle("Refresh")
+        }
+        
+        // Sort the categories
+        categories = categories.sort({ $0.rawValue < $1.rawValue })
+        for category in categories {
+            self.addStoriesToTable(byCategory: category)
+        }
+        
+        // Add a load more button
+        let numRows = self.table.numberOfRows
+        self.table.insertRowsAtIndexes(NSIndexSet(index: numRows), withRowType: "vusefeedButton")
+        if let loadMoreRow = self.table.rowControllerAtIndex(numRows) as? VFButtonRowController {
+            loadMoreRow.button.setTitle("Load More")
+        }
+        
+        
+        // Scroll to hide the refresh button
+        self.table.scrollToRowAtIndex(2)
+        
+    }
+    
+    private func showReachabilityError() {
+        let tryAgain = WKAlertAction(title: "Uh Oh", style: .Default, handler: { () -> Void in })
+        let cancel = WKAlertAction(title: "Cancel", style: .Cancel, handler: { () -> Void in })
+        self.presentAlertControllerWithTitle("Your iPhone is not reachable.", message: "Your stories cannot be loaded because your iPhone is not currently connected to your phone. Please ensure your iPhone is on and within range of your Watch.", preferredStyle: WKAlertControllerStyle.Alert, actions:[tryAgain, cancel])
     }
     
     override func table(table: WKInterfaceTable, didSelectRowAtIndex rowIndex: Int) {
@@ -109,28 +102,7 @@ class VFStoriesTableController: WKInterfaceController {
         
     }
     
-    // Load stories from JSON file
-    func loadStoriesFromJSON(fileName: String) -> [Story] {
-        
-        // Get path of JSON file
-        let path = NSBundle.mainBundle().pathForResource(fileName, ofType: "json")!
-        
-        // Extract the file data into memory
-        let data = NSData(contentsOfFile: path)!
-        
-        // Create JSON object
-        let json = try! NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as? [[String: AnyObject]]
-        
-        // Iterate through the json and create story objects
-        var stories = [Story]()
-        for jsonStory in json! {
-            stories.append(Story(withJSON: jsonStory))
-        }
-        
-        return stories
-    }
-    
-    func addStoriesToTable(byCategory category: String) {
+    func addStoriesToTable(byCategory category: Category) {
         
         // Get the number of rows in the table already
         let rows = self.table.numberOfRows
@@ -161,8 +133,8 @@ class VFStoriesTableController: WKInterfaceController {
             if let row = row as? VFHeaderRowController {
                 
                 // Change the background and set the category label
-                row.rowGroup.setBackgroundColor(CategoryColor(withCategory: category).colorForCategory())
-                row.categoryLabel.setText(category.capitalizedString)
+                row.rowGroup.setBackgroundColor(UIColor.colorForCategory(category))
+                row.categoryLabel.setText(category.rawValue.capitalizedString)
                 
             } else if let row = row as? VFStoryRowController {
                 
@@ -173,7 +145,7 @@ class VFStoriesTableController: WKInterfaceController {
                 row.story = story
                 
                 // Set the thumbnail, headline, & author
-                let rowColor = CategoryColor.init(withCategory: story.category).colorForCategory()
+                let rowColor = UIColor.colorForCategory(story.category)
                 //row.thumbnailImage.setImage(UIImage(named: String(story.pubDateEpoch)))
                 row.movie.setPosterImage(WKImage(image: UIImage(named: String(story.pubDateEpoch))!))
                 if let _ = story.watchVideoURL {
@@ -191,6 +163,76 @@ class VFStoriesTableController: WKInterfaceController {
         
     }
 
+}
+
+extension VFStoriesTableController : WCSessionDelegate {
+    
+    private func setupWatchConnectivity() {
+        if WCSession.isSupported() {
+            let session  = WCSession.defaultSession()
+            session.delegate = self
+            session.activateSession()
+        }
+    }
+    
+    func fetchStoriesInstantly() {
+        
+        // Fetch the stories
+        if WCSession.isSupported() {
+            
+            let session = WCSession.defaultSession()
+            if session.reachable {
+                let message = ["fetch_date" : NSDate()]
+                
+                // Send the request
+                session.sendMessage(message, replyHandler: { (reply : [String : AnyObject]) in
+                    
+                    // Check for any errors
+                    if let errorString = reply["error_message"] as? String {
+                        print(errorString)
+                        return
+                    }
+                    
+                    // Extract the story data
+                    guard let storyData = reply["watch_stories"] as? [[String : AnyObject]] else {
+                        print("Could not extract the watch stories from the reply payload")
+                        return
+                    }
+                    
+                    // Convert the data to Stories
+                    self.stories = storyData.flatMap({ Story(withJSON: $0) })
+                    self.loadTable(withStories: self.stories)
+                    
+                    }, errorHandler: { (error : NSError) in
+                        print("ERROR SENDING MESSAGE - CODE: \(error.code) - DESCRIPTION: \(error.localizedDescription)")
+                })
+                
+            } else { self.showReachabilityError() }
+            
+        }
+
+        
+    }
+    
+//    func fetchStoriesAndWait() {
+//        
+//        if WCSession.isSupported() {
+//            let message = ["fetch_date" : NSDate()]
+//            
+//            WCSession.defaultSession().transferUserInfo(message)
+//            
+//        }
+//        
+//    }
+    
+    func session(session: WCSession, didReceiveUserInfo userInfo: [String : AnyObject]) {
+        if let stories = userInfo["watch_stories"] {
+            print(stories)
+        }
+    }
+    
+    
+    
 }
 
 

@@ -10,6 +10,10 @@ import Foundation
 import CloudKit
 import CoreData
 
+enum Device {
+    case Phone, Watch
+}
+
 class CloudKitManager {
     
     // The number of days to set the current date back
@@ -68,9 +72,10 @@ class CloudKitManager {
             
             // Parse the stories.json file into CKRecords
             let storyRecords = self.parseStoriesFromFile()
+            let videoRecords = self.parseStoriesFromFile("videos")
             
             // Save the records
-            self.saveRecords(storyRecords)
+            self.saveRecords(storyRecords + videoRecords)
         }
 
         self.publicDatabase.addOperation(operation)
@@ -100,7 +105,7 @@ class CloudKitManager {
             }
             
             // Create a file in the tmp directory for the article asset
-            let tempFileURL = NSURL.fileURLWithPath(NSTemporaryDirectory(), isDirectory: true).URLByAppendingPathComponent("\(headline).txt")
+            let tempFileURL = NSURL.fileURLWithPath(NSTemporaryDirectory(), isDirectory: true).URLByAppendingPathComponent("\(headline.hashValue).txt")
             do {
                 try article.writeToURL(tempFileURL, atomically: true, encoding: NSUTF8StringEncoding)
             } catch let error as NSError {
@@ -119,6 +124,15 @@ class CloudKitManager {
             storyRecord.setValue(summary, forKey: "summary")
             storyRecord.setValue(headline, forKey: "headline")
             storyRecord.setValue(imageLink, forKey: "videoThumbnailString")
+            
+            // Extract any video data if present
+            if let videoURL = jsonStory["VIDEO"] as? String {
+                storyRecord.setValue(videoURL, forKey: "mainVideo")
+            }
+            
+            if let watchURL = jsonStory["WATCH"] as? String {
+                storyRecord.setValue(watchURL, forKey: "watchVideo")
+            }
             
             // Save the date
             let nowDouble = NSDate().timeIntervalSince1970
@@ -165,7 +179,7 @@ class CloudKitManager {
     }
     
     // Fetch all stories by category that were published within the last 36hrs
-    func fetchStories(fromDatabase database: CKDatabase = CKContainer.defaultContainer().publicCloudDatabase, withCompletion completion: ([WatchableStory]!) -> Void) throws {
+    func fetchStories(forDevice device: Device,fromDatabase database: CKDatabase = CKContainer.defaultContainer().publicCloudDatabase, withCompletion completion: ([AnyObject]!) -> Void) throws {
     
         // Set the network activity indicator
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
@@ -173,7 +187,7 @@ class CloudKitManager {
         // Create the predicate and sort descriptor
         var predicate : NSPredicate
         do {
-            predicate = try self.constructCategoriesFetchPredicate()
+            predicate = try self.constructCategoriesFetchPredicate(forDevice: device)
         } catch let error as NSError {
             throw error
         }
@@ -203,7 +217,13 @@ class CloudKitManager {
             
             if error == nil {
                 // Save the latest fetch date
-                self.setLastFetchTime()
+                self.setLastFetchTime(forDevice: device)
+                
+                // If the data is for the Watch, convert the stories to the appropriate object
+                if device == .Watch {
+                    let watchStories = newStories.flatMap({ Story(withAuthor: $0.author, headline: $0.headline, category: $0.category, pubDate: $0.pubDate, epochDate: $0.epochDate, watchVideoURL: $0.watchVideo ) })
+                    completion(watchStories)
+                }
                 
                 // Dispatch the results to the UI for display
                 dispatch_async(dispatch_get_main_queue()) {
@@ -315,14 +335,19 @@ class CloudKitManager {
 
 extension CloudKitManager {
     
-    private func setLastFetchTime() {
-        NSUserDefaults.standardUserDefaults().setObject(NSDate(), forKey: "lastFetchTime")
+    private func setLastFetchTime(forDevice device: Device) {
+        
+        let key = device == .Phone ? "last_phone_fetch_time" : "last_watch_fetch_time"
+        
+        NSUserDefaults.standardUserDefaults().setObject(NSDate(), forKey: key)
     }
     
-    private func getLastFetchTime() -> NSDate {
+    private func getLastFetchTime(forDevice device: Device) -> NSDate {
+        
+        let key = device == .Phone ? "last_phone_fetch_time" : "last_watch_fetch_time"
         
         // Get the last fetch date from user defaults
-        guard let lastFetchTime = NSUserDefaults.standardUserDefaults().objectForKey("lastFetchTime") as? NSDate else {
+        guard let lastFetchTime = NSUserDefaults.standardUserDefaults().objectForKey(key) as? NSDate else {
             return self.calculateDateInPast()
         }
         
@@ -338,7 +363,7 @@ extension CloudKitManager {
         return NSDate().dateByAddingTimeInterval(-(seconds))
     }
     
-    private func constructCategoriesFetchPredicate() throws -> NSPredicate {
+    private func constructCategoriesFetchPredicate(forDevice device: Device) throws -> NSPredicate {
         
         // Fetch the categories from CoreData
         var fetchedEntities = [NSManagedObject]()
@@ -352,8 +377,12 @@ extension CloudKitManager {
             let categories = fetchedEntities.flatMap{ $0.valueForKey("category") }
             let categoryPredicate = NSPredicate(format: "%K IN %@", "category", categories)
             
+            let watchPredicate = NSPredicate(format: "watchVideo != %@", nil as COpaquePointer)
+            
             // Return a compound `AND` predicate
-            return NSCompoundPredicate(andPredicateWithSubpredicates: [datePredicate, categoryPredicate])
+            if device == .Watch { return NSCompoundPredicate(andPredicateWithSubpredicates: [datePredicate, categoryPredicate]) }
+            else { return NSCompoundPredicate(andPredicateWithSubpredicates: [datePredicate, categoryPredicate]) }
+            
         } catch let error as NSError {
             throw error
         }
@@ -363,16 +392,19 @@ extension CloudKitManager {
 }
 
 extension CollectionType {
-    /// Return a copy of `self` with its elements shuffled
+    
+    // Return a copy of `self` with its elements shuffled
     func shuffle() -> [Generator.Element] {
         var list = Array(self)
         list.shuffleInPlace()
         return list
     }
+    
 }
 
 extension MutableCollectionType where Index == Int {
-    /// Shuffle the elements of `self` in-place.
+    
+    // Shuffle the elements of `self` in-place.
     mutating func shuffleInPlace() {
         // empty and single-element collections don't shuffle
         if count < 2 { return }
@@ -383,6 +415,7 @@ extension MutableCollectionType where Index == Int {
             swap(&self[i], &self[j])
         }
     }
+
 }
 
 

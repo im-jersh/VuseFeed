@@ -8,7 +8,7 @@
 
 import UIKit
 import CoreData
-
+import WatchConnectivity
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,7 +18,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
+        // Seed the CloudKit database
         CloudKitManager.sharedManager().seedCloudKit()
+        
+        // Set up WatchConnectivity
+        self.setupWatchConnectivity()
         
         return true
     }
@@ -111,4 +115,135 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 }
+
+extension AppDelegate : WCSessionDelegate {
+    
+    private func setupWatchConnectivity() {
+        
+        // Ensure the device supports connectivity
+        if WCSession.isSupported() {
+            // Set the delegate and activate the session
+            WCSession.defaultSession().delegate = self
+            WCSession.defaultSession().activateSession()
+            
+        }
+    }
+    
+    func session(session: WCSession, didReceiveMessage message: [String : AnyObject], replyHandler: ([String : AnyObject]) -> Void) {
+        
+        // If there was a date passed in
+        if let _ = message["fetch_date"] as? NSDate {
+            
+            // Fetch the latest videos
+            do {
+                try CloudKitManager.sharedManager().fetchStories(forDevice: .Watch, withCompletion: { (stories) in
+                    
+                    guard !stories.isEmpty else {
+                        // Return an empty dictionary
+                        replyHandler(["error_message" : "There were no stories returned."])
+                        return
+                    }
+                    
+                    // Cast the returned objects as compatible Story objects
+                    let watchStories = stories.flatMap({ $0 as? Story })
+                    
+                    guard !watchStories.isEmpty else {
+                        // Return an empty dictionary
+                        replyHandler(["error_message" : "There was an issue with converting the data to the appropriate class."])
+                        return
+                    }
+                    
+                    // Extract each object's data for transport
+                    var rawStoryData = [[String: AnyObject]]()
+                    for story in watchStories {
+                        rawStoryData.append(story.rawData)
+                    }
+
+                    let replyDictionary = ["watch_stories" : rawStoryData]
+                    
+                    // Send the reply
+                    replyHandler(replyDictionary)
+                    
+                })
+            } catch let error as NSError {
+                print(error.localizedDescription)
+            }
+            
+        }
+
+    }
+    
+    
+    
+    
+//    func session(session: WCSession, didReceiveUserInfo userInfo: [String : AnyObject]) {
+//        
+//        // If there was a date passed in
+//        if let _ = userInfo["fetch_date"] as? NSDate {
+//            
+//            // Fetch the latest videos
+//            do {
+//                try CloudKitManager.sharedManager().fetchStories(forDevice: .Watch, withCompletion: { (stories) in
+//                    
+//                    guard !stories.isEmpty else {
+//                        // Return an empty dictionary
+//                        print("NO STORIES FETCHED FOR WATCH EXTENSION")
+//                        return
+//                    }
+//                    
+//                    // Cast the results at Story array
+//                    guard let stories = stories as? [WatchableStory] else {
+//                        // Return an empty dictionary
+//                        print("ERROR IN WATCH STORIES RESULT DATA")
+//                        return
+//                    }
+//                    
+//                    let watchStories = stories.flatMap({ $0.watchVideo != nil ? Story(withAuthor: $0.author, headline: $0.headline, category: $0.category, pubDate: $0.pubDate, epochDate: $0.epochDate, watchVideoURL: $0.watchVideo) : nil })
+//                    
+//                    // Prepare the stories for the reply
+//                    self.updateWatchExtension(withStories: watchStories)
+//                    
+//                })
+//            } catch let error as NSError {
+//                print(error.localizedDescription)
+//            }
+//            
+//        }
+//
+//        
+//    }
+//    
+//    func updateWatchExtension(withStories stories: [Story]) {
+//        
+//        if WCSession.isSupported() {
+//            
+//            let session = WCSession.defaultSession()
+//            if session.watchAppInstalled {
+//                let replyDictionary = ["watch_stories" : stories]
+//                session.transferUserInfo(replyDictionary)
+//            }
+//        }
+//        
+//    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

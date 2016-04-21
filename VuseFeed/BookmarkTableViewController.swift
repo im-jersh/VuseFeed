@@ -29,7 +29,13 @@ class BookmarkTableViewController: WatchableTableViewController {
         
         // Fetch the stories from CloudKit and reload the table view when the results are returned
         do {
-            try CloudKitManager.sharedManager().fetchStories(fromDatabase: CloudKitManager.sharedManager().privateDatabase) { (fetchedStories: [WatchableStory]!) in
+            try CloudKitManager.sharedManager().fetchStories(forDevice: .Phone, fromDatabase: CloudKitManager.sharedManager().privateDatabase, withCompletion: { (fetchedStories) in
+                
+                // Cast the result
+                guard let fetchedStories = fetchedStories as? [WatchableStory] else {
+                    print("Unable to cast result as WatchableStory array")
+                    return
+                }
                 
                 // Get the various DISTINCT category types for the section headers sorted alphabetically
                 let categorySet = Set<Category>(fetchedStories.map{ $0.category })
@@ -40,8 +46,9 @@ class BookmarkTableViewController: WatchableTableViewController {
                     return ($0.category.rawValue == $1.category.rawValue) ? ($0.epochDate > $1.epochDate) : ($0.category.rawValue < $1.category.rawValue)
                 }
                 
-            }
-        } catch let _ as NSError {
+            })
+
+        } catch _ as NSError {
             // TODO: Handle exception
         }
         

@@ -8,60 +8,8 @@
 
 import UIKit
 import CloudKit
-import Chameleon
 
-enum Category : String {
-    case World = "World"
-    case US = "U.S."
-    case Local = "Local"
-    case Politics = "Politics"
-    case SciTech = "Science & Technology"
-    case Entertainment = "Entertainment"
-    case Sports = "Sports"
-    case Business = "Business"
-    case Health = "Health"
-    case Travel = "Travel"
-    case Lifestyle = "Lifestyle"
-    case Education = "Education"
-    case Default = "Uncategorized"
-}
-
-extension UIColor {
-    
-    static func colorForCategory(category: Category) -> UIColor {
-        switch category {
-        case .Business :
-            return UIColor.flatPowderBlueColorDark()
-        case .Education :
-            return UIColor.flatSkyBlueColorDark()
-        case .Entertainment :
-            return UIColor.flatMagentaColor()
-        case .Health :
-            return UIColor.flatPinkColor()
-        case .Lifestyle :
-            return UIColor.flatRedColor()
-        case .Local :
-            return UIColor.flatOrangeColor()
-        case .Politics :
-            return UIColor.flatYellowColor()
-        case .SciTech :
-            return UIColor.flatLimeColor()
-        case .Sports :
-            return UIColor.flatGreenColorDark()
-        case .Travel :
-            return UIColor.flatMintColor()
-        case .US :
-            return UIColor.flatTealColor()
-        case .World :
-            return UIColor.flatCoffeeColorDark()
-        default:
-            return UIColor.flatBlackColor()
-        }
-    }
-    
-}
-
-class WatchableStory {
+public class WatchableStory {
 
     private(set) var cloudKitRecord : CKRecord
     private(set) var author : String!
@@ -112,6 +60,10 @@ class WatchableStory {
         } else if let thumbnailAsset = record["videoThumbnail"] as? CKAsset {
             self.thumbnailAsset = thumbnailAsset
             self.thumbnailImageString = thumbnailAsset.fileURL.absoluteString
+        }
+        
+        if let watchVideo = record["watchVideo"] as? String, watchVideoURL = NSURL(string: watchVideo) {
+            self.watchVideo = watchVideoURL
         }
 
     }
