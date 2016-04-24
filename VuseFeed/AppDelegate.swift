@@ -85,6 +85,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             NSLog("Unresolved error \(wrappedError), \(wrappedError.userInfo)")
             abort()
+            
         }
         
         return coordinator
@@ -144,20 +145,8 @@ extension AppDelegate : WCSessionDelegate {
                         return
                     }
                     
-                    // Cast the returned objects as compatible Story objects
-                    let watchStories = stories.flatMap({ $0 as? Story })
-                    
-                    guard !watchStories.isEmpty else {
-                        // Return an empty dictionary
-                        replyHandler(["error_message" : "There was an issue with converting the data to the appropriate class."])
-                        return
-                    }
-                    
                     // Extract each object's data for transport
-                    var rawStoryData = [[String: AnyObject]]()
-                    for story in watchStories {
-                        rawStoryData.append(story.rawData)
-                    }
+                    let rawStoryData = stories.flatMap({ $0.convertToRawData() })
 
                     let replyDictionary = ["watch_stories" : rawStoryData]
                     

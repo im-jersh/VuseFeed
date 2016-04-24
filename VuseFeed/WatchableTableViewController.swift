@@ -87,7 +87,7 @@ class WatchableTableViewController: UITableViewController {
             cell.authorLabel.text = story.author
             cell.pubDateLabel.text = NSDateFormatter.localizedStringFromDate(story.pubDate, dateStyle: .MediumStyle, timeStyle: .ShortStyle)
             
-            if let imageURL = story.thumbnailImageURL {
+            if let imageURL = story.thumbnailURL {
                 cell.thumbnailImage.sd_setImageWithURL(imageURL, placeholderImage: UIImage(named: "placeholder"))
             }
             

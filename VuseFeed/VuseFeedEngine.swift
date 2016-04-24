@@ -147,13 +147,13 @@ extension VuseFeedEngine : WCSessionDelegate {
                     }
                     
                     // Extract the story data
-                    guard let storyData = reply["watch_stories"] as? [[String : AnyObject]] else {
+                    guard let storyData = reply["watch_stories"] as? [NSData] else {
                         print("Could not extract the watch stories from the reply payload")
                         return
                     }
                     
                     // Convert the data to Stories
-                    VuseFeedEngine.watchStories = storyData.flatMap({ Story(withJSON: $0) })
+                    VuseFeedEngine.watchStories = storyData.flatMap({ Story(withData: $0) })
                     
                     }, errorHandler: { (error : NSError) in
                         print("ERROR SENDING MESSAGE - CODE: \(error.code) - DESCRIPTION: \(error.localizedDescription)")

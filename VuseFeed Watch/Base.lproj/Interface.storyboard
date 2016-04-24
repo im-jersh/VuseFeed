@@ -5,25 +5,13 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="10032"/>
     </dependencies>
     <scenes>
-        <!--TableController-->
+        <!--News Feed-->
         <scene sceneID="aou-V4-d1y">
             <objects>
-                <controller identifier="TableController" id="AgC-eL-Hgc" customClass="VFStoriesTableController" customModule="VuseFeed_Watch_Extension">
+                <controller identifier="StoryList" title="News Feed" id="AgC-eL-Hgc" customClass="VFStoriesTableController" customModule="VuseFeed_Watch_Extension">
                     <items>
                         <table alignment="center" spacing="5" id="JVr-VB-9Jh">
                             <items>
-                                <tableRow identifier="vusefeedButton" id="4jm-qa-VdB" customClass="VFButtonRowController" customModule="VuseFeed_Watch_Extension">
-                                    <group key="rootItem" width="1" alignment="left" id="roy-TY-fWP">
-                                        <items>
-                                            <button width="1" alignment="left" title="Button" id="Lh9-5y-NyK"/>
-                                        </items>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <edgeInsets key="margins" left="0.0" right="0.0" top="0.0" bottom="0.0"/>
-                                    </group>
-                                    <connections>
-                                        <outlet property="button" destination="Lh9-5y-NyK" id="gYF-Rv-Z6L"/>
-                                    </connections>
-                                </tableRow>
                                 <tableRow identifier="categoryLabel" selectable="NO" id="e8h-3E-oe9" customClass="VFHeaderRowController" customModule="VuseFeed_Watch_Extension">
                                     <group key="rootItem" width="1" height="0.0" alignment="left" layout="vertical" id="rrK-oi-dan">
                                         <items>
@@ -45,15 +33,10 @@
                                             <label alignment="left" text="Headline" numberOfLines="0" id="mqI-un-1sL">
                                                 <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
                                             </label>
-                                            <label alignment="right" text="Author" textAlignment="right" numberOfLines="2" id="IaH-aG-F89">
-                                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                                <fontDescription key="font" type="italicSystem" pointSize="13"/>
-                                            </label>
                                         </items>
                                         <edgeInsets key="margins" left="0.0" right="0.0" top="0.0" bottom="5"/>
                                     </group>
                                     <connections>
-                                        <outlet property="authorLabel" destination="IaH-aG-F89" id="AK2-hf-0ox"/>
                                         <outlet property="headlineLabel" destination="mqI-un-1sL" id="nbY-hF-0MO"/>
                                         <outlet property="movie" destination="LBu-0v-pyn" id="Stz-hj-zAW"/>
                                         <outlet property="rowGroup" destination="urf-oZ-cVb" id="RAB-fs-w5p"/>
@@ -62,12 +45,45 @@
                             </items>
                         </table>
                     </items>
+                    <menu key="menu" id="xDu-LG-sr1">
+                        <items>
+                            <menuItem title="Refresh" icon="accept" id="8Y6-rx-8Ba"/>
+                            <menuItem title="Older Stories" icon="more" id="a2a-kW-Ecf"/>
+                        </items>
+                    </menu>
                     <connections>
                         <outlet property="table" destination="JVr-VB-9Jh" id="obF-2X-heV"/>
                     </connections>
                 </controller>
             </objects>
             <point key="canvasLocation" x="235" y="370"/>
+        </scene>
+        <!--StoryDetail-->
+        <scene sceneID="1EP-iX-evC">
+            <objects>
+                <controller identifier="StoryDetail" id="De3-Ra-NQc" customClass="VFStoryDetailController" customModule="VuseFeed_Watch_Extension">
+                    <items>
+                        <movie width="1" height="85" alignment="center" videoGravity="resize" posterImage="video_placeholder" id="aAj-WN-1fg"/>
+                        <label alignment="left" text="Headline" numberOfLines="0" id="Uqd-tw-TxO">
+                            <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
+                        </label>
+                        <label alignment="right" text="Author" textAlignment="right" numberOfLines="2" id="qsn-Q2-3K4">
+                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            <fontDescription key="font" type="italicSystem" pointSize="13"/>
+                        </label>
+                        <label alignment="left" text="Summary" textAlignment="justified" numberOfLines="0" id="paq-5f-8pa">
+                            <fontDescription key="font" style="UICTFontTextStyleCaption2"/>
+                        </label>
+                    </items>
+                    <connections>
+                        <outlet property="authorLabel" destination="qsn-Q2-3K4" id="fXf-HG-MZ4"/>
+                        <outlet property="headlineLabel" destination="Uqd-tw-TxO" id="tqc-ci-cvS"/>
+                        <outlet property="moviePlayer" destination="aAj-WN-1fg" id="4eq-np-XqO"/>
+                        <outlet property="summaryLabel" destination="paq-5f-8pa" id="NYN-DV-VBr"/>
+                    </connections>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="570" y="311"/>
         </scene>
         <!--Glance Interface Controller-->
         <scene sceneID="BOz-TT-tkC">

@@ -9,62 +9,53 @@
 import UIKit
 import CloudKit
 
-public class WatchableStory {
+class WatchableStory : Story {
 
-    private(set) var cloudKitRecord : CKRecord
-    private(set) var author : String!
-    private(set) var category : Category!
-    private(set) var headline : String!
-    private(set) var epochDate : Double!
-    private(set) var pubDate : NSDate!
     private(set) var printPubDate : String!
-    private(set) var summary : String!
+    
     private(set) var article : NSURL?
     private(set) var articleText : String!
-    private(set) var mainVideo : NSURL?
-    private(set) var watchVideo : NSURL?
     
-    private(set) var thumbnailImageString : String?
-    private(set) var thumbnailImageURL : NSURL? {
-        get {
-            return NSURL(string: thumbnailImageString!)
-        }
-        set {
-            
-        }
-    }
+    private(set) var mainVideo : NSURL?
+    
     private(set) var thumbnailAsset : CKAsset?
+    private(set) var cloudKitRecord : CKRecord
 
-    init(fromRecord record: CKRecord) {
+    init?(fromRecord record: CKRecord) {
         
-        self.cloudKitRecord = record
+        // Extract the values from the record
         guard let author = record["author"] as? String, headline = record["headline"] as? String, categoryString = record["category"] as? String, pubDate = record["publicationDate"] as? Double, summary = record["summary"] as? String, category = Category(rawValue: categoryString) else {
-            return
+            return nil
         }
         
-        self.author = author
-        self.category = category
-        self.headline = headline
-        self.summary = summary
-        self.epochDate = pubDate
-        self.pubDate = NSDate(timeIntervalSince1970: pubDate)
+        // Save the record
+        self.cloudKitRecord = record
+        
+        // Init the parent
+        super.init(recordName: record.recordID.recordName, author: author, headline: headline, category: category, summary: summary, epochDate: pubDate)
+
+        
+        // Create a pub date string for use in the view
         self.printPubDate = NSDateFormatter.localizedStringFromDate(self.pubDate, dateStyle: .FullStyle, timeStyle: .ShortStyle)
         
+        // Get any main video information
         if let mainVideo = record["mainVideo"] as? String, mainVideoURL = NSURL(string: mainVideo) {
             self.mainVideo = mainVideoURL
         }
         
         // There must either be a url or an asset for the story's thumbnail, but not both
         if let videoThumbnailString = record["videoThumbnailString"] as? String {
-            self.thumbnailImageString = videoThumbnailString
+            self.thumbnailString = videoThumbnailString
         } else if let thumbnailAsset = record["videoThumbnail"] as? CKAsset {
             self.thumbnailAsset = thumbnailAsset
-            self.thumbnailImageString = thumbnailAsset.fileURL.absoluteString
+            self.thumbnailString = thumbnailAsset.fileURL.absoluteString
         }
         
+        // Get any watch video information
         if let watchVideo = record["watchVideo"] as? String, watchVideoURL = NSURL(string: watchVideo) {
-            self.watchVideo = watchVideoURL
+            self.watchVideoURL = watchVideoURL
         }
+
 
     }
     
@@ -77,7 +68,7 @@ public class WatchableStory {
         self.article = article.fileURL
         
         if let wVideo = record["watchVideo"] as? CKAsset {
-            self.watchVideo = wVideo.fileURL
+            self.watchVideoURL = wVideo.fileURL
         }
         
         // Extract text from file
@@ -128,14 +119,14 @@ public class WatchableStory {
             recordCopy.setValue(mainVideoURL, forKey: "mainVideo")
         }
         
-        if let watchVideoURL = self.watchVideo?.path {
+        if let watchVideoURL = self.watchVideoURL?.path {
             recordCopy.setValue(watchVideoURL, forKey: "watchVideo")
         }
         
         // If there's an asset, use it; otherwise, we are guaranteed an thumbnail URL
         if let thumbnailAsset = self.thumbnailAsset {
             recordCopy.setObject(thumbnailAsset, forKey: "videoThumbnail")
-        } else if let thumbnailURLString = self.thumbnailImageString {
+        } else if let thumbnailURLString = self.thumbnailString {
             recordCopy.setValue(thumbnailURLString, forKey: "videoThumbnailString")
         } else {
             return nil

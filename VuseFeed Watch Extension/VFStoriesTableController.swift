@@ -57,28 +57,11 @@ class VFStoriesTableController: WKInterfaceController {
             }
         }
         
-        // Add a refresh button
-        self.table.insertRowsAtIndexes(NSIndexSet(index: 0), withRowType: "vusefeedButton")
-        if let refreshRow = self.table.rowControllerAtIndex(0) as? VFButtonRowController {
-            refreshRow.button.setTitle("Refresh")
-        }
-        
         // Sort the categories and add them to the table 
         categories = categories.sort({ $0.rawValue < $1.rawValue })
         for category in categories {
             self.addStoriesToTable(byCategory: category)
         }
-        
-        // Add a load more button
-        let numRows = self.table.numberOfRows
-        self.table.insertRowsAtIndexes(NSIndexSet(index: numRows), withRowType: "vusefeedButton")
-        if let loadMoreRow = self.table.rowControllerAtIndex(numRows) as? VFButtonRowController {
-            loadMoreRow.button.setTitle("Load More")
-        }
-        
-        
-        // Scroll to hide the refresh button
-        self.table.scrollToRowAtIndex(1)
         
     }
     
@@ -94,16 +77,7 @@ class VFStoriesTableController: WKInterfaceController {
         let row = self.table.rowControllerAtIndex(rowIndex)
         
         if let row = row as? VFStoryRowController {
-            
-            // Create and present a movie controller if this story has a video attached to us
-            if let story = row.story, _ = story.watchVideoURL {
-                //self.pushControllerWithName("movieController", context: story)
-                let options = [WKMediaPlayerControllerOptionsAutoplayKey : true, WKMediaPlayerControllerOptionsLoopsKey : false]
-                self.presentMediaPlayerControllerWithURL(story.watchVideoURL!, options: options, completion: { (didPlayToEnd, endTime, error) -> Void in
-                    print("VIDEO DID END")
-                })
-            }
-            
+            self.pushControllerWithName("StoryDetail", context: row.story)
         }
         
     }
@@ -129,7 +103,7 @@ class VFStoriesTableController: WKInterfaceController {
                 storiesForCategory.append($0)
             }
         }
-        storiesForCategory.sortInPlace{ $0.pubDateEpoch > $1.pubDateEpoch } // Sort them by publication date
+        storiesForCategory.sortInPlace{ $0.epochDate > $1.epochDate } // Sort them by publication date
         
         let storyRows = NSIndexSet(indexesInRange: NSRange(location: rows + 1, length: storiesForCategory.count))
         self.table.insertRowsAtIndexes(storyRows, withRowType: "storyRow")
@@ -149,14 +123,14 @@ class VFStoriesTableController: WKInterfaceController {
                 
                 // Set the thumbnail, headline, & author
                 let rowColor = UIColor.colorForCategory(story.category)
-                row.movie.setPosterImage(WKImage(image: UIImage(named: "video_placeholder")!))
+                row.movie.setPosterImage(WKImage(image: story.thumbnail!))
                 if let _ = story.watchVideoURL {
                     row.movie.setMovieURL(story.watchVideoURL!)
                 }
                 row.movie.setLoops(false)
                 row.rowGroup.setBackgroundColor(rowColor.colorWithAlphaComponent(0.20))
                 row.headlineLabel.setText(story.headline)
-                row.authorLabel.setText(story.author)
+                
             }
         }
         

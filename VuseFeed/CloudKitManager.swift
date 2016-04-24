@@ -179,7 +179,7 @@ class CloudKitManager {
     }
     
     // Fetch all stories by category that were published within the last 36hrs
-    func fetchStories(forDevice device: Device,fromDatabase database: CKDatabase = CKContainer.defaultContainer().publicCloudDatabase, withCompletion completion: ([AnyObject]!) -> Void) throws {
+    func fetchStories(forDevice device: Device,fromDatabase database: CKDatabase = CKContainer.defaultContainer().publicCloudDatabase, withCompletion completion: ([Story]!) -> Void) throws {
     
         // Set the network activity indicator
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
@@ -206,7 +206,9 @@ class CloudKitManager {
         
         // Per record completion block
         operation.recordFetchedBlock = { (record) in
-            newStories.append(WatchableStory(fromRecord: record))
+            if let story = WatchableStory(fromRecord: record) {
+                newStories.append(story)
+            }
         }
         
         // Query completion block
@@ -221,7 +223,7 @@ class CloudKitManager {
                 
                 // If the data is for the Watch, convert the stories to the appropriate object
                 if device == .Watch {
-                    let watchStories = newStories.flatMap({ Story(withAuthor: $0.author, headline: $0.headline, category: $0.category, pubDate: $0.pubDate, epochDate: $0.epochDate, watchVideoURL: $0.watchVideo ) })
+                    let watchStories = newStories.flatMap({ $0 as Story })
                     completion(watchStories)
                 }
                 
@@ -377,7 +379,7 @@ extension CloudKitManager {
             let categories = fetchedEntities.flatMap{ $0.valueForKey("category") }
             let categoryPredicate = NSPredicate(format: "%K IN %@", "category", categories)
             
-            let watchPredicate = NSPredicate(format: "watchVideo != %@", nil as COpaquePointer)
+            _ = NSPredicate(format: "watchVideo != %@", nil as COpaquePointer)
             
             // Return a compound `AND` predicate
             if device == .Watch { return NSCompoundPredicate(andPredicateWithSubpredicates: [datePredicate, categoryPredicate]) }

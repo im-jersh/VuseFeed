@@ -7,54 +7,142 @@
 //
 
 import Foundation
+import UIKit
 
 class Story {
+    
+    let recordName : String
     
     let author : String
     let headline : String
     let category : Category
-    let pubDate : NSDate
-    let pubDateEpoch : Double
-    let watchVideoURL : NSURL?
+    let summary : String
     
-    var rawData : [String : AnyObject] {
+    let pubDate : NSDate
+    let epochDate : Double
+    
+    var watchVideoURL : NSURL?
+    
+    var thumbnailString : String?
+    var thumbnailURL : NSURL? {
         get {
-            return ["author" : self.author, "headline" : self.headline, "category" : self.category.rawValue, "pubDateEpoch" : self.pubDateEpoch, "watchVideoURL" : self.watchVideoURL!.absoluteString]
+            if let _ = self.thumbnailString { return NSURL(string: thumbnailString!) }
+            else { return nil }
         }
+    }
+    var thumbnail : UIImage?
+    
+    
+    init(recordName: String, author: String, headline: String, category: Category, summary: String, epochDate: Double) {
+        self.recordName = recordName
+        self.author = author
+        self.headline = headline
+        self.category = category
+        self.summary = summary
+        self.epochDate = epochDate
+        self.pubDate = NSDate(timeIntervalSince1970: self.epochDate)
     }
     
     init(withJSON json: [String : AnyObject]) {
         
+        self.recordName = json["recordName"] as! String
         self.author = json["author"] as! String
         self.headline = json["headline"] as! String
         self.category = Category(rawValue: json["category"] as! String)!
-        self.pubDateEpoch = json["pubDateEpoch"] as! Double
-        self.pubDate = NSDate(timeIntervalSince1970: self.pubDateEpoch)
+        self.summary = json["summary"] as! String
+        self.epochDate = json["pubDateEpoch"] as! Double
+        self.pubDate = NSDate(timeIntervalSince1970: self.epochDate)
         
-        guard let watchVideoString = json["watchVideoURL"] as? String, watchVideoURL = NSURL(string: watchVideoString) else {
-            self.watchVideoURL = nil
-            return
+        if let watchVideoString = json["watchVideoURL"] as? String, watchVideoURL = NSURL(string: watchVideoString), urlString = json["thumbnailURL"] as? String {
+            self.watchVideoURL = watchVideoURL
+            self.thumbnailString = urlString
+            self.thumbnail = self.downloadImage(withURL: self.thumbnailURL)
         }
-        
-        self.watchVideoURL = watchVideoURL
         
     }
     
-    init?(withAuthor author: String, headline: String, category: Category, pubDate: NSDate, epochDate: Double, watchVideoURL: NSURL?) {
+    convenience init?(withData data: NSData) {
         
-        guard let watchVideoURL = watchVideoURL else {
+        // Extract the dictionary from the data
+        guard let jsonData = try? NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments) as? [String: AnyObject] else {
             return nil
         }
         
-        self.author = author
-        self.headline = headline
-        self.category = category
-        self.pubDateEpoch = epochDate
-        self.pubDate = pubDate
-        self.watchVideoURL = watchVideoURL
+        guard let json = jsonData else {
+            return nil
+        }
+        
+        self.init(withJSON: json)
+        
+        guard let _ = self.watchVideoURL else {
+            return nil
+        }
+    }
+    
+    func convertToRawData() -> NSData? {
+        
+        // Create the dictionary of required data
+        var dict : [String : AnyObject] = [
+            "recordName" : self.recordName,
+            "author" : self.author,
+            "headline" : self.headline,
+            "category" : self.category.rawValue,
+            "summary" : self.summary,
+            "pubDateEpoch" : self.epochDate
+        ]
+        
+        // Add any optional data
+        if let watchURL = self.watchVideoURL?.absoluteString {
+            dict.updateValue(watchURL, forKey: "watchVideoURL")
+        }
+        
+        if let thumbnail = self.thumbnailString {
+            dict.updateValue(thumbnail, forKey: "thumbnailURL")
+        }
+        
+        // Convert the dictionary to raw data
+        return try? NSJSONSerialization.dataWithJSONObject(dict, options: .PrettyPrinted)
+    }
+    
+    private func downloadImage(withURL url: NSURL?) -> UIImage {
+        
+        // Make sure the url is valid
+        guard let url = url else {
+            // Return the placeholder
+            return UIImage(named: "placeholder")!
+        }
+        
+        guard let data = NSData(contentsOfURL: url), image = UIImage(data: data) else {
+            return UIImage(named: "placeholder")!
+        }
+        
+        return image
         
     }
     
     
-    
 }
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

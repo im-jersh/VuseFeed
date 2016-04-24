@@ -116,7 +116,7 @@ class StoryDetailViewController: UIViewController {
         if let videoURL = self.story.mainVideo {
             self.avPlayer = AVPlayer(URL: videoURL)
             self.videoPlayerView.avPlayer = self.avPlayer
-        } else if let imageURL = self.story.thumbnailImageURL, data = NSData(contentsOfURL: imageURL), image = UIImage(data: data) {
+        } else if let imageURL = self.story.thumbnailURL, data = NSData(contentsOfURL: imageURL), image = UIImage(data: data) {
             self.videoPlayerView.image = image
             self.videoControlContainerBlurView.hidden = true
         }
