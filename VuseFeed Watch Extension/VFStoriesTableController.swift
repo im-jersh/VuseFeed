@@ -10,17 +10,46 @@ import WatchKit
 import Foundation
 import WatchConnectivity
 
+
 class VFStoriesTableController: WKInterfaceController {
+    
+    enum InterfaceState {
+        case Loading, Results, NoResults
+    }
 
     @IBOutlet var table: WKInterfaceTable!
+    @IBOutlet var loadingGroup: WKInterfaceGroup!
     
     let jsonFileName = "Stories"
     var stories : [Story]? {
         didSet {
-            self.loadTable(withStories: self.stories!)
+            if self.stories!.isEmpty { self.interfaceState = .NoResults }
+            else {
+                self.interfaceState = .Results
+                self.loadTable(withStories: self.stories!)
+            }
+            
         }
     }
     
+    var interfaceState = InterfaceState.Loading {
+        didSet {
+            self.loadingGroup.setHidden(true)
+            self.table.setHidden(true)
+            
+            switch self.interfaceState {
+            case .Loading :
+                self.loadingGroup.setHidden(false)
+                break
+            case .Results :
+                self.table.setHidden(false)
+                break
+            case .NoResults :
+                
+                break
+            }
+        }
+    }
     
     override func awakeWithContext(context: AnyObject?) {
         

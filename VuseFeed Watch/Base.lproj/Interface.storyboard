@@ -44,6 +44,15 @@
                                 </tableRow>
                             </items>
                         </table>
+                        <group width="1" height="1" alignment="center" backgroundImage="Activity" contentMode="center" id="onA-kQ-W3B">
+                            <items>
+                                <label alignment="center" verticalAlignment="center" textAlignment="center" numberOfLines="2" id="Ygk-Z6-Dc3">
+                                    <string key="text">Loading
+stories</string>
+                                    <fontDescription key="font" style="UICTFontTextStyleTitle1"/>
+                                </label>
+                            </items>
+                        </group>
                     </items>
                     <menu key="menu" id="xDu-LG-sr1">
                         <items>
@@ -52,11 +61,12 @@
                         </items>
                     </menu>
                     <connections>
+                        <outlet property="loadingGroup" destination="onA-kQ-W3B" id="qV0-hd-DhD"/>
                         <outlet property="table" destination="JVr-VB-9Jh" id="obF-2X-heV"/>
                     </connections>
                 </controller>
             </objects>
-            <point key="canvasLocation" x="235" y="370"/>
+            <point key="canvasLocation" x="235" y="419.5"/>
         </scene>
         <!--StoryDetail-->
         <scene sceneID="1EP-iX-evC">
@@ -96,7 +106,7 @@
                     <edgeInsets key="margins" left="0.0" right="0.0" top="0.0" bottom="14"/>
                 </glanceController>
             </objects>
-            <point key="canvasLocation" x="235" y="738"/>
+            <point key="canvasLocation" x="235" y="1004"/>
         </scene>
         <!--Static Notification Interface Controller-->
         <scene sceneID="AEw-b0-oYE">
@@ -112,14 +122,14 @@
                     </connections>
                 </notificationController>
             </objects>
-            <point key="canvasLocation" x="235" y="1001"/>
+            <point key="canvasLocation" x="611" y="826"/>
         </scene>
         <!--Notification Controller-->
         <scene sceneID="KIl-fV-djm">
             <objects>
                 <controller id="gdX-wl-uQE" customClass="NotificationController" customModule="VuseFeed_Watch" customModuleProvider="target"/>
             </objects>
-            <point key="canvasLocation" x="553" y="1001"/>
+            <point key="canvasLocation" x="929" y="826"/>
         </scene>
     </scenes>
 </document>
