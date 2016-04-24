@@ -153,7 +153,9 @@ extension VuseFeedEngine : WCSessionDelegate {
                     }
                     
                     // Convert the data to Stories
-                    VuseFeedEngine.watchStories = storyData.flatMap({ Story(withData: $0) })
+                    let stories = storyData.flatMap({ Story(withData: $0) })
+                    
+                    VuseFeedEngine.watchStories = stories
                     
                     }, errorHandler: { (error : NSError) in
                         print("ERROR SENDING MESSAGE - CODE: \(error.code) - DESCRIPTION: \(error.localizedDescription)")

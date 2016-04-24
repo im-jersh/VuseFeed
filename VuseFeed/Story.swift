@@ -120,6 +120,21 @@ class Story {
         
     }
     
+    func downloadWatchVideo() {
+        
+        // Get the data
+        guard let url = self.watchVideoURL, data = NSData(contentsOfURL: url) else {
+            return
+        }
+        
+        // Save the data to the file system
+        let tempFileURL = NSURL.fileURLWithPath(NSTemporaryDirectory(), isDirectory: true).URLByAppendingPathComponent("\(self.recordName).mp4")
+        if data.writeToURL(tempFileURL, atomically: true) {
+            self.watchVideoURL = tempFileURL
+            print("FINISHED DOWNLOADING: \(tempFileURL.absoluteString)")
+        }
+        
+    }
     
 }
  

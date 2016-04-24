@@ -153,9 +153,19 @@ class VFStoriesTableController: WKInterfaceController {
                 // Set the thumbnail, headline, & author
                 let rowColor = UIColor.colorForCategory(story.category)
                 row.movie.setPosterImage(WKImage(image: story.thumbnail!))
-                if let _ = story.watchVideoURL {
-                    row.movie.setMovieURL(story.watchVideoURL!)
+                
+                // Download the video
+                // Download on a background thread
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
+                    
+                    story.downloadWatchVideo()
+                    
+                    dispatch_async(dispatch_get_main_queue(), { 
+                        row.movie.setMovieURL(story.watchVideoURL!)
+                    })
                 }
+
+                
                 row.movie.setLoops(false)
                 row.rowGroup.setBackgroundColor(rowColor.colorWithAlphaComponent(0.20))
                 row.headlineLabel.setText(story.headline)
