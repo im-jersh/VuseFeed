@@ -333,6 +333,30 @@ class CloudKitManager {
         
     }
     
+    // Fetch a single record by its record name
+    func fetchStory(withRecordName recordName: String, withCompletionHandler completion: (Story?) -> Void) {
+        
+        // Create the recordID from the recordName
+        let recordID = CKRecordID(recordName: recordName)
+        
+        // Fetch the record
+        self.publicDatabase.fetchRecordWithID(recordID) { (record: CKRecord?, error: NSError?) in
+            
+            guard let record = record where error == nil else {
+                print("Error fetching record with ID: \(recordID.recordName)")
+                return
+            }
+            
+            // Make a Story from the record
+            let story = WatchableStory(fromRecord: record)
+            //story?.updateStory(withRecord: record)
+            
+            completion(story)
+            
+        }
+        
+    }
+    
 }
 
 extension CloudKitManager {

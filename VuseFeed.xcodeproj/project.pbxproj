@@ -47,6 +47,8 @@
 		035CD7B81CAF05A900527B3F /* Chameleon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 035CD7A61CAEC97100527B3F /* Chameleon.framework */; };
 		035CD7B91CAF05A900527B3F /* LNPopupController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 035CD7A41CAEC8AE00527B3F /* LNPopupController.framework */; };
 		035CD7BA1CAF05A900527B3F /* WebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 035CD7A21CAEC78200527B3F /* WebImage.framework */; };
+		0374DD3A1CCCAD9300DCE572 /* HandoffHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0374DD391CCCAD9300DCE572 /* HandoffHelper.swift */; };
+		0374DD3B1CCCAD9300DCE572 /* HandoffHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0374DD391CCCAD9300DCE572 /* HandoffHelper.swift */; };
 		03789CBD1CADAF9A00F631BB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03789CBC1CADAF9A00F631BB /* QuartzCore.framework */; };
 		03789CBF1CADAFA000F631BB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03789CBE1CADAFA000F631BB /* CoreGraphics.framework */; };
 		037FFA1D1CC85B910089E887 /* videos.json in Resources */ = {isa = PBXBuildFile; fileRef = 037FFA1C1CC85B910089E887 /* videos.json */; };
@@ -166,6 +168,7 @@
 		035CD7B11CAED92900527B3F /* VuseFeed-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VuseFeed-Bridging-Header.h"; sourceTree = "<group>"; };
 		035CD7B41CAEDAA400527B3F /* UIImageView+WebCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UIImageView+WebCache.h"; path = "Carthage/Build/iOS/WebImage.framework/Headers/UIImageView+WebCache.h"; sourceTree = SOURCE_ROOT; };
 		035CD7B51CAEE68D00527B3F /* VuseFeedEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VuseFeedEngine.swift; sourceTree = "<group>"; };
+		0374DD391CCCAD9300DCE572 /* HandoffHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandoffHelper.swift; sourceTree = "<group>"; };
 		03789CBC1CADAF9A00F631BB /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		03789CBE1CADAFA000F631BB /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		037FFA1C1CC85B910089E887 /* videos.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = videos.json; sourceTree = "<group>"; };
@@ -358,6 +361,7 @@
 		03583EF31CA42DF600C5EAFE /* Engines, Managers, & Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				0374DD391CCCAD9300DCE572 /* HandoffHelper.swift */,
 				035CD7B51CAEE68D00527B3F /* VuseFeedEngine.swift */,
 				03583EF41CA42E0200C5EAFE /* CloudKitManager.swift */,
 				030007AE1CC09E3300047F23 /* Category+Extensions.swift */,
@@ -646,6 +650,7 @@
 				671844101CAB378400C53DE2 /* CategoriesViewController.swift in Sources */,
 				03583EF51CA42E0200C5EAFE /* CloudKitManager.swift in Sources */,
 				671844121CAB436B00C53DE2 /* CategoryTableViewCell.swift in Sources */,
+				0374DD3A1CCCAD9300DCE572 /* HandoffHelper.swift in Sources */,
 				035CD7B61CAEE68D00527B3F /* VuseFeedEngine.swift in Sources */,
 				035CD7991CAE0B0300527B3F /* VFStoryListCell.swift in Sources */,
 				03BC40EC1CBB480C00637C67 /* BookmarkDetailViewController.swift in Sources */,
@@ -685,6 +690,7 @@
 				030007B11CC09EA000047F23 /* Category+Extensions.swift in Sources */,
 				03583F0B1CA42F6400C5EAFE /* VFHeaderRowController.swift in Sources */,
 				03583EDE1CA42D7300C5EAFE /* ComplicationController.swift in Sources */,
+				0374DD3B1CCCAD9300DCE572 /* HandoffHelper.swift in Sources */,
 				03FAE6741CCC143F00AEC18F /* VFStoryDetailController.swift in Sources */,
 				03583EDC1CA42D7300C5EAFE /* GlanceController.swift in Sources */,
 				0343647D1CC2D78E0010210D /* VFStoriesTableController.swift in Sources */,

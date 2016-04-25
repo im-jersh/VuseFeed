@@ -30,7 +30,7 @@ class Story {
             else { return nil }
         }
     }
-    var thumbnail : UIImage?
+    var thumbnail : UIImage? = UIImage(named: "placeholder")
     
     
     init(recordName: String, author: String, headline: String, category: Category, summary: String, epochDate: Double) {
@@ -56,7 +56,7 @@ class Story {
         if let watchVideoString = json["watchVideoURL"] as? String, watchVideoURL = NSURL(string: watchVideoString), urlString = json["thumbnailURL"] as? String {
             self.watchVideoURL = watchVideoURL
             self.thumbnailString = urlString
-            self.thumbnail = self.downloadImage(withURL: self.thumbnailURL)
+            //self.downloadImage(withURL: self.thumbnailURL)
         }
         
     }
@@ -104,19 +104,40 @@ class Story {
         return try? NSJSONSerialization.dataWithJSONObject(dict, options: .PrettyPrinted)
     }
     
-    private func downloadImage(withURL url: NSURL?) -> UIImage {
+    private func downloadImage(withURL url: NSURL?) {
         
         // Make sure the url is valid
         guard let url = url else {
-            // Return the placeholder
-            return UIImage(named: "placeholder")!
+            // Set the placeholder
+            self.thumbnail = UIImage(named: "placeholder")!
+            return
         }
+//
+//        guard let data = NSData(contentsOfURL: url), image = UIImage(data: data) else {
+//            return UIImage(named: "placeholder")!
+//        }
+//        
+//        return image
         
-        guard let data = NSData(contentsOfURL: url), image = UIImage(data: data) else {
-            return UIImage(named: "placeholder")!
-        }
-        
-        return image
+        NSURLSession.sharedSession().dataTaskWithURL(url) { [unowned self](data: NSData?, response: NSURLResponse?, error: NSError?) in
+            
+            guard let data = data else {
+                if let error = error {
+                    print(error.localizedDescription)
+                }
+                return
+            }
+            
+            // Create an image
+            guard let image = UIImage(data: data) else {
+                print("UNABLE TO CREATE THUMBNAIL IMAGE FROM DATA")
+                self.thumbnail = UIImage(named: "placeholder")!
+                return
+            }
+            
+            self.thumbnail = image
+            
+        }.resume()
         
     }
     

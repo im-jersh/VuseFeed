@@ -49,6 +49,47 @@ class WatchableTableViewController: UITableViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    override func restoreUserActivityState(activity: NSUserActivity) {
+        super.restoreUserActivityState(activity)
+        
+        self.navigationController?.popToViewController(self, animated: true)
+        
+        let handoff = Handoff()
+        switch activity.activityType {
+        case Handoff.ActivityTypes.ViewStory.rawValue :
+            
+            // Get the record name from the activity's userInfo
+            guard let recordName = activity.userInfo?[handoff.activityKey] as? String else {
+                print("Error extracting record name")
+                return
+            }
+            
+            // Fetch the record
+            CloudKitManager.sharedManager().fetchStory(withRecordName: recordName, withCompletionHandler: { (story: Story?) in
+                
+                guard let story = story as? WatchableStory else {
+                    return
+                }
+                
+                if let popupController = self.storyboard?.instantiateViewControllerWithIdentifier("storyDetailController") as? StoryDetailViewController {
+                    popupController.story = story
+                    popupController.popupItem.title = popupController.story.headline
+                    popupController.popupItem.subtitle = popupController.story.summary
+                    popupController.delegate = self
+                    
+                    self.navigationController?.presentPopupBarWithContentViewController(popupController, openPopup: true, animated: true, completion: nil)
+                }
+                
+            })
+            
+            break
+        default :
+            break
+        }
+        
+        
+    }
 
 // MARK: - Table view data source
 

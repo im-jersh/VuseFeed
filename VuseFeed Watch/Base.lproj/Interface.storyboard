@@ -56,8 +56,16 @@ stories</string>
                     </items>
                     <menu key="menu" id="xDu-LG-sr1">
                         <items>
-                            <menuItem title="Refresh" icon="accept" id="8Y6-rx-8Ba"/>
-                            <menuItem title="Older Stories" icon="more" id="a2a-kW-Ecf"/>
+                            <menuItem title="Refresh" icon="accept" id="8Y6-rx-8Ba">
+                                <connections>
+                                    <action selector="refreshButtonWasTapped" destination="AgC-eL-Hgc" id="rXE-vH-pX7"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Older Stories" icon="more" id="a2a-kW-Ecf">
+                                <connections>
+                                    <action selector="loadOlderStoriesWasTapped" destination="AgC-eL-Hgc" id="ASU-hq-ycG"/>
+                                </connections>
+                            </menuItem>
                         </items>
                     </menu>
                     <connections>

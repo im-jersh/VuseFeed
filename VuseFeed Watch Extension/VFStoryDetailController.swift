@@ -43,8 +43,15 @@ class VFStoryDetailController: WKInterfaceController {
     }
 
     override func willActivate() {
-        // This method is called when watch view controller is about to be visible to user
         super.willActivate()
+        
+        // Send a handoff activity
+        if let recordName = self.story?.recordName {
+            let handoff = Handoff()
+            let userInfo : [NSObject : AnyObject] = [handoff.activityKey : recordName]
+            self.updateUserActivity(Handoff.ActivityTypes.ViewStory.rawValue, userInfo: userInfo, webpageURL: nil)
+        }
+        
     }
 
     override func didDeactivate() {

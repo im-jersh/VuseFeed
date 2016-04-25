@@ -114,6 +114,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
+    
+    func application(application: UIApplication, continueUserActivity userActivity: NSUserActivity, restorationHandler: ([AnyObject]?) -> Void) -> Bool {
+        
+        // Get the userInfo
+        guard let userInfo = userActivity.userInfo else {
+            return true
+        }
+        print(userInfo)
+        
+        // Get the root controller to restore the state
+        guard let storyListController = (window?.rootViewController as? UINavigationController)?.viewControllers.first as? WatchableTableViewController else {
+            return true
+        }
+        
+        storyListController.restoreUserActivityState(userActivity)
+        
+        return true
+    }
 
 }
 
