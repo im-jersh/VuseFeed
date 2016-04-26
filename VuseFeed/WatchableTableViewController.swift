@@ -315,7 +315,9 @@ extension WatchableTableViewController : StoryDetailDelegate {
             
             CloudKitManager.sharedManager().saveStoryToPrivateDatabase(story) { (success, message) in
                 if !success {
-                    self.presentAlertWithMessage(message!)
+                    dispatch_async(dispatch_get_main_queue(), { 
+                        self.presentAlertWithMessage(message!)
+                    })
                 }
             }
             

@@ -58,5 +58,12 @@ class VFStoryDetailController: WKInterfaceController {
         // This method is called when watch view controller is no longer visible
         super.didDeactivate()
     }
-
+    
+    
+    @IBAction func bookmarkMenuItemWasTapped() {
+        if let _ = self.story {
+            VuseFeedEngine.sharedEngine.bookmarkStory(self.story!)
+        }
+    }
+    
 }

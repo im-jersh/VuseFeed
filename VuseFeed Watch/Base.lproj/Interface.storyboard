@@ -93,6 +93,15 @@ stories</string>
                             <fontDescription key="font" style="UICTFontTextStyleCaption2"/>
                         </label>
                     </items>
+                    <menu key="menu" id="Dul-P2-ePZ">
+                        <items>
+                            <menuItem title="Bookmark" icon="share" id="0ho-52-58j">
+                                <connections>
+                                    <action selector="bookmarkMenuItemWasTapped" destination="De3-Ra-NQc" id="6iV-Ww-dyg"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
                     <connections>
                         <outlet property="authorLabel" destination="qsn-Q2-3K4" id="fXf-HG-MZ4"/>
                         <outlet property="headlineLabel" destination="Uqd-tw-TxO" id="tqc-ci-cvS"/>
@@ -101,7 +110,7 @@ stories</string>
                     </connections>
                 </controller>
             </objects>
-            <point key="canvasLocation" x="570" y="311"/>
+            <point key="canvasLocation" x="503" y="285"/>
         </scene>
         <!--Glance Interface Controller-->
         <scene sceneID="BOz-TT-tkC">

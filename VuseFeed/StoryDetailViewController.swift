@@ -165,7 +165,9 @@ class StoryDetailViewController: UIViewController {
         
         CloudKitManager.sharedManager().saveStoryToPrivateDatabase(self.story) { (success, message) in
             if !success {
-                self.presentAlertWithMessage(message!)
+                dispatch_async(dispatch_get_main_queue(), { 
+                    self.presentAlertWithMessage(message!)
+                })
             }
         }
         

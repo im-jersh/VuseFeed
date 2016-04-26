@@ -167,26 +167,53 @@ extension VuseFeedEngine : WCSessionDelegate {
             
         }
         
-        
     }
     
-    //    func fetchStoriesAndWait() {
-    //
-    //        if WCSession.isSupported() {
-    //            let message = ["fetch_date" : NSDate()]
-    //
-    //            WCSession.defaultSession().transferUserInfo(message)
-    //
-    //        }
-    //
-    //    }
+    func bookmarkStory(story: Story) {
+        
+        if WCSession.isSupported() {
+            let userInfo = ["recordName" : story.recordName]
+            WCSession.defaultSession().transferUserInfo(userInfo)
+        }
+        
+    }
     
     func session(session: WCSession, didReceiveUserInfo userInfo: [String : AnyObject]) {
         if let stories = userInfo["watch_stories"] {
             print(stories)
         }
+    
     }
 
     
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

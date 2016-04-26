@@ -183,55 +183,14 @@ extension AppDelegate : WCSessionDelegate {
     
     
     
-//    func session(session: WCSession, didReceiveUserInfo userInfo: [String : AnyObject]) {
-//        
-//        // If there was a date passed in
-//        if let _ = userInfo["fetch_date"] as? NSDate {
-//            
-//            // Fetch the latest videos
-//            do {
-//                try CloudKitManager.sharedManager().fetchStories(forDevice: .Watch, withCompletion: { (stories) in
-//                    
-//                    guard !stories.isEmpty else {
-//                        // Return an empty dictionary
-//                        print("NO STORIES FETCHED FOR WATCH EXTENSION")
-//                        return
-//                    }
-//                    
-//                    // Cast the results at Story array
-//                    guard let stories = stories as? [WatchableStory] else {
-//                        // Return an empty dictionary
-//                        print("ERROR IN WATCH STORIES RESULT DATA")
-//                        return
-//                    }
-//                    
-//                    let watchStories = stories.flatMap({ $0.watchVideo != nil ? Story(withAuthor: $0.author, headline: $0.headline, category: $0.category, pubDate: $0.pubDate, epochDate: $0.epochDate, watchVideoURL: $0.watchVideo) : nil })
-//                    
-//                    // Prepare the stories for the reply
-//                    self.updateWatchExtension(withStories: watchStories)
-//                    
-//                })
-//            } catch let error as NSError {
-//                print(error.localizedDescription)
-//            }
-//            
-//        }
-//
-//        
-//    }
-//    
-//    func updateWatchExtension(withStories stories: [Story]) {
-//        
-//        if WCSession.isSupported() {
-//            
-//            let session = WCSession.defaultSession()
-//            if session.watchAppInstalled {
-//                let replyDictionary = ["watch_stories" : stories]
-//                session.transferUserInfo(replyDictionary)
-//            }
-//        }
-//        
-//    }
+    func session(session: WCSession, didReceiveUserInfo userInfo: [String : AnyObject]) {
+        
+        // Check for a recordName
+        if let recordName = userInfo["recordName"] as? String {
+            CloudKitManager.sharedManager().saveBookmarkFromWatch(withRecordName: recordName)
+        }
+        
+    }
     
 }
 
