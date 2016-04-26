@@ -52,30 +52,45 @@ class CloudKitManager {
         operation.desiredKeys = ["publicationDate"]
         operation.resultsLimit = 1
         
-        var storiesPresent = false
+        var seedRequired = false
         operation.recordFetchedBlock = { (record) in
             // There was at least 1 story
-            storiesPresent = true
+            seedRequired = true
         }
         
         operation.queryCompletionBlock = { (cursor, error) in
             
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
             
-            guard !storiesPresent else {
+            guard !seedRequired else {
                 return
             }
             
             print("SEEDING CLOUDKIT.....")
             
-            // TODO: Delete all records first
+            // Fetch all the records
+            let truePred = NSPredicate(value: true)
+            let allRecordsQuery = CKQuery(recordType: "Story", predicate: truePred)
             
-            // Parse the stories.json file into CKRecords
-            let storyRecords = self.parseStoriesFromFile()
-            let videoRecords = self.parseStoriesFromFile("videos")
+            self.publicDatabase.performQuery(allRecordsQuery, inZoneWithID: nil, completionHandler: { (records: [CKRecord]?, error: NSError?) in
+                
+                guard let records = records where error == nil else {
+                    print("ERROR FETCHING ALL RECORDS")
+                    return
+                }
+                
+                // Get the recordIDs of the returned records
+                let deleteRecordIDs = records.flatMap({ $0.recordID })
+                
+                // Parse the stories.json file into CKRecords
+                let storyRecords = self.parseStoriesFromFile()
+                let videoRecords = self.parseStoriesFromFile("videos")
+                
+                // Save the new records and delete the old records
+                self.saveRecords(storyRecords + videoRecords, andDeleteRecords: deleteRecordIDs)
+                
+            })
             
-            // Save the records
-            self.saveRecords(storyRecords + videoRecords)
         }
 
         self.publicDatabase.addOperation(operation)
@@ -150,14 +165,15 @@ class CloudKitManager {
     }
     
     // Saves a batch of records to a CloudKit datase
-    func saveRecords(records: [CKRecord], toDatabase database: CKDatabase = CKContainer.defaultContainer().publicCloudDatabase) {
+    func saveRecords(saveRecords: [CKRecord]?,andDeleteRecords deleteRecords: [CKRecordID]?, toDatabase database: CKDatabase = CKContainer.defaultContainer().publicCloudDatabase) {
         
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         
         // Create the save operation
-        let saveOperation = CKModifyRecordsOperation(recordsToSave: records, recordIDsToDelete: nil)
+        let saveOperation = CKModifyRecordsOperation(recordsToSave: saveRecords, recordIDsToDelete: deleteRecords)
         saveOperation.modifyRecordsCompletionBlock = { (savedRecords, deletedRecords, error) in
-            print("\(savedRecords?.count ?? 0) CKRECORDS WERE SAVED")
+            print("\(savedRecords?.count ?? 0) CKRECORDS WERE SAVED AND \(deleteRecords?.count ?? 0) WERE DELETED")
+            
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
             
             // Update the UI
@@ -354,6 +370,12 @@ class CloudKitManager {
             completion(story)
             
         }
+        
+    }
+    
+    // Deletes a batch of stories from the supplied database
+    func deleteRecords(withIDs IDs: [CKRecordID], fromDatabase database: CKDatabase = CKContainer.defaultContainer().publicCloudDatabase) {
+        
         
     }
     

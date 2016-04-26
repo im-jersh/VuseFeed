@@ -269,7 +269,7 @@ extension WKInterfaceMovie {
         // Set the default poster image
         self.setPosterImage(WKImage(image: UIImage(named: "placeholder")!))
         
-        if !SESSION {
+        if SESSION {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
                 
                 NSURLSession.sharedSession().dataTaskWithURL(url) { [unowned self](data: NSData?, response: NSURLResponse? , error: NSError?) in
