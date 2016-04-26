@@ -51,6 +51,7 @@
 		0374DD3B1CCCAD9300DCE572 /* HandoffHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0374DD391CCCAD9300DCE572 /* HandoffHelper.swift */; };
 		03789CBD1CADAF9A00F631BB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03789CBC1CADAF9A00F631BB /* QuartzCore.framework */; };
 		03789CBF1CADAFA000F631BB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03789CBE1CADAFA000F631BB /* CoreGraphics.framework */; };
+		037C5A6E1CD0315B00405DE3 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037C5A6D1CD0315B00405DE3 /* SettingsViewController.swift */; };
 		037FFA1D1CC85B910089E887 /* videos.json in Resources */ = {isa = PBXBuildFile; fileRef = 037FFA1C1CC85B910089E887 /* videos.json */; };
 		03BA44971CC928230047AE73 /* VuseFeedEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035CD7B51CAEE68D00527B3F /* VuseFeedEngine.swift */; };
 		03BC40EC1CBB480C00637C67 /* BookmarkDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BC40EB1CBB480C00637C67 /* BookmarkDetailViewController.swift */; };
@@ -171,6 +172,7 @@
 		0374DD391CCCAD9300DCE572 /* HandoffHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandoffHelper.swift; sourceTree = "<group>"; };
 		03789CBC1CADAF9A00F631BB /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		03789CBE1CADAFA000F631BB /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		037C5A6D1CD0315B00405DE3 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		037FFA1C1CC85B910089E887 /* videos.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = videos.json; sourceTree = "<group>"; };
 		03BC40EB1CBB480C00637C67 /* BookmarkDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkDetailViewController.swift; sourceTree = "<group>"; };
 		03E09A631CB96ACE006AEDFE /* stories.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = stories.json; sourceTree = "<group>"; };
@@ -348,6 +350,7 @@
 		03583EF01CA42DB800C5EAFE /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				037C5A6D1CD0315B00405DE3 /* SettingsViewController.swift */,
 				03BC40EB1CBB480C00637C67 /* BookmarkDetailViewController.swift */,
 				03E09A671CBAF1C3006AEDFE /* BookmarkTableViewController.swift */,
 				6718440F1CAB378400C53DE2 /* CategoriesViewController.swift */,
@@ -659,6 +662,7 @@
 				030007AF1CC09E3300047F23 /* Category+Extensions.swift in Sources */,
 				03583EFB1CA42E2300C5EAFE /* WatchablePlayerController.swift in Sources */,
 				03583EF71CA42E1400C5EAFE /* Story.swift in Sources */,
+				037C5A6E1CD0315B00405DE3 /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
