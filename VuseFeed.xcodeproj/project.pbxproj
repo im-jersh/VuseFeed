@@ -254,7 +254,7 @@
 				03583EEF1CA42DAE00C5EAFE /* Views */,
 				03583EF01CA42DB800C5EAFE /* View Controllers */,
 				03583EED1CA42D8800C5EAFE /* Data Models */,
-				03583EF31CA42DF600C5EAFE /* Engines, Managers, & Helpers */,
+				03583EF31CA42DF600C5EAFE /* Engines, Managers, Helpers & Extensions */,
 				03583EEE1CA42D9700C5EAFE /* Supporting Files */,
 			);
 			path = VuseFeed;
@@ -361,7 +361,7 @@
 			name = "View Controllers";
 			sourceTree = "<group>";
 		};
-		03583EF31CA42DF600C5EAFE /* Engines, Managers, & Helpers */ = {
+		03583EF31CA42DF600C5EAFE /* Engines, Managers, Helpers & Extensions */ = {
 			isa = PBXGroup;
 			children = (
 				0374DD391CCCAD9300DCE572 /* HandoffHelper.swift */,
@@ -370,7 +370,7 @@
 				030007AE1CC09E3300047F23 /* Category+Extensions.swift */,
 				035CD7B41CAEDAA400527B3F /* UIImageView+WebCache.h */,
 			);
-			name = "Engines, Managers, & Helpers";
+			name = "Engines, Managers, Helpers & Extensions";
 			sourceTree = "<group>";
 		};
 		035A45371CC6C2FC00608615 /* Frameworks */ = {
