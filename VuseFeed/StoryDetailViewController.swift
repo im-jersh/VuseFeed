@@ -78,6 +78,10 @@ class StoryDetailViewController: UIViewController {
         self.configureVideoPlayer()
         self.scrollView.scrollsToTop = true
         
+        //set content insets for the scroll view
+        self.scrollView.contentInset = UIEdgeInsetsMake(0.0, 0.0, 44.0, 0.0)
+        self.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(0.0, 0.0, 44.0, 0.0)
+        
     }
     
     override func viewDidAppear(animated: Bool) {

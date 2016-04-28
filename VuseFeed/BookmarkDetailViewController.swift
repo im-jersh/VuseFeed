@@ -24,6 +24,7 @@ class BookmarkDetailViewController: StoryDetailViewController {
         super.configure()
         super.configureVideoPlayer()
         self.scrollView.scrollsToTop = true
+        
     }
 
     override func didReceiveMemoryWarning() {
