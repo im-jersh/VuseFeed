@@ -43,6 +43,7 @@ class WatchableTableViewController: UITableViewController {
         // Make the popupcontroller bar title bold
         LNPopupBar.appearanceWhenContainedInInstancesOfClasses([UINavigationController.self]).titleTextAttributes = [ NSFontAttributeName : UIFont.boldSystemFontOfSize(12.0)]
         
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -157,6 +158,11 @@ class WatchableTableViewController: UITableViewController {
             popupController.delegate = self
             
             self.navigationController?.presentPopupBarWithContentViewController(popupController, openPopup: true, animated: true, completion: nil)
+            
+            //set content insets for the scroll view
+            self.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, 88.0, 0.0)
+            self.tableView.scrollIndicatorInsets = self.tableView.contentInset
+            
         }
         
         self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
