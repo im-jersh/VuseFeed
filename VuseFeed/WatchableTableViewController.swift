@@ -43,6 +43,9 @@ class WatchableTableViewController: UITableViewController {
         // Make the popupcontroller bar title bold
         LNPopupBar.appearanceWhenContainedInInstancesOfClasses([UINavigationController.self]).titleTextAttributes = [ NSFontAttributeName : UIFont.boldSystemFontOfSize(12.0)]
         
+        // Add an action to the refresh control
+        self.refreshControl?.addTarget(self, action: #selector(WatchableTableViewController.handleRefresh(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -230,9 +233,15 @@ extension WatchableTableViewController {
     
     func fetchStories() {
         
+        self.refreshControl?.beginRefreshing()
+        
         // Fetch the stories from CloudKit and reload the table view when the results are returned
         do {
             try CloudKitManager.sharedManager().fetchStories(forDevice: .Phone, withCompletion: { (fetchedStories) in
+                
+                defer {
+                    self.refreshControl?.endRefreshing()
+                }
                 
                 guard let fetchedStories = fetchedStories as? [WatchableStory] else {
                     print("Unable to cast result")
@@ -254,6 +263,10 @@ extension WatchableTableViewController {
             // TODO: Handle exception
         }
         
+    }
+    
+    func handleRefresh(refreshControl: UIRefreshControl) {
+        self.fetchStories()
     }
 
     @IBAction func categoriesTapped(sender: AnyObject) {
@@ -288,6 +301,7 @@ extension WatchableTableViewController {
                 self.stories?.removeAll()
                 self.storySections?.removeAll()
                 self.tableView.reloadData()
+                self.refreshControl?.beginRefreshing()
                 self.fetchStories()
             }
             

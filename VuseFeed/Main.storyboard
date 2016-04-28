@@ -110,6 +110,9 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="pfa-iE-rUz">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </refreshControl>
                     <connections>
                         <outlet property="bookmarksButton" destination="Sob-sd-bci" id="ifu-hx-AV9"/>
                         <outlet property="categoriesButton" destination="vrN-LE-SzE" id="Esb-08-vPd"/>
@@ -708,7 +711,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XIF-P8-mmD" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="C8J-a8-pmF" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1818" y="2032"/>
+            <point key="canvasLocation" x="1818" y="2100"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="EQ4-uk-sQH">
@@ -913,7 +916,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="2578" y="2032"/>
+            <point key="canvasLocation" x="2592" y="2100"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="pL2-SV-Esj">
