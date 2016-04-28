@@ -3,7 +3,12 @@
     <entity name="Category" syncable="YES">
         <attribute name="category" attributeType="String" defaultValueString="Uncategorized" syncable="YES"/>
     </entity>
+    <entity name="Subscription" syncable="YES">
+        <attribute name="category" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="recordID" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <elements>
         <element name="Category" positionX="-63" positionY="-18" width="128" height="60"/>
+        <element name="Subscription" positionX="-63" positionY="-9" width="128" height="75"/>
     </elements>
 </model>

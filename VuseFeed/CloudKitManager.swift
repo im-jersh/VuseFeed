@@ -393,6 +393,32 @@ class CloudKitManager {
         }
         
     }
+    
+    // Save a subscription
+    func updateSubscription(forCategories categories: [Category]) {
+        
+        let predicate = NSPredicate(format: "category == %@", categories.flatMap({ $0.rawValue }))
+        let subscription = CKSubscription(recordType: "Story", predicate: predicate, options: .FiresOnRecordCreation)
+        
+        let notification = CKNotificationInfo()
+        notification.alertBody = "THIS JUST IN: %@"
+        notification.alertLocalizationArgs = ["headline"]
+        
+        subscription.notificationInfo = notification
+        
+        self.publicDatabase.saveSubscription(subscription) { (subscription: CKSubscription?, error: NSError?) in
+            
+            if let subscription = subscription where error == nil {
+                NSUserDefaults.standardUserDefaults().setValue(subscription.subscriptionID, forKey: "subscriptionID")
+            }
+            
+        }
+
+        
+        
+        
+    }
+
 }
 
 extension CloudKitManager {
