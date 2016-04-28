@@ -24,6 +24,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Set up WatchConnectivity
         self.setupWatchConnectivity()
         
+        // Request notification permissions
+        let notificationSettings = UIUserNotificationSettings(forTypes: [.Alert, .Sound, .Badge], categories: nil)
+        UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
+        UIApplication.sharedApplication().registerForRemoteNotifications()
+        
         return true
     }
 

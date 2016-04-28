@@ -10,6 +10,9 @@ import Foundation
 import CoreData
 import WatchConnectivity
 import UIKit
+#if os(iOS)
+import CloudKit
+#endif
 
 protocol VuseFeedEngineDelegate {
     func engine(engine: VuseFeedEngine, didCompleteFetchWithStories stories: [Story])
@@ -39,6 +42,22 @@ class VuseFeedEngine : NSObject {
        return Set(self.allCategorieStrings.flatMap{ Category(rawValue: $0) })
     }()
     
+    private(set) lazy var subscriptions : Set<Category> = {
+        
+        // Fetch the entities
+        let fetchRequest = NSFetchRequest(entityName: "Subscription")
+        do {
+            let fetchedSubscriptions = try self.moc.executeFetchRequest(fetchRequest) as! [NSManagedObject]
+            // Map the entities to categories
+            let subscriptionCategories = fetchedSubscriptions.flatMap({ Category(rawValue: $0.valueForKey("category") as! String) })
+            return Set(subscriptionCategories)
+        } catch {
+            // TODO: Handle exception
+        }
+        
+        return Set<Category>()
+        
+    }()
     
     lazy var moc : NSManagedObjectContext = {
         let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
@@ -111,7 +130,45 @@ class VuseFeedEngine : NSObject {
             // TODO: Handle exception
         }
         
-        // TODO: Unsubscribe CloudKit Notifications for this category
+        self.deleteSubscription(forCategory: category)
+    }
+    
+    func createSubscription(forCategory category: Category) {
+        
+        // Add to the category set
+        self.subscriptions.insert(category)
+        
+        // Check to see if entity already exists
+        let fetchRequest = NSFetchRequest(entityName: "Subscription")
+        fetchRequest.predicate = NSPredicate(format: "%K == %@", "category", category.rawValue)
+        let error : NSErrorPointer = nil
+        if self.moc.countForFetchRequest(fetchRequest, error: error) == 1 { return } // Entity already exists; return
+        
+        // Save new record
+        let newEntity = NSEntityDescription.insertNewObjectForEntityForName("Subscription", inManagedObjectContext: self.moc)
+        newEntity.setValue(category.rawValue, forKey: "category")
+        
+    }
+    
+    func deleteSubscription(forCategory category: Category) {
+        
+        // Remove from the category set
+        self.subscriptions.remove(category)
+        
+        // Delete entity from CoreData
+        let fetchRequest = NSFetchRequest(entityName: "Subscription")
+        fetchRequest.predicate = NSPredicate(format: "%K == %@", "category", category.rawValue)
+        
+        do {
+            let fetchedEntities = try self.moc.executeFetchRequest(fetchRequest) as! [NSManagedObject]
+            if let entityToDelete = fetchedEntities.first {
+                self.moc.deleteObject(entityToDelete)
+            }
+        } catch {
+            // TODO: Handle exception
+        }
+
+        
     }
     
 #endif
