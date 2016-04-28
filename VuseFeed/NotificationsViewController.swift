@@ -12,6 +12,8 @@ class NotificationsViewController: UIViewController {
     
     @IBOutlet weak var notificationsTable: UITableView!
     
+    var flag = false
+    
     // Show only the categories that are currently in the news feed
     let newsFeedCategories = Array(VuseFeedEngine.sharedEngine.newsFeedCategories).sort({ $0.rawValue < $1.rawValue })
     let currentSubscriptions = VuseFeedEngine.sharedEngine.subscriptions
@@ -19,7 +21,6 @@ class NotificationsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
     }
     
     override func viewDidDisappear(animated: Bool) {
@@ -32,23 +33,25 @@ class NotificationsViewController: UIViewController {
             print("UNABLE TO SAVE SUBSCRIPTIONS")
         }
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        
+        //check NSUserDefaults for the night mode setting
+        if let nightMode = NSUserDefaults.standardUserDefaults().valueForKey("nightMode") as? Int where nightMode == 1 {
+            self.notificationsTable.backgroundColor = UIColor.darkGrayColor()
+            flag = true
+        }
+        else {
+            self.notificationsTable.backgroundColor = UIColor.whiteColor()
+            flag = false
+        }
+        
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
 
 extension NotificationsViewController : UITableViewDelegate, UITableViewDataSource {
@@ -67,6 +70,40 @@ extension NotificationsViewController : UITableViewDelegate, UITableViewDataSour
     
     func tableView(tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         return "Only categories that are currently filling your news feed will appear here. When on, you will receive push notifications when new stories are published to the selected category."
+    }
+    
+    func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        
+        //change the background color of the header view when in night mode
+        if flag {
+            if let view = view as? UITableViewHeaderFooterView {
+                view.backgroundView?.backgroundColor = UIColor.darkGrayColor()
+                view.textLabel?.textColor = UIColor.lightGrayColor()
+            }
+        }
+        else {
+            if let view = view as? UITableViewHeaderFooterView {
+                view.backgroundView?.backgroundColor = UIColor.groupTableViewBackgroundColor()
+                view.textLabel?.textColor = UIColor.darkGrayColor()
+            }
+        }
+    }
+    
+    func tableView(tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
+        
+        //change the background color of the header view when in night mode
+        if flag {
+            if let view = view as? UITableViewHeaderFooterView {
+                view.backgroundView?.backgroundColor = UIColor.darkGrayColor()
+                view.textLabel?.textColor = UIColor.lightGrayColor()
+            }
+        }
+        else {
+            if let view = view as? UITableViewHeaderFooterView {
+                view.backgroundView?.backgroundColor = UIColor.groupTableViewBackgroundColor()
+                view.textLabel?.textColor = UIColor.darkGrayColor()
+            }
+        }
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {

@@ -79,8 +79,37 @@ class StoryDetailViewController: UIViewController {
         self.scrollView.scrollsToTop = true
         
         //set content insets for the scroll view
-        self.scrollView.contentInset = UIEdgeInsetsMake(0.0, 0.0, 44.0, 0.0)
-        self.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(0.0, 0.0, 44.0, 0.0)
+        self.scrollView.contentInset = UIEdgeInsetsMake(64.0, 0.0, 44.0, 0.0)
+        self.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(64.0, 0.0, 44.0, 0.0)
+        
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        
+        //check NSUserDefaults for the night mode setting
+        if let nightMode = NSUserDefaults.standardUserDefaults().valueForKey("nightMode") as? Int where nightMode == 1 {
+            self.contentView.backgroundColor = UIColor.darkGrayColor()
+            self.headlineLabel.textColor = UIColor.lightGrayColor()
+            self.authorLabel.textColor = UIColor.whiteColor()
+            self.summaryLabel.textColor = UIColor.lightGrayColor()
+            self.dateLabel.textColor = UIColor.whiteColor()
+            self.scrollView.backgroundColor = UIColor.darkGrayColor()
+            self.articleLabel.textColor = UIColor.lightGrayColor()
+            self.navigationController?.toolbar.translucent = false
+            self.navigationController?.toolbar.barStyle = .Black
+            self.navigationController?.toolbar.tintColor = VuseFeedEngine.globalTint
+            
+        }
+        else {
+            self.contentView.backgroundColor = UIColor.whiteColor()
+            self.headlineLabel.textColor = UIColor.blackColor()
+            self.authorLabel.textColor = UIColor.darkGrayColor()
+            self.summaryLabel.textColor = UIColor.darkGrayColor()
+            self.dateLabel.textColor = UIColor.darkGrayColor()
+            self.scrollView.backgroundColor = UIColor.whiteColor()
+            self.articleLabel.textColor = UIColor.darkGrayColor()
+            
+        }
         
     }
     
