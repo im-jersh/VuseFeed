@@ -18,7 +18,8 @@ class WatchableTableViewController: UITableViewController {
     @IBOutlet weak var bookmarksButton: UIBarButtonItem!
     @IBOutlet weak var settingsButton: UIBarButtonItem!
     
-    var flag = false
+    var nightMode = false
+    private var context : UInt8 = 37
     
     var reuseIdentifier = "WatchableStoryCell"
     var stories : [WatchableStory]? {
@@ -48,24 +49,26 @@ class WatchableTableViewController: UITableViewController {
         // Add an action to the refresh control
         self.refreshControl?.addTarget(self, action: #selector(WatchableTableViewController.handleRefresh(_:)), forControlEvents: UIControlEvents.ValueChanged)
         
+        // Observe for night mode changes
+        NSUserDefaults.standardUserDefaults().addObserver(self, forKeyPath: "night_mode", options: .New, context: &self.context)
+        self.nightMode = NSUserDefaults.standardUserDefaults().boolForKey("night_mode")
+        
+        self.tableView.tableFooterView = UIView()
     }
     
     override func viewWillAppear(animated: Bool) {
         
-        //check to see if night mode switch is set
-        if let nightMode = NSUserDefaults.standardUserDefaults().valueForKey("nightMode") as? Int where nightMode == 1 {
-            flag = true
-            self.tableView.backgroundColor = UIColor.darkGrayColor()
-        }
-        else {
-            flag = false
-            self.tableView.backgroundColor = UIColor.whiteColor()
-        }
+        self.shouldSwitchToNightMode(self.nightMode)
+    
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return self.nightMode ? .LightContent : .Default
     }
     
     override func restoreUserActivityState(activity: NSUserActivity) {
@@ -108,6 +111,19 @@ class WatchableTableViewController: UITableViewController {
         
         
     }
+    
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+        
+        if context == &self.context {
+            // Switch to night mode
+            self.shouldSwitchToNightMode(NSUserDefaults.standardUserDefaults().boolForKey("night_mode"))
+        }
+    }
+    
+    deinit {
+        NSUserDefaults.standardUserDefaults().removeObserver(self, forKeyPath: "night_mode")
+    }
+
 
 // MARK: - Table view data source
 
@@ -142,14 +158,8 @@ class WatchableTableViewController: UITableViewController {
         // Extract the story from the filtered set
         if let story = filteredStories?[indexPath.row] {
             
-            //see if night mode is set
-            if flag {
-                cell.headlineLabel.textColor = UIColor.whiteColor()
-            }
-            else {
-                cell.headlineLabel.textColor = UIColor.blackColor()
-            }
-            
+            cell.headlineLabel.textColor = self.nightMode ? UIColor.whiteColor() : UIColor.darkTextColor()
+            cell.backgroundColor = self.nightMode ? UIColor.clearColor() : UIColor.whiteColor()
             cell.headlineLabel.text = story.headline
             cell.authorLabel.text = story.author
             cell.pubDateLabel.text = NSDateFormatter.localizedStringFromDate(story.pubDate, dateStyle: .MediumStyle, timeStyle: .ShortStyle)
@@ -185,7 +195,7 @@ class WatchableTableViewController: UITableViewController {
             self.navigationController?.presentPopupBarWithContentViewController(popupController, openPopup: true, animated: true, completion: nil)
             
             //set content insets for the scroll view
-            self.tableView.contentInset = UIEdgeInsetsMake(64.0, 0.0, 88.0, 0.0)
+            self.tableView.contentInset = UIEdgeInsetsMake(64.0, 0.0, 84.0, 0.0)
             self.tableView.scrollIndicatorInsets = self.tableView.contentInset
             
         }
@@ -218,8 +228,6 @@ class WatchableTableViewController: UITableViewController {
         
         return header
     }
-    
-    
     
 // MARK: - Navigation
 
@@ -296,6 +304,32 @@ extension WatchableTableViewController {
     func handleRefresh(refreshControl: UIRefreshControl) {
         self.fetchStories()
     }
+    
+    func shouldSwitchToNightMode(nightMode: Bool) {
+        
+        defer { self.tableView.reloadData() }
+        
+        self.nightMode = nightMode
+        
+        if nightMode {
+            self.tableView.backgroundColor = UIColor.darkGrayColor()
+            self.navigationController?.navigationBar.barTintColor = VuseFeedEngine.globalTint
+            self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
+            self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName : UIColor.whiteColor()]
+            self.refreshControl?.tintColor = UIColor.whiteColor()
+            self.navigationController?.toolbar.barTintColor = VuseFeedEngine.globalTint
+            self.navigationController?.toolbar.tintColor = UIColor.whiteColor()
+        } else {
+            self.tableView.backgroundColor = UIColor.whiteColor()
+            self.navigationController?.navigationBar.barTintColor = UIColor.whiteColor()
+            self.navigationController?.navigationBar.tintColor = VuseFeedEngine.globalTint
+            self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName : VuseFeedEngine.globalTint]
+            self.refreshControl?.tintColor = VuseFeedEngine.globalTint
+            self.navigationController?.toolbar.barTintColor = UIColor.whiteColor()
+            self.navigationController?.toolbar.tintColor = VuseFeedEngine.globalTint
+        }
+        
+    }
 
     @IBAction func categoriesTapped(sender: AnyObject) {
         print("categories tapped")
@@ -329,7 +363,6 @@ extension WatchableTableViewController {
                 self.stories?.removeAll()
                 self.storySections?.removeAll()
                 self.tableView.reloadData()
-                self.refreshControl?.beginRefreshing()
                 self.fetchStories()
             }
             
@@ -340,6 +373,7 @@ extension WatchableTableViewController {
         }
         
     }
+    
 }
 
 extension WatchableTableViewController : StoryDetailDelegate {

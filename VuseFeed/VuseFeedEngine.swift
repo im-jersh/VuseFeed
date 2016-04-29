@@ -20,7 +20,7 @@ protocol VuseFeedEngineDelegate {
 
 class VuseFeedEngine : NSObject {
     
-    static let globalTint = UIColor(red: 133.0/255.0, green: 31.0/255.0, blue: 174.0/255.0, alpha: 1)
+    static let globalTint = UIColor(red: 88.0/255.0, green: 86.0/255.0, blue: 214.0/255.0, alpha: 1)
     
     // Singleton
     static let sharedEngine = VuseFeedEngine()

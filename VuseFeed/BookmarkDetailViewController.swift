@@ -9,7 +9,7 @@
 import UIKit
 
 class BookmarkDetailViewController: StoryDetailViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

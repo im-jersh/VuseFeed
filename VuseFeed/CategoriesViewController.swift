@@ -12,17 +12,26 @@ class CategoriesViewController: UIViewController {
 
     @IBOutlet weak var categoriesTable: UITableView!
     
-    var flag = false
+    var nightMode = false
     
     // Array of all categories sorted alphabetically
     var categories = Array(VuseFeedEngine.sharedEngine.allCategories).sort({ $0.rawValue < $1.rawValue })
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.nightMode = NSUserDefaults.standardUserDefaults().boolForKey("night_mode")
+        self.shouldSwitchToNightMode(nightMode: self.nightMode)
+        
+        //self.categoriesTable.contentInset = UIEdgeInsetsZero
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return self.nightMode ? .LightContent : .Default
     }
     
     override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
@@ -36,20 +45,6 @@ class CategoriesViewController: UIViewController {
         
         return true
     }
-    
-    override func viewWillAppear(animated: Bool) {
-        
-        //check to see if night mode switch is on
-        if let nightMode = NSUserDefaults.standardUserDefaults().valueForKey("nightMode") as? Int where nightMode == 1 {
-            self.categoriesTable.backgroundColor = UIColor.darkGrayColor()
-            flag = true
-        }
-        else {
-            self.categoriesTable.backgroundColor = UIColor.whiteColor()
-            flag = false
-        }
-    }
-    
 
     /*
     // MARK: - Navigation
@@ -68,35 +63,16 @@ extension CategoriesViewController : UITableViewDelegate, UITableViewDataSource 
     
     func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         
-        if flag {
-            //change the background color of the header view when in night mode
-            if let view = view as? UITableViewHeaderFooterView {
-                view.backgroundView?.backgroundColor = UIColor.darkGrayColor()
-                view.textLabel?.textColor = UIColor.lightGrayColor()
-            }
+        if let view = view as? UITableViewHeaderFooterView {
+            view.textLabel?.textColor = self.nightMode ? UIColor.lightTextColor() : UIColor.darkGrayColor()
         }
-        else {
-            if let view = view as? UITableViewHeaderFooterView {
-                view.backgroundView?.backgroundColor = UIColor.groupTableViewBackgroundColor()
-                view.textLabel?.textColor = UIColor.darkGrayColor()
-            }
-        }
+        
     }
     
     func tableView(tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
         
-        if flag {
-            //change the background color of the header view when in night mode
-            if let view = view as? UITableViewHeaderFooterView {
-                view.backgroundView?.backgroundColor = UIColor.darkGrayColor()
-                view.textLabel?.textColor = UIColor.lightGrayColor()
-            }
-        }
-        else {
-            if let view = view as? UITableViewHeaderFooterView {
-                view.backgroundView?.backgroundColor = UIColor.groupTableViewBackgroundColor()
-                view.textLabel?.textColor = UIColor.darkGrayColor()
-            }
+        if let view = view as? UITableViewHeaderFooterView {
+            view.textLabel?.textColor = self.nightMode ? UIColor.lightTextColor() : UIColor.darkGrayColor()
         }
     }
     
@@ -106,12 +82,14 @@ extension CategoriesViewController : UITableViewDelegate, UITableViewDataSource 
         let cell = self.categoriesTable.dequeueReusableCellWithIdentifier("categoryCell", forIndexPath: indexPath)
         let category = self.categories[indexPath.row]
         
+        cell.backgroundColor = self.nightMode ? UIColor.clearColor() : UIColor.whiteColor()
         cell.textLabel?.font = UIFont(descriptor: (cell.textLabel?.font.fontDescriptor().fontDescriptorWithSymbolicTraits(.TraitBold))!, size: (cell.textLabel?.font.pointSize)!)
         cell.textLabel?.text = category.rawValue
         cell.textLabel?.textColor = UIColor.colorForCategory(category)
 
         // If the category is in the newsFeedCategories set, checkmark it; otherwise, don't
         cell.accessoryType = VuseFeedEngine.sharedEngine.newsFeedCategories.contains(category) ? .Checkmark : .None
+        cell.tintColor = self.nightMode ? UIColor.whiteColor() : VuseFeedEngine.globalTint
         
         return cell
     }
@@ -182,6 +160,29 @@ extension CategoriesViewController {
         alert.addAction(action)
         
         self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    func shouldSwitchToNightMode(nightMode nightMode: Bool) {
+        
+        if nightMode {
+            self.view.backgroundColor = UIColor.darkGrayColor()
+            self.categoriesTable.backgroundColor = UIColor.darkGrayColor()
+            self.navigationController?.navigationBar.barTintColor = VuseFeedEngine.globalTint
+            self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
+            self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName : UIColor.whiteColor()]
+            self.navigationController?.toolbar.barTintColor = VuseFeedEngine.globalTint
+            self.navigationController?.toolbar.tintColor = UIColor.whiteColor()
+
+        } else {
+            self.view.backgroundColor = UIColor.groupTableViewBackgroundColor()
+            self.categoriesTable.backgroundColor = UIColor.groupTableViewBackgroundColor()
+            self.navigationController?.navigationBar.barTintColor = UIColor.whiteColor()
+            self.navigationController?.navigationBar.tintColor = VuseFeedEngine.globalTint
+            self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName : VuseFeedEngine.globalTint]
+            self.navigationController?.toolbar.barTintColor = UIColor.whiteColor()
+            self.navigationController?.toolbar.tintColor = VuseFeedEngine.globalTint
+        }
+        
     }
     
 }
