@@ -10,6 +10,8 @@ import UIKit
 
 class SettingsViewController: UITableViewController {
 
+    var flag = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -36,6 +38,54 @@ class SettingsViewController: UITableViewController {
     }
 
     
+    override func viewWillAppear(animated: Bool) {
+        
+        //check NSUserDefaults for the night mode setting
+        if flag {
+            self.tableView.backgroundColor = UIColor.darkGrayColor()
+            self.tableView.reloadData()
+        }
+        else {
+            self.tableView.backgroundColor = UIColor.groupTableViewBackgroundColor()
+            self.tableView.reloadData()
+        }
+        
+    }
+    
+    override func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        
+        if flag {
+            //change the background color of the header view when in night mode
+            if let view = view as? UITableViewHeaderFooterView {
+                view.backgroundView?.backgroundColor = UIColor.darkGrayColor()
+                view.textLabel?.textColor = UIColor.lightGrayColor()
+            }
+        }
+        else {
+            if let view = view as? UITableViewHeaderFooterView {
+                view.backgroundView?.backgroundColor = UIColor.groupTableViewBackgroundColor()
+                view.textLabel?.textColor = UIColor.darkGrayColor()
+            }
+        }
+    }
+    
+    override func tableView(tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
+        
+        if flag {
+            //change the background color of the header view when in night mode
+            if let view = view as? UITableViewHeaderFooterView {
+                view.backgroundView?.backgroundColor = UIColor.darkGrayColor()
+                view.textLabel?.textColor = UIColor.lightGrayColor()
+            }
+        }
+        else {
+            if let view = view as? UITableViewHeaderFooterView {
+                view.backgroundView?.backgroundColor = UIColor.groupTableViewBackgroundColor()
+                view.textLabel?.textColor = UIColor.darkGrayColor()
+            }
+        }
+    }
+    
     /*
     // MARK: - Navigation
 
@@ -46,4 +96,30 @@ class SettingsViewController: UITableViewController {
     }
     */
 
+}
+
+extension SettingsViewController {
+    
+    //action to set NSUserDefaults to be able to determine whether the night mode switch is on or off
+    @IBAction func nightModeSwitchWasTapped(sender: AnyObject) {
+        
+        if let nightModeSwitch = sender as? UISwitch {
+            
+            if nightModeSwitch.on {
+                NSUserDefaults.standardUserDefaults().setValue(1, forKey: "nightMode")
+                flag = true
+                self.tableView.backgroundColor = UIColor.darkGrayColor()
+                
+                self.tableView.reloadData()
+            }
+            else {
+                NSUserDefaults.standardUserDefaults().setValue(0, forKey: "nightMode")
+                flag = false
+                self.tableView.backgroundColor = UIColor.groupTableViewBackgroundColor()
+                self.tableView.reloadData()
+            }
+        }
+        
+    }
+    
 }

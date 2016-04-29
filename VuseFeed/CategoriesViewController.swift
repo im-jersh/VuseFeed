@@ -12,6 +12,8 @@ class CategoriesViewController: UIViewController {
 
     @IBOutlet weak var categoriesTable: UITableView!
     
+    var flag = false
+    
     // Array of all categories sorted alphabetically
     var categories = Array(VuseFeedEngine.sharedEngine.allCategories).sort({ $0.rawValue < $1.rawValue })
     
@@ -34,6 +36,20 @@ class CategoriesViewController: UIViewController {
         
         return true
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        
+        //check to see if night mode switch is on
+        if let nightMode = NSUserDefaults.standardUserDefaults().valueForKey("nightMode") as? Int where nightMode == 1 {
+            self.categoriesTable.backgroundColor = UIColor.darkGrayColor()
+            flag = true
+        }
+        else {
+            self.categoriesTable.backgroundColor = UIColor.whiteColor()
+            flag = false
+        }
+    }
+    
 
     /*
     // MARK: - Navigation
@@ -49,6 +65,40 @@ class CategoriesViewController: UIViewController {
 
 
 extension CategoriesViewController : UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        
+        if flag {
+            //change the background color of the header view when in night mode
+            if let view = view as? UITableViewHeaderFooterView {
+                view.backgroundView?.backgroundColor = UIColor.darkGrayColor()
+                view.textLabel?.textColor = UIColor.lightGrayColor()
+            }
+        }
+        else {
+            if let view = view as? UITableViewHeaderFooterView {
+                view.backgroundView?.backgroundColor = UIColor.groupTableViewBackgroundColor()
+                view.textLabel?.textColor = UIColor.darkGrayColor()
+            }
+        }
+    }
+    
+    func tableView(tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
+        
+        if flag {
+            //change the background color of the header view when in night mode
+            if let view = view as? UITableViewHeaderFooterView {
+                view.backgroundView?.backgroundColor = UIColor.darkGrayColor()
+                view.textLabel?.textColor = UIColor.lightGrayColor()
+            }
+        }
+        else {
+            if let view = view as? UITableViewHeaderFooterView {
+                view.backgroundView?.backgroundColor = UIColor.groupTableViewBackgroundColor()
+                view.textLabel?.textColor = UIColor.darkGrayColor()
+            }
+        }
+    }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
