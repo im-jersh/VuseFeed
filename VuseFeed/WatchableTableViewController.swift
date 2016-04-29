@@ -18,6 +18,8 @@ class WatchableTableViewController: UITableViewController {
     @IBOutlet weak var bookmarksButton: UIBarButtonItem!
     @IBOutlet weak var settingsButton: UIBarButtonItem!
     
+    var flag = false
+    
     var reuseIdentifier = "WatchableStoryCell"
     var stories : [WatchableStory]? {
         didSet {
@@ -46,6 +48,19 @@ class WatchableTableViewController: UITableViewController {
         // Add an action to the refresh control
         self.refreshControl?.addTarget(self, action: #selector(WatchableTableViewController.handleRefresh(_:)), forControlEvents: UIControlEvents.ValueChanged)
         
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        
+        //check to see if night mode switch is set
+        if let nightMode = NSUserDefaults.standardUserDefaults().valueForKey("nightMode") as? Int where nightMode == 1 {
+            flag = true
+            self.tableView.backgroundColor = UIColor.darkGrayColor()
+        }
+        else {
+            flag = false
+            self.tableView.backgroundColor = UIColor.whiteColor()
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -127,6 +142,14 @@ class WatchableTableViewController: UITableViewController {
         // Extract the story from the filtered set
         if let story = filteredStories?[indexPath.row] {
             
+            //see if night mode is set
+            if flag {
+                cell.headlineLabel.textColor = UIColor.whiteColor()
+            }
+            else {
+                cell.headlineLabel.textColor = UIColor.blackColor()
+            }
+            
             cell.headlineLabel.text = story.headline
             cell.authorLabel.text = story.author
             cell.pubDateLabel.text = NSDateFormatter.localizedStringFromDate(story.pubDate, dateStyle: .MediumStyle, timeStyle: .ShortStyle)
@@ -160,6 +183,11 @@ class WatchableTableViewController: UITableViewController {
             popupController.delegate = self
             
             self.navigationController?.presentPopupBarWithContentViewController(popupController, openPopup: true, animated: true, completion: nil)
+            
+            //set content insets for the scroll view
+            self.tableView.contentInset = UIEdgeInsetsMake(64.0, 0.0, 88.0, 0.0)
+            self.tableView.scrollIndicatorInsets = self.tableView.contentInset
+            
         }
         
         self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
