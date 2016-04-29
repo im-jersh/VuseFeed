@@ -1002,7 +1002,7 @@
                         </constraints>
                     </view>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="Select Categories" id="Fnb-aA-Do9"/>
+                    <navigationItem key="navigationItem" title="Notifications" id="Fnb-aA-Do9"/>
                     <connections>
                         <outlet property="notificationsTable" destination="lzM-yO-bP5" id="9zS-x2-iFN"/>
                     </connections>
@@ -1020,5 +1020,5 @@
         <image name="playerPlay" width="100" height="100"/>
         <image name="settings" width="22" height="22"/>
     </resources>
-    <color key="tintColor" red="0.52106726169586182" green="0.24050712585449219" blue="0.68248951435089111" alpha="1" colorSpace="calibratedRGB"/>
+    <color key="tintColor" red="0.52156862745098043" green="0.23921568627450981" blue="0.68235294117647061" alpha="1" colorSpace="calibratedRGB"/>
 </document>
