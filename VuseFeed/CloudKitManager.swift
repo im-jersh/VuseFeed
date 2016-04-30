@@ -397,12 +397,14 @@ class CloudKitManager {
     // Save a subscription
     func updateSubscription(forCategories categories: [Category]) {
         
-        let predicate = NSPredicate(format: "category == %@", categories.flatMap({ $0.rawValue }))
+        let predicate = NSPredicate(format: "category IN %@", categories.flatMap({ $0.rawValue }))
         let subscription = CKSubscription(recordType: "Story", predicate: predicate, options: .FiresOnRecordCreation)
         
         let notification = CKNotificationInfo()
-        notification.alertBody = "THIS JUST IN: %@"
+        notification.alertLocalizationKey = "THIS JUST IN: %1$@"
         notification.alertLocalizationArgs = ["headline"]
+        notification.shouldBadge = true
+        
         
         subscription.notificationInfo = notification
         
@@ -411,12 +413,7 @@ class CloudKitManager {
             if let subscription = subscription where error == nil {
                 NSUserDefaults.standardUserDefaults().setValue(subscription.subscriptionID, forKey: "subscriptionID")
             }
-            
         }
-
-        
-        
-        
     }
 
 }

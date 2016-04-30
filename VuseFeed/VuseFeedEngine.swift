@@ -140,16 +140,24 @@ class VuseFeedEngine : NSObject {
         // Add to the category set
         self.subscriptions.insert(category)
         
-        // Check to see if entity already exists
+        // Check to see if entity already exists; it really shouldn't unless there was an error deleting the subscription earlier
         let fetchRequest = NSFetchRequest(entityName: "Subscription")
         fetchRequest.predicate = NSPredicate(format: "%K == %@", "category", category.rawValue)
         let error : NSErrorPointer = nil
         if self.moc.countForFetchRequest(fetchRequest, error: error) == 1 { return } // Entity already exists; return
         
-        // Save new record
+        // Create new record
         let newEntity = NSEntityDescription.insertNewObjectForEntityForName("Subscription", inManagedObjectContext: self.moc)
         newEntity.setValue(category.rawValue, forKey: "category")
         
+        // Save the subscription to CloudKit
+        
+        // Save the record
+        do {
+            try self.moc.save()
+        } catch let error as NSError {
+            print("ERROR SAVING THE SUBSCRIPTION TO CORE DATA: \(error.localizedDescription)")
+        }
     }
     
     func deleteSubscription(forCategory category: Category) {

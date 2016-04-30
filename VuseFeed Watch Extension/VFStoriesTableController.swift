@@ -159,7 +159,7 @@ class VFStoriesTableController: WKInterfaceController {
                 row.movie.setRemoteMovieURL(forStory: story)
                 
                 row.movie.setLoops(false)
-                row.rowGroup.setBackgroundColor(rowColor.colorWithAlphaComponent(0.20))
+                row.rowGroup.setBackgroundColor(rowColor.colorWithAlphaComponent(0.30))
                 row.headlineLabel.setText(story.headline)
                 
             }
