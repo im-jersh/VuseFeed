@@ -397,6 +397,16 @@ class CloudKitManager {
     // Save a subscription
     func updateSubscription(forCategories categories: [Category]) {
         
+        guard !categories.isEmpty else {
+            // No categories selected. Delete the old subscription
+            if let oldSubscriptionID = NSUserDefaults.standardUserDefaults().valueForKey("subscriptionID") as? String {
+                self.publicDatabase.deleteSubscriptionWithID(oldSubscriptionID, completionHandler: { (newSubscriptionID: String?, error: NSError?) in
+                    if error == nil { print("NO LONGER SUBSCRIBING TO NOTIFICATIONS") }
+                })
+            }
+            return
+        }
+        
         let predicate = NSPredicate(format: "category IN %@", categories.flatMap({ $0.rawValue }))
         let subscription = CKSubscription(recordType: "Story", predicate: predicate, options: .FiresOnRecordCreation)
         
@@ -411,10 +421,19 @@ class CloudKitManager {
         self.publicDatabase.saveSubscription(subscription) { (subscription: CKSubscription?, error: NSError?) in
             
             if let subscription = subscription where error == nil {
-                NSUserDefaults.standardUserDefaults().setValue(subscription.subscriptionID, forKey: "subscriptionID")
+                
+                // Delete the old subscritption
+                if let oldSubscriptionID = NSUserDefaults.standardUserDefaults().valueForKey("subscriptionID") as? String {
+                    self.publicDatabase.deleteSubscriptionWithID(oldSubscriptionID, completionHandler: { (oldSubscriptionID: String?, error: NSError?) in
+                        // Save the new ID
+                        NSUserDefaults.standardUserDefaults().setValue(subscription.subscriptionID, forKey: "subscriptionID")
+                    })
+                }
+                
             }
         }
     }
+
 
 }
 

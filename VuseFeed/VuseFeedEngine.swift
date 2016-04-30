@@ -116,7 +116,7 @@ class VuseFeedEngine : NSObject {
     }
     
     func removeCategory(category: Category) {
-        // Remove from the category set
+        // Remove from the categories
         self.newsFeedCategories.remove(category)
         
         // Delete entity from CoreData
@@ -132,7 +132,8 @@ class VuseFeedEngine : NSObject {
             // TODO: Handle exception
         }
         
-        self.deleteSubscription(forCategory: category)
+        if self.subscriptions.contains(category) { self.deleteSubscription(forCategory: category) }
+        
     }
     
     func createSubscription(forCategory category: Category) {
@@ -150,14 +151,6 @@ class VuseFeedEngine : NSObject {
         let newEntity = NSEntityDescription.insertNewObjectForEntityForName("Subscription", inManagedObjectContext: self.moc)
         newEntity.setValue(category.rawValue, forKey: "category")
         
-        // Save the subscription to CloudKit
-        
-        // Save the record
-        do {
-            try self.moc.save()
-        } catch let error as NSError {
-            print("ERROR SAVING THE SUBSCRIPTION TO CORE DATA: \(error.localizedDescription)")
-        }
     }
     
     func deleteSubscription(forCategory category: Category) {
@@ -178,7 +171,6 @@ class VuseFeedEngine : NSObject {
             // TODO: Handle exception
         }
 
-        
     }
     
 #endif
