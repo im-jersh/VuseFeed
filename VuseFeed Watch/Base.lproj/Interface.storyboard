@@ -85,7 +85,7 @@ stories</string>
                         <label alignment="left" text="Headline" numberOfLines="0" id="Uqd-tw-TxO">
                             <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
                         </label>
-                        <label alignment="right" text="Author" textAlignment="right" numberOfLines="2" id="qsn-Q2-3K4">
+                        <label alignment="right" text="Author" textAlignment="right" numberOfLines="0" id="qsn-Q2-3K4">
                             <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             <fontDescription key="font" type="italicSystem" pointSize="13"/>
                         </label>

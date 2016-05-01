@@ -57,6 +57,7 @@
 		037FFA1D1CC85B910089E887 /* videos.json in Resources */ = {isa = PBXBuildFile; fileRef = 037FFA1C1CC85B910089E887 /* videos.json */; };
 		03BA44971CC928230047AE73 /* VuseFeedEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035CD7B51CAEE68D00527B3F /* VuseFeedEngine.swift */; };
 		03BC40EC1CBB480C00637C67 /* BookmarkDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BC40EB1CBB480C00637C67 /* BookmarkDetailViewController.swift */; };
+		03C7C4151CD5A1AC00DA8A56 /* DailyRemindersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C7C4141CD5A1AC00DA8A56 /* DailyRemindersTableViewController.swift */; };
 		03E09A641CB96ACE006AEDFE /* stories.json in Resources */ = {isa = PBXBuildFile; fileRef = 03E09A631CB96ACE006AEDFE /* stories.json */; };
 		03E09A681CBAF1C3006AEDFE /* BookmarkTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E09A671CBAF1C3006AEDFE /* BookmarkTableViewController.swift */; };
 		03FAE6741CCC143F00AEC18F /* VFStoryDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FAE6731CCC143F00AEC18F /* VFStoryDetailController.swift */; };
@@ -179,6 +180,7 @@
 		037C5A731CD08FE600405DE3 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		037FFA1C1CC85B910089E887 /* videos.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = videos.json; sourceTree = "<group>"; };
 		03BC40EB1CBB480C00637C67 /* BookmarkDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkDetailViewController.swift; sourceTree = "<group>"; };
+		03C7C4141CD5A1AC00DA8A56 /* DailyRemindersTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DailyRemindersTableViewController.swift; sourceTree = "<group>"; };
 		03E09A631CB96ACE006AEDFE /* stories.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = stories.json; sourceTree = "<group>"; };
 		03E09A671CBAF1C3006AEDFE /* BookmarkTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkTableViewController.swift; sourceTree = "<group>"; };
 		03FAE6731CCC143F00AEC18F /* VFStoryDetailController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VFStoryDetailController.swift; sourceTree = "<group>"; };
@@ -355,6 +357,7 @@
 		03583EF01CA42DB800C5EAFE /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				03C7C4141CD5A1AC00DA8A56 /* DailyRemindersTableViewController.swift */,
 				037C5A6F1CD07E3E00405DE3 /* NotificationsViewController.swift */,
 				037C5A6D1CD0315B00405DE3 /* SettingsViewController.swift */,
 				03BC40EB1CBB480C00637C67 /* BookmarkDetailViewController.swift */,
@@ -664,6 +667,7 @@
 				671844101CAB378400C53DE2 /* CategoriesViewController.swift in Sources */,
 				03583EF51CA42E0200C5EAFE /* CloudKitManager.swift in Sources */,
 				671844121CAB436B00C53DE2 /* CategoryTableViewCell.swift in Sources */,
+				03C7C4151CD5A1AC00DA8A56 /* DailyRemindersTableViewController.swift in Sources */,
 				0374DD3A1CCCAD9300DCE572 /* HandoffHelper.swift in Sources */,
 				035CD7B61CAEE68D00527B3F /* VuseFeedEngine.swift in Sources */,
 				035CD7991CAE0B0300527B3F /* VFStoryListCell.swift in Sources */,

@@ -24,25 +24,29 @@ class NotificationsViewController: UIViewController {
     }
     
     override func viewDidDisappear(animated: Bool) {
-        // Save the moc
-        do {
-            try VuseFeedEngine.sharedEngine.moc.save()
-            // Update the cloudkit subscription
-            CloudKitManager.sharedManager().updateSubscription(forCategories: Array(VuseFeedEngine.sharedEngine.subscriptions))
-        } catch {
-            print("UNABLE TO SAVE SUBSCRIPTIONS")
-        }
+        
+//        if VuseFeedEngine.sharedEngine.moc.hasChanges {
+//            // Save the moc
+//            do {
+//                try VuseFeedEngine.sharedEngine.moc.save()
+//                // Update the cloudkit subscription
+//                CloudKitManager.sharedManager().updateSubscription(forCategories: Array(VuseFeedEngine.sharedEngine.subscriptions))
+//            } catch {
+//                print("UNABLE TO SAVE SUBSCRIPTIONS")
+//            }
+//        }
+        
     }
     
     override func viewWillAppear(animated: Bool) {
         
         //check NSUserDefaults for the night mode setting
-        if let nightMode = NSUserDefaults.standardUserDefaults().valueForKey("nightMode") as? Int where nightMode == 1 {
+        if let nightMode = NSUserDefaults.standardUserDefaults().valueForKey("night_mode") as? Bool where nightMode {
             self.notificationsTable.backgroundColor = UIColor.darkGrayColor()
             flag = true
         }
         else {
-            self.notificationsTable.backgroundColor = UIColor.whiteColor()
+            self.notificationsTable.backgroundColor = UIColor.groupTableViewBackgroundColor()
             flag = false
         }
         
@@ -52,6 +56,11 @@ class NotificationsViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return self.flag ? .LightContent : .Default
+    }
+    
 }
 
 extension NotificationsViewController : UITableViewDelegate, UITableViewDataSource {
@@ -115,6 +124,7 @@ extension NotificationsViewController : UITableViewDelegate, UITableViewDataSour
         
         let category = self.newsFeedCategories[indexPath.row]
         
+        cell.backgroundColor = self.flag ? UIColor.clearColor() : UIColor.lightTextColor()
         cell.categoryLabel.text = category.rawValue
         cell.categoryLabel.font = UIFont(descriptor: (cell.textLabel?.font.fontDescriptor().fontDescriptorWithSymbolicTraits(.TraitBold))!, size: (cell.textLabel?.font.pointSize)!)
         cell.categoryLabel.textColor = UIColor.colorForCategory(category)

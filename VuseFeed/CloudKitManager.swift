@@ -395,29 +395,49 @@ class CloudKitManager {
     }
     
     // Save a subscription
-    func updateSubscription(forCategories categories: [Category]) {
+    func createSubscription(forCategory category: Category) {
         
-        let predicate = NSPredicate(format: "category == %@", categories.flatMap({ $0.rawValue }))
+        // Make the subscription
+        let predicate = NSPredicate(format: "category == %@", category.rawValue)
         let subscription = CKSubscription(recordType: "Story", predicate: predicate, options: .FiresOnRecordCreation)
         
+        // Include the new records Headline in the notification's alert body
         let notification = CKNotificationInfo()
-        notification.alertBody = "THIS JUST IN: %@"
+        notification.alertLocalizationKey = "THIS JUST IN: %1$@"
         notification.alertLocalizationArgs = ["headline"]
         
         subscription.notificationInfo = notification
         
+        // Save the subscription
         self.publicDatabase.saveSubscription(subscription) { (subscription: CKSubscription?, error: NSError?) in
             
-            if let subscription = subscription where error == nil {
-                NSUserDefaults.standardUserDefaults().setValue(subscription.subscriptionID, forKey: "subscriptionID")
+            guard error == nil else {
+                print("ERROR CREATING SUBSCRIPTION: \(error!.localizedDescription)")
+                return
             }
             
+            if let subscription = subscription where error == nil {
+                // Save the subscriptionID to CoreData
+                VuseFeedEngine.sharedEngine.updateSubscription(forCategory: category, withSubscriptionID: subscription.subscriptionID)
+            }
         }
-
+    }
+    
+    func deleteSubscription(withSubscriptionID subscriptionID: String) {
         
-        
+        self.publicDatabase.deleteSubscriptionWithID(subscriptionID) { (id: String?, error: NSError?) in
+            
+            guard error == nil else {
+                print("ERROR DELETING SUBSCRIPTION: \(error!.localizedDescription)")
+                return
+            }
+            
+            print("UNSUBSCRIBED NOTIFICATIONS: \(id!)")
+            
+        }
         
     }
+
 
 }
 

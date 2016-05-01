@@ -159,7 +159,7 @@ class VFStoriesTableController: WKInterfaceController {
                 row.movie.setRemoteMovieURL(forStory: story)
                 
                 row.movie.setLoops(false)
-                row.rowGroup.setBackgroundColor(rowColor.colorWithAlphaComponent(0.20))
+                row.rowGroup.setBackgroundColor(rowColor.colorWithAlphaComponent(0.30))
                 row.headlineLabel.setText(story.headline)
                 
             }
@@ -183,19 +183,27 @@ extension VFStoriesTableController {
     
     @IBAction func refreshButtonWasTapped() {
         
-        // Set the interface state and clear the stories
-        self.stories?.removeAll()
-        self.interfaceState = .Loading
+        // Clear the table first
+        self.clearTable()
         
         // Fetch the stories
         VuseFeedEngine.delegate = self
         VuseFeedEngine.sharedEngine.fetchStoriesInstantly()
         
-        
     }
     
     @IBAction func loadOlderStoriesWasTapped() {
         
+    }
+    
+    func clearTable() {
+        
+        // Set the interface state and clear the stories
+        self.stories?.removeAll()
+        self.interfaceState = .Loading
+        
+        let allRows = NSIndexSet(indexesInRange: NSRange(0..<self.table.numberOfRows))
+        self.table.removeRowsAtIndexes(allRows)
     }
     
 }

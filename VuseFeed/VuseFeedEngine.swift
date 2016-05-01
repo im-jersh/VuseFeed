@@ -20,7 +20,7 @@ protocol VuseFeedEngineDelegate {
 
 class VuseFeedEngine : NSObject {
     
-    static let globalTint = UIColor(red: 133.0/255.0, green: 31.0/255.0, blue: 174.0/255.0, alpha: 1)
+    static let globalTint = UIColor(red: 88.0/255.0, green: 86.0/255.0, blue: 214.0/255.0, alpha: 1)
     
     // Singleton
     static let sharedEngine = VuseFeedEngine()
@@ -116,7 +116,7 @@ class VuseFeedEngine : NSObject {
     }
     
     func removeCategory(category: Category) {
-        // Remove from the category set
+        // Remove from the categories
         self.newsFeedCategories.remove(category)
         
         // Delete entity from CoreData
@@ -125,14 +125,16 @@ class VuseFeedEngine : NSObject {
         
         do {
             let fetchedEntities = try self.moc.executeFetchRequest(fetchRequest) as! [NSManagedObject]
-            if let entityToDelete = fetchedEntities.first {
-                self.moc.deleteObject(entityToDelete)
+            if let entityToDelete = fetchedEntities.first, id = entityToDelete.valueForKey("recordID") as? String {
+                self.moc.deleteObject(entityToDelete) // Delete from CoreData
             }
         } catch {
             // TODO: Handle exception
         }
         
-        self.deleteSubscription(forCategory: category)
+        // Remove the subscription and delete
+        if self.subscriptions.contains(category) { self.deleteSubscription(forCategory: category) }
+        
     }
     
     func createSubscription(forCategory category: Category) {
@@ -140,15 +142,48 @@ class VuseFeedEngine : NSObject {
         // Add to the category set
         self.subscriptions.insert(category)
         
-        // Check to see if entity already exists
+        // Check to see if entity already exists; it really shouldn't unless there was an error deleting the subscription earlier
         let fetchRequest = NSFetchRequest(entityName: "Subscription")
         fetchRequest.predicate = NSPredicate(format: "%K == %@", "category", category.rawValue)
         let error : NSErrorPointer = nil
         if self.moc.countForFetchRequest(fetchRequest, error: error) == 1 { return } // Entity already exists; return
         
-        // Save new record
+        // Create new record
         let newEntity = NSEntityDescription.insertNewObjectForEntityForName("Subscription", inManagedObjectContext: self.moc)
         newEntity.setValue(category.rawValue, forKey: "category")
+        
+        // Save the subscription
+        do {
+            try self.moc.save()
+        } catch let error as NSError {
+            print("ERROR SAVING THE SUBSCRIPTION: \(error.localizedDescription)")
+        }
+        
+        // Create a cloudkit subscription
+        CloudKitManager.sharedManager().createSubscription(forCategory: category)
+    }
+    
+    func updateSubscription(forCategory category: Category, withSubscriptionID id: String) {
+        
+        // Fetch the subscription record
+        let fetchRequest = NSFetchRequest(entityName: "Subscription")
+        fetchRequest.predicate = NSPredicate(format: "category == %@", category.rawValue)
+        
+        do {
+            let records = try self.moc.executeFetchRequest(fetchRequest) as! [NSManagedObject]
+            if let record = records.first {
+                record.setValue(id, forKey: "recordID")
+            }
+        } catch let error as NSError {
+            print("ERROR FETCHING THE SUBSCRIPTION TO UPDATED: \(error.localizedDescription)")
+        }
+        
+        // Save the update
+        do {
+            try self.moc.save()
+        } catch let error as NSError {
+            print("ERROR SAVING THE SUBSCRIPTION UPDATE: \(error.localizedDescription)")
+        }
         
     }
     
@@ -163,14 +198,21 @@ class VuseFeedEngine : NSObject {
         
         do {
             let fetchedEntities = try self.moc.executeFetchRequest(fetchRequest) as! [NSManagedObject]
-            if let entityToDelete = fetchedEntities.first {
+            if let entityToDelete = fetchedEntities.first, id = entityToDelete.valueForKey("recordID") as? String {
+                CloudKitManager.sharedManager().deleteSubscription(withSubscriptionID: id)
                 self.moc.deleteObject(entityToDelete)
             }
         } catch {
             // TODO: Handle exception
         }
-
         
+        // Save the update
+        do {
+            try self.moc.save()
+        } catch let error as NSError {
+            print("ERROR DELETING SUBSCRIPTION: \(error.localizedDescription)")
+        }
+
     }
     
 #endif

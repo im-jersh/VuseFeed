@@ -29,6 +29,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
         UIApplication.sharedApplication().registerForRemoteNotifications()
         
+        //self.window?.rootViewController = UIStoryboard.init(name: "Main", bundle: nil).instantiateInitialViewController()
+        
         return true
     }
 
