@@ -115,12 +115,22 @@ stories</string>
         <!--Glance Interface Controller-->
         <scene sceneID="BOz-TT-tkC">
             <objects>
-                <glanceController spacing="0.0" id="0uZ-2p-rRc" customClass="GlanceController" customModule="VuseFeed_Watch" customModuleProvider="target">
+                <glanceController spacing="0.0" bottomTemplateType="body6Footer" id="0uZ-2p-rRc" customClass="GlanceController" customModule="VuseFeed_Watch" customModuleProvider="target">
                     <items>
-                        <group alignment="left" id="t8f-Gd-c4y"/>
-                        <group alignment="left" id="uCw-4Q-Ouw"/>
+                        <group alignment="left" id="aWF-qu-Apy">
+                            <items>
+                                <imageView width="105" height="1" alignment="left" image="placeholder" contentMode="scaleAspectFit" id="ZdI-c2-wsT"/>
+                            </items>
+                        </group>
+                        <label alignment="left" text="Loading..." id="u1n-Dq-bS0"/>
+                        <label alignment="left" id="Qs5-n5-94Z"/>
                     </items>
                     <edgeInsets key="margins" left="0.0" right="0.0" top="0.0" bottom="14"/>
+                    <connections>
+                        <outlet property="headlineLabel" destination="u1n-Dq-bS0" id="Rwr-ri-tpQ"/>
+                        <outlet property="publicationDateLabel" destination="Qs5-n5-94Z" id="guD-C0-HzB"/>
+                        <outlet property="thumbnailImage" destination="ZdI-c2-wsT" id="oKY-3C-JOL"/>
+                    </connections>
                 </glanceController>
             </objects>
             <point key="canvasLocation" x="235" y="1004"/>

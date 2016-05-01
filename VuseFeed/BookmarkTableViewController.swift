@@ -10,6 +10,7 @@ import UIKit
 import CloudKit
 import LNPopupController
 import CoreData
+import DZNEmptyDataSet
 
 
 class BookmarkTableViewController: WatchableTableViewController {
@@ -97,7 +98,42 @@ class BookmarkTableViewController: WatchableTableViewController {
 }
 
 
+extension BookmarkTableViewController {
 
+    
+    override func titleForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
+        
+        let text = "You haven't saved any bookmarks yet!"
+        
+        let foregroundColor = self.nightMode ? UIColor.whiteColor() : UIColor.darkGrayColor()
+        
+        let attributes = [NSFontAttributeName : UIFont.boldSystemFontOfSize(18.0), NSForegroundColorAttributeName : foregroundColor]
+        
+        return NSAttributedString(string: text, attributes: attributes)
+        
+    }
+    
+    override func descriptionForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
+        
+        let text = "When you see a story that you would like to come back to later, be sure to tap the bookmark icon and the story will be saved here. \n\nIf you believe this to be an error, tap the refresh button to load your bookmarks again."
+        
+        let paragraph = NSMutableParagraphStyle()
+        paragraph.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        paragraph.alignment = NSTextAlignment.Center
+        
+        let attributes = [NSFontAttributeName : UIFont.systemFontOfSize(14.0), NSForegroundColorAttributeName : UIColor.lightGrayColor(), NSParagraphStyleAttributeName : paragraph]
+        
+        return NSAttributedString(string: text, attributes: attributes)
+        
+    }
+    
+    override func emptyDataSet(scrollView: UIScrollView!, didTapButton button: UIButton!) {
+        
+        self.fetchStories()
+        
+    }
+    
+}
 
 
 

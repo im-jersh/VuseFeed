@@ -10,6 +10,7 @@ import UIKit
 import CloudKit
 import LNPopupController
 import CoreData
+import DZNEmptyDataSet
 
 
 class WatchableTableViewController: UITableViewController {
@@ -53,6 +54,9 @@ class WatchableTableViewController: UITableViewController {
         NSUserDefaults.standardUserDefaults().addObserver(self, forKeyPath: "night_mode", options: .New, context: &self.context)
         self.nightMode = NSUserDefaults.standardUserDefaults().boolForKey("night_mode")
         
+        // Emtpty data set
+        self.tableView.emptyDataSetSource = self
+        self.tableView.emptyDataSetDelegate = self
         self.tableView.tableFooterView = UIView()
     }
     
@@ -407,6 +411,53 @@ extension WatchableTableViewController : StoryDetailDelegate {
     
 }
 
+extension WatchableTableViewController : DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
+    
+    func imageForEmptyDataSet(scrollView: UIScrollView!) -> UIImage! {
+        return UIImage(named: "logo")!
+    }
+    
+    func titleForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
+        
+        let text = "There doesn't appear to be any new stories posted in the last 36 hours."
+        
+        let foregroundColor = self.nightMode ? UIColor.whiteColor() : UIColor.darkGrayColor()
+        
+        let attributes = [NSFontAttributeName : UIFont.boldSystemFontOfSize(18.0), NSForegroundColorAttributeName : foregroundColor]
+        
+        return NSAttributedString(string: text, attributes: attributes)
+        
+    }
+    
+    func descriptionForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
+        
+        let text = "Check back later or tap refresh to try again."
+        
+        let paragraph = NSMutableParagraphStyle()
+        paragraph.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        paragraph.alignment = NSTextAlignment.Center
+        
+        let attributes = [NSFontAttributeName : UIFont.systemFontOfSize(14.0), NSForegroundColorAttributeName : UIColor.lightGrayColor(), NSParagraphStyleAttributeName : paragraph]
+        
+        return NSAttributedString(string: text, attributes: attributes)
+        
+    }
+    
+    func buttonTitleForEmptyDataSet(scrollView: UIScrollView!, forState state: UIControlState) -> NSAttributedString! {
+        
+        let attributes = [NSFontAttributeName : UIFont.boldSystemFontOfSize(17.0), NSForegroundColorAttributeName : VuseFeedEngine.globalTint]
+        
+        return NSAttributedString(string: "Refresh", attributes: attributes)
+        
+    }
+    
+    func emptyDataSet(scrollView: UIScrollView!, didTapButton button: UIButton!) {
+        
+        self.fetchStories()
+        
+    }
+    
+}
 
 
 

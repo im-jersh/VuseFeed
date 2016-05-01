@@ -48,6 +48,7 @@
 		035CD7BA1CAF05A900527B3F /* WebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 035CD7A21CAEC78200527B3F /* WebImage.framework */; };
 		0374DD3A1CCCAD9300DCE572 /* HandoffHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0374DD391CCCAD9300DCE572 /* HandoffHelper.swift */; };
 		0374DD3B1CCCAD9300DCE572 /* HandoffHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0374DD391CCCAD9300DCE572 /* HandoffHelper.swift */; };
+		0375A0FC1CD5BDD400D9B686 /* DZNEmptyDataSet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0375A0FB1CD5BDD400D9B686 /* DZNEmptyDataSet.framework */; };
 		03789CBD1CADAF9A00F631BB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03789CBC1CADAF9A00F631BB /* QuartzCore.framework */; };
 		03789CBF1CADAFA000F631BB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03789CBE1CADAFA000F631BB /* CoreGraphics.framework */; };
 		037C5A6E1CD0315B00405DE3 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037C5A6D1CD0315B00405DE3 /* SettingsViewController.swift */; };
@@ -172,6 +173,7 @@
 		035CD7B41CAEDAA400527B3F /* UIImageView+WebCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UIImageView+WebCache.h"; path = "Carthage/Build/iOS/WebImage.framework/Headers/UIImageView+WebCache.h"; sourceTree = SOURCE_ROOT; };
 		035CD7B51CAEE68D00527B3F /* VuseFeedEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VuseFeedEngine.swift; sourceTree = "<group>"; };
 		0374DD391CCCAD9300DCE572 /* HandoffHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandoffHelper.swift; sourceTree = "<group>"; };
+		0375A0FB1CD5BDD400D9B686 /* DZNEmptyDataSet.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DZNEmptyDataSet.framework; path = Carthage/Build/iOS/DZNEmptyDataSet.framework; sourceTree = "<group>"; };
 		03789CBC1CADAF9A00F631BB /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		03789CBE1CADAFA000F631BB /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		037C5A6D1CD0315B00405DE3 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
@@ -193,6 +195,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0375A0FC1CD5BDD400D9B686 /* DZNEmptyDataSet.framework in Frameworks */,
 				035CD7B81CAF05A900527B3F /* Chameleon.framework in Frameworks */,
 				035CD7B91CAF05A900527B3F /* LNPopupController.framework in Frameworks */,
 				035CD7BA1CAF05A900527B3F /* WebImage.framework in Frameworks */,
@@ -385,6 +388,7 @@
 		035A45371CC6C2FC00608615 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0375A0FB1CD5BDD400D9B686 /* DZNEmptyDataSet.framework */,
 				037C5A731CD08FE600405DE3 /* CloudKit.framework */,
 				035CD7A61CAEC97100527B3F /* Chameleon.framework */,
 				035CD7A41CAEC8AE00527B3F /* LNPopupController.framework */,
@@ -643,6 +647,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Chameleon.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/LNPopupController.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/WebImage.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/DZNEmptyDataSet.framework",
 			);
 			outputPaths = (
 			);

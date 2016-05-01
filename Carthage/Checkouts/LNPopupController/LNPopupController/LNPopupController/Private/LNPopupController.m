@@ -298,14 +298,17 @@ static CGFloat __smoothstep(CGFloat a, CGFloat b, CGFloat x)
 			contentController.view.frame = _containerController.view.bounds;
 			contentController.view.clipsToBounds = NO;
 			contentController.view.autoresizingMask = UIViewAutoresizingNone;
+			
 			if(CGColorGetAlpha(contentController.view.backgroundColor.CGColor) < 1.0)
 			{
 				//Support for iOS8, where this property was exposed as readonly.
 				[self.popupContentView setValue:[UIBlurEffect effectWithStyle:_popupBar.barStyle == UIBarStyleDefault ? UIBlurEffectStyleExtraLight : UIBlurEffectStyleDark] forKey:@"effect"];
+				self.popupContentView.popupCloseButton.layer.shadowOpacity = 0.2;
 			}
 			else
 			{
 				[self.popupContentView setValue:nil forKey:@"effect"];
+				self.popupContentView.popupCloseButton.layer.shadowOpacity = 0.1;
 			}
 			
 			[self.popupContentView.contentView addSubview:contentController.view];
@@ -342,10 +345,16 @@ static CGFloat __smoothstep(CGFloat a, CGFloat b, CGFloat x)
 			 [_popupBar addGestureRecognizer:self.popupContentView.popupInteractionGestureRecognizer];
 			 
 			 [_popupBar _setTitleViewMarqueesPaused:NO];
+			 
+			 _popupContentView.accessibilityViewIsModal = NO;
+			 UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil);
 		 }
 		 else if(state == LNPopupPresentationStateOpen)
 		 {
 			 [_popupBar _setTitleViewMarqueesPaused:YES];
+			 
+			 _popupContentView.accessibilityViewIsModal = YES;
+			 UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, _popupContentView.popupCloseButton);
 		 }
 		 
 		 _popupControllerState = state;
@@ -477,6 +486,26 @@ static CGFloat __smoothstep(CGFloat a, CGFloat b, CGFloat x)
 	}];
 }
 
+- (void)_reconfigure_accessibilityLavel
+{
+	_popupBar.accessibilityCenterLabel = _currentPopupItem.accessibilityLabel;
+}
+
+- (void)_reconfigure_accessibilityHint
+{
+	_popupBar.accessibilityCenterHint = _currentPopupItem.accessibilityHint;
+}
+
+- (void)_reconfigure_accessibilityProgressLabel
+{
+	_popupBar.accessibilityProgressLabel = _currentPopupItem.accessibilityProgressLabel;
+}
+
+- (void)_reconfigure_accessibilityProgressValue
+{
+	_popupBar.accessibilityProgressValue = _currentPopupItem.accessibilityProgressValue;
+}
+
 - (void)_reconfigureBarItems
 {
 	[_popupBar _delayBarButtonLayout];
@@ -531,9 +560,14 @@ static CGFloat __smoothstep(CGFloat a, CGFloat b, CGFloat x)
 		[_currentContentController endAppearanceTransition];
 		
 		_currentContentController = newContentController;
+		
+		if(_popupControllerState == LNPopupPresentationStateOpen)
+		{
+			UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil);
+		}
 	}
 	
-	NSArray<NSString*>* keys = @[@"title", @"subtitle", @"progress", @"leftBarButtonItems"];
+	NSArray<NSString*>* keys = @[@"title", @"subtitle", @"progress", @"leftBarButtonItems", @"accessibilityLavel", @"accessibilityHint", @"accessibilityProgressLabel", @"accessibilityProgressValue"];
 	[keys enumerateObjectsUsingBlock:^(NSString * __nonnull key, NSUInteger idx, BOOL * __nonnull stop) {
 		[self _popupItem:_currentPopupItem didChangeValueForKey:key];
 	}];
@@ -555,7 +589,7 @@ static CGFloat __smoothstep(CGFloat a, CGFloat b, CGFloat x)
 
 - (void)_movePopupBarAndContentToBottomBarSuperview
 {
-	NSAssert(_bottomBar.superview != nil, @"Bottom docking view must have a superview before presenting popup.");
+//	NSAssert(_bottomBar.superview != nil, @"Bottom docking view must have a superview before presenting popup.");
 	[_popupBar removeFromSuperview];
 	[_bottomBar.superview insertSubview:_popupBar belowSubview:_bottomBar];
 	[_popupBar.superview bringSubviewToFront:_popupBar];
@@ -577,7 +611,6 @@ static CGFloat __smoothstep(CGFloat a, CGFloat b, CGFloat x)
 	_popupContentView.contentView.preservesSuperviewLayoutMargins = YES;
 	
 	_popupContentView.popupCloseButton = [[LNPopupCloseButton alloc] initWithFrame: CGRectMake(0, 0, 0, 0)];
-	_popupContentView.popupCloseButton.clipsToBounds = YES;
 	[_popupContentView.popupCloseButton addTarget:self action:@selector(_closePopupContent) forControlEvents:UIControlEventTouchUpInside];
 	[_popupContentView.contentView addSubview:self.popupContentView.popupCloseButton];
 	
@@ -644,7 +677,7 @@ static CGFloat __smoothstep(CGFloat a, CGFloat b, CGFloat x)
 			}
 		} completion:^(BOOL finished)
 		 {
-			if(completionBlock != nil)
+			if(completionBlock != nil && !open)
 			{
 				completionBlock();
 			}
@@ -658,8 +691,7 @@ static CGFloat __smoothstep(CGFloat a, CGFloat b, CGFloat x)
 		{
 			[self openPopupAnimated:animated completion:completionBlock];
 		}
-		
-		if(completionBlock != nil)
+		else if(completionBlock != nil)
 		{
 			completionBlock();
 		}
