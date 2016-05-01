@@ -125,7 +125,7 @@ class VuseFeedEngine : NSObject {
         
         do {
             let fetchedEntities = try self.moc.executeFetchRequest(fetchRequest) as! [NSManagedObject]
-            if let entityToDelete = fetchedEntities.first, id = entityToDelete.valueForKey("recordID") as? String {
+            if let entityToDelete = fetchedEntities.first {
                 self.moc.deleteObject(entityToDelete) // Delete from CoreData
             }
         } catch {

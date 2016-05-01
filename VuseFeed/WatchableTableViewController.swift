@@ -22,6 +22,8 @@ class WatchableTableViewController: UITableViewController {
     var nightMode = false
     private var context : UInt8 = 37
     
+    var popupController : UIViewController?
+    
     var reuseIdentifier = "WatchableStoryCell"
     var stories : [WatchableStory]? {
         didSet {
@@ -191,6 +193,7 @@ class WatchableTableViewController: UITableViewController {
         }
         
         if let popupController = self.storyboard?.instantiateViewControllerWithIdentifier("storyDetailController") as? StoryDetailViewController {
+            self.popupController = popupController
             popupController.story = filteredStories[indexPath.row]
             popupController.popupItem.title = popupController.story.headline
             popupController.popupItem.subtitle = popupController.story.summary
@@ -332,6 +335,8 @@ extension WatchableTableViewController {
             self.navigationController?.toolbar.barTintColor = UIColor.whiteColor()
             self.navigationController?.toolbar.tintColor = VuseFeedEngine.globalTint
         }
+        
+        self.popupController?.updatePopupBarAppearance()
         
     }
 

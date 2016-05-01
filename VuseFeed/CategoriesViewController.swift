@@ -36,11 +36,13 @@ class CategoriesViewController: UIViewController {
     
     override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
         
-        if identifier == "unwindToNewsfeed" && VuseFeedEngine.sharedEngine.newsFeedCategories.isEmpty {
-            // There must be at least one category selected, otherwise the news feed would be empty; notify the user and cancel the segue
-            self.showAlertController(withMessage: "You must select at least 1 category otherwise your news feed will be all boring and we can't have you getting bored!")
-            
-            return false
+        if identifier == "unwindFromCategories" {
+            if VuseFeedEngine.sharedEngine.newsFeedCategories.isEmpty {
+                // There must be at least one category selected, otherwise the news feed would be empty; notify the user and cancel the segue
+                self.showAlertController(withMessage: "You must select at least 1 category otherwise your news feed will be all boring and we can't have you getting bored!")
+                
+                return false
+            }
         }
         
         return true
