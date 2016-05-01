@@ -100,15 +100,24 @@ class SettingsViewController: UITableViewController {
         }
     }
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if indexPath.section == 2 { // Night Mode switch
+            // Flip the switch
+            self.nightModeSwitch.setOn(!self.nightModeSwitch.on, animated: true)
+            
+            // Call the switch's action
+            self.nightModeSwitchWasTapped(self.nightModeSwitch)
+        } else if indexPath.section == 3 {
+            // Flip the switch
+            self.popupBarSwitch.setOn(!self.nightModeSwitch.on, animated: true)
+            
+            // Call the switch's action
+            self.popupBarSwitchWasTapped(self.popupBarSwitch)
+        }
+        
+        self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
-    */
 
 }
 
@@ -123,8 +132,16 @@ extension SettingsViewController {
             
             defer { defaults.synchronize() }
             
-            nightModeSwitch.on ? defaults.setBool(true, forKey: "night_mode") : defaults.setBool(false, forKey: "night_mode")
+            defaults.setBool(nightModeSwitch.on, forKey: "night_mode")
             
+        }
+        
+    }
+    
+    @IBAction func popupBarSwitchWasTapped(sender: AnyObject) {
+        
+        if let popupBarSwitch = sender as? UISwitch {
+            NSUserDefaults.standardUserDefaults().setBool(popupBarSwitch.on, forKey: "popup_bar")
         }
         
     }

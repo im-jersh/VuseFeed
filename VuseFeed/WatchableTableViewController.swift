@@ -192,7 +192,7 @@ class WatchableTableViewController: UITableViewController {
             popupController.popupItem.subtitle = popupController.story.summary
             popupController.delegate = self
             
-            self.navigationController?.presentPopupBarWithContentViewController(popupController, openPopup: true, animated: true, completion: nil)
+            self.navigationController?.presentPopupBarWithContentViewController(popupController, openPopup: NSUserDefaults.standardUserDefaults().boolForKey("popup_bar"), animated: true, completion: nil)
             
             //set content insets for the scroll view
             self.tableView.contentInset = UIEdgeInsetsMake(64.0, 0.0, 84.0, 0.0)
