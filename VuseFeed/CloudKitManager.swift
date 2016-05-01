@@ -395,43 +395,47 @@ class CloudKitManager {
     }
     
     // Save a subscription
-    func updateSubscription(forCategories categories: [Category]) {
+    func createSubscription(forCategory category: Category) {
         
-        guard !categories.isEmpty else {
-            // No categories selected. Delete the old subscription
-            if let oldSubscriptionID = NSUserDefaults.standardUserDefaults().valueForKey("subscriptionID") as? String {
-                self.publicDatabase.deleteSubscriptionWithID(oldSubscriptionID, completionHandler: { (newSubscriptionID: String?, error: NSError?) in
-                    if error == nil { print("NO LONGER SUBSCRIBING TO NOTIFICATIONS") }
-                })
-            }
-            return
-        }
-        
-        let predicate = NSPredicate(format: "category IN %@", categories.flatMap({ $0.rawValue }))
+        // Make the subscription
+        let predicate = NSPredicate(format: "category == %@", category.rawValue)
         let subscription = CKSubscription(recordType: "Story", predicate: predicate, options: .FiresOnRecordCreation)
         
+        // Include the new records Headline in the notification's alert body
         let notification = CKNotificationInfo()
         notification.alertLocalizationKey = "THIS JUST IN: %1$@"
         notification.alertLocalizationArgs = ["headline"]
-        notification.shouldBadge = true
-        
         
         subscription.notificationInfo = notification
         
+        // Save the subscription
         self.publicDatabase.saveSubscription(subscription) { (subscription: CKSubscription?, error: NSError?) in
             
+            guard error == nil else {
+                print("ERROR CREATING SUBSCRIPTION: \(error!.localizedDescription)")
+                return
+            }
+            
             if let subscription = subscription where error == nil {
-                
-                // Delete the old subscritption
-                if let oldSubscriptionID = NSUserDefaults.standardUserDefaults().valueForKey("subscriptionID") as? String {
-                    self.publicDatabase.deleteSubscriptionWithID(oldSubscriptionID, completionHandler: { (oldSubscriptionID: String?, error: NSError?) in
-                        // Save the new ID
-                        NSUserDefaults.standardUserDefaults().setValue(subscription.subscriptionID, forKey: "subscriptionID")
-                    })
-                }
-                
+                // Save the subscriptionID to CoreData
+                VuseFeedEngine.sharedEngine.updateSubscription(forCategory: category, withSubscriptionID: subscription.subscriptionID)
             }
         }
+    }
+    
+    func deleteSubscription(withSubscriptionID subscriptionID: String) {
+        
+        self.publicDatabase.deleteSubscriptionWithID(subscriptionID) { (id: String?, error: NSError?) in
+            
+            guard error == nil else {
+                print("ERROR DELETING SUBSCRIPTION: \(error!.localizedDescription)")
+                return
+            }
+            
+            print("UNSUBSCRIBED NOTIFICATIONS: \(id!)")
+            
+        }
+        
     }
 
 

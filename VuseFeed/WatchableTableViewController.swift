@@ -354,7 +354,6 @@ extension WatchableTableViewController {
                 // Save the changed
                 do {
                     try self.moc.save()
-                    CloudKitManager.sharedManager().updateSubscription(forCategories: Array(VuseFeedEngine.sharedEngine.subscriptions))
                 } catch {
                     // TODO: Handle exceptions
                 }

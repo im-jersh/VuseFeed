@@ -25,16 +25,16 @@ class NotificationsViewController: UIViewController {
     
     override func viewDidDisappear(animated: Bool) {
         
-        if VuseFeedEngine.sharedEngine.moc.hasChanges {
-            // Save the moc
-            do {
-                try VuseFeedEngine.sharedEngine.moc.save()
-                // Update the cloudkit subscription
-                CloudKitManager.sharedManager().updateSubscription(forCategories: Array(VuseFeedEngine.sharedEngine.subscriptions))
-            } catch {
-                print("UNABLE TO SAVE SUBSCRIPTIONS")
-            }
-        }
+//        if VuseFeedEngine.sharedEngine.moc.hasChanges {
+//            // Save the moc
+//            do {
+//                try VuseFeedEngine.sharedEngine.moc.save()
+//                // Update the cloudkit subscription
+//                CloudKitManager.sharedManager().updateSubscription(forCategories: Array(VuseFeedEngine.sharedEngine.subscriptions))
+//            } catch {
+//                print("UNABLE TO SAVE SUBSCRIPTIONS")
+//            }
+//        }
         
     }
     
