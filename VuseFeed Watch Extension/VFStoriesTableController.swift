@@ -10,7 +10,7 @@ import WatchKit
 import Foundation
 import WatchConnectivity
 
-let SESSION = false
+let SESSION = true
 
 class VFStoriesTableController: WKInterfaceController {
     

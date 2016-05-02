@@ -32,8 +32,7 @@ class VFStoryDetailController: WKInterfaceController {
         self.moviePlayer.setMovieURL(story.watchVideoURL!)
         
         if let _ = story.thumbnail {
-            let image = WKImage(image: story.thumbnail!)
-            self.moviePlayer.setPosterImage(image)
+            self.moviePlayer.setRemotePosterImage(forStory: story)
         }
         
         self.headlineLabel.setText(story.headline)

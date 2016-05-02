@@ -20,6 +20,7 @@ protocol VuseFeedEngineDelegate {
 
 class VuseFeedEngine : NSObject {
     
+    let defaultCategories = ["Local", "World", "Entertainment"]
     static let globalTint = UIColor(red: 88.0/255.0, green: 86.0/255.0, blue: 214.0/255.0, alpha: 1)
     
     // Singleton
@@ -213,6 +214,24 @@ class VuseFeedEngine : NSObject {
             print("ERROR DELETING SUBSCRIPTION: \(error.localizedDescription)")
         }
 
+    }
+    
+    func configureApplication() {
+        
+        // Create the categories
+        let categories = self.defaultCategories.flatMap({ Category(rawValue: $0) })
+        
+        // Add the categories to CoreData and subscribe for notifications
+        for category in categories {
+            self.addCategory(category)
+            self.createSubscription(forCategory: category)
+        }
+        
+        // Create the settings
+        NSUserDefaults.standardUserDefaults().setBool(false, forKey: "night_mode")
+        NSUserDefaults.standardUserDefaults().setBool(true, forKey: "popup_bar")
+        NSUserDefaults.standardUserDefaults().setBool(true, forKey: "initial_install")
+        
     }
     
 #endif

@@ -15,8 +15,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        
+        if !NSUserDefaults.standardUserDefaults().boolForKey("initial_install") {
+            // Let's set up the app
+            VuseFeedEngine.sharedEngine.configureApplication()
+        }
         
         // Seed the CloudKit database
         CloudKitManager.sharedManager().seedCloudKit()

@@ -164,6 +164,14 @@ class CloudKitManager {
         return storyRecords
     }
     
+    func validateUser() {
+        
+        self.defaultContainer.accountStatusWithCompletionHandler { (status: CKAccountStatus, error: NSError?) in
+            
+        }
+        
+    }
+    
     // Saves a batch of records to a CloudKit datase
     func saveRecords(saveRecords: [CKRecord]?,andDeleteRecords deleteRecords: [CKRecordID]?, toDatabase database: CKDatabase = CKContainer.defaultContainer().publicCloudDatabase) {
         
